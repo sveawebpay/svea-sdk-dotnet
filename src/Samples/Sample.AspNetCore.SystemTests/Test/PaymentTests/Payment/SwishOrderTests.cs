@@ -47,7 +47,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
             Assert.That(response.OrderAmount.Value, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Swish)));
-            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
+            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
             Assert.That(response.AvailableActions.Count, Is.EqualTo(0));                
             Assert.That(response.OrderRows.Count, Is.EqualTo(1));

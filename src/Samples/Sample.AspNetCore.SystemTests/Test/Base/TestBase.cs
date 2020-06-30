@@ -50,8 +50,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Base
 #if DEBUG
             AtataContext.Configure()
                 .UseDriver(_driverAlias)
-                    //.UseBaseUrl("https://localhost:44345/")
-                    .UseBaseUrl("https://svea-webpay-sdk-001-dev.azurewebsites.net/")
+                    .UseBaseUrl("https://localhost:44345/")
             .Build();
             AtataContext.Current.Driver.Maximize();
 #elif DEV

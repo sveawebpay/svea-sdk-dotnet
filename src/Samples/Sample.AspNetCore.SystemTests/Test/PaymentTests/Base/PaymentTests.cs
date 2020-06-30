@@ -68,7 +68,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             return Go.To<ProductsPage>()
                 .Do((x) =>
                 {
-                    if (x.Header.ClearOrders.Exists(new SearchOptions { Timeout = new TimeSpan(0, 0, 0, 0, 1000), IsSafely = true }))
+                    if (x.Header.ClearOrders.Exists(new SearchOptions { Timeout = TimeSpan.FromSeconds(2), IsSafely = true }))
                     {
                         x
                         .Header.ClearOrders.ClickAndGo()
@@ -256,9 +256,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                 .PageUrl.WaitTo.Within(TimeSpan.FromSeconds(60)).Contain("thankyou")
                 .SwitchToRoot<ThankYouPage>()
                 .ThankYou.IsVisible.WaitTo.BeTrue()
-                .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 15, retryInterval: 3)
+                .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 25, retryInterval: 3)
                 .Header.Orders.ClickAndGo();
-
         }
 
         protected static IEnumerable TestData(bool singleProduct = true)

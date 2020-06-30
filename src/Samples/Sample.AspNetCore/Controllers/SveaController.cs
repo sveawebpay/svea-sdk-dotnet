@@ -43,29 +43,33 @@ namespace Sample.AspNetCore.Controllers
             {
                 if (orderId.HasValue)
                 {
-                    var paymentOrder = await _sveaClient.PaymentAdmin.GetOrder(orderId.Value);
-
-                    if (paymentOrder != null)
+                    var order = await _sveaClient.Checkout.GetOrder(orderId.Value);
+                    if (order != null && order.Status == CheckoutOrderStatus.Final)
                     {
-                        _cartService.SveaOrderId = paymentOrder.Id.ToString();
-                        _cartService.Update();
+                        var paymentOrder = await _sveaClient.PaymentAdmin.GetOrder(orderId.Value);
 
-                        var products = _cartService.CartLines.Select(p => p.Product);
-
-                        _context.Products.AttachRange(products);
-
-                        var existing = _context.Orders.Find(paymentOrder.Id.ToString());
-                        if (existing != null)
+                        if (paymentOrder != null)
                         {
-                            return Ok();
+                            _cartService.SveaOrderId = paymentOrder.Id.ToString();
+                            _cartService.Update();
+
+                            var products = _cartService.CartLines.Select(p => p.Product);
+
+                            _context.Products.AttachRange(products);
+
+                            var existing = _context.Orders.Find(paymentOrder.Id.ToString());
+                            if (existing != null)
+                            {
+                                return Ok();
+                            }
+
+                            _context.Orders.Add(new Order
+                            {
+                                SveaOrderId = _cartService.SveaOrderId,
+                                Lines = _cartService.CartLines.ToList()
+                            });
+                            _context.SaveChanges(true);
                         }
-
-                        _context.Orders.Add(new Order
-                        {
-                            SveaOrderId = _cartService.SveaOrderId,
-                            Lines = _cartService.CartLines.ToList()
-                        });
-                        _context.SaveChanges(true);
                     }
                 }
 

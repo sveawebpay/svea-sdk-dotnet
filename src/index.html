@@ -1,0 +1,55 @@
+<html>
+<head>
+<title>test</title>
+</head>
+<body>
+<div id="svea-checkout-container" style="overflow-x: hidden; overflow-y: hidden">
+    <noscript>
+        Please <a href="http://enable-javascript.com">enable JavaScript</a>.
+    </noscript>
+    <iframe id="svea-checkout-iframe" name="svea-checkout-iframe" scrolling="no" frameborder="0" style="width: 100%; min-height: 480px; transition: min-height 0.15s"></iframe>
+</div>
+
+<script type="text/javascript" src="https://checkoutapistage.svea.com/bundles/client-api"></script>
+<script type="text/javascript">
+    (function (config) {
+        config.includingDocument = document.URL;
+
+        var iframeUrl = config.bootstrapSrc + "/bootstrap/get?cfg=" + encodeURIComponent(JSON.stringify(config));
+        window[config.configKey] = {
+            "config" : config
+        };
+
+        var scoFrame = document.getElementById("svea-checkout-iframe");
+
+        scoFrame.onload = function () {
+            scoFrame.onload = function () { };
+
+            var interval = window.setInterval(awaitApiScripts, 100);
+            if (SveaCheckoutApi) {
+                awaitApiScripts();
+            }
+
+            function awaitApiScripts() {
+                if (!SveaCheckoutApi) {
+                    return;
+                }
+                window.clearInterval(interval);
+
+                if (window.scoApiInstance && window.scoApiInstance.uninitialize) {
+                    window.scoApiInstance.uninitialize();
+                }
+
+                window.scoApiInstance = new SveaCheckoutApi(iframeUrl, scoFrame);
+                window.scoApiInstance.initialize(function (api) {
+                    window["scoApi"] = api;
+                    document.dispatchEvent(new CustomEvent("checkoutReady"));
+                });
+            }
+        };
+        scoFrame.src = iframeUrl;
+    })({"orderId":152776,"bootstrapSrc":"https://checkoutapistage.svea.com","authToken":"SveaCheckout NZYKXfOwbYh5p/W0974qMOvOir4=","configKey":"_sveaConfirm","token":"29E3C04BC90FDC46A9261DDA953319FB","includingDocument":null,"clientApi":"https://checkoutapistage.svea.com\\bundles/clientapi"});
+</script>
+
+</body>
+</html>

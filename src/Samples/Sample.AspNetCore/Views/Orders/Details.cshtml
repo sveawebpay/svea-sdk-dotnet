@@ -1,0 +1,230 @@
+﻿@using OrderActions = Svea.WebPay.SDK.PaymentAdminApi.OrderActionType
+@using OrderRowActions = Svea.WebPay.SDK.PaymentAdminApi.OrderRowActionType
+@using DeliveryActions = Svea.WebPay.SDK.PaymentAdminApi.DeliveryActionType
+@using System.Reflection;
+@model Sample.AspNetCore.Models.ViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "OrderDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var count = 1;
+
+}
+
+
+@if (TempData["CancelMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["CancelMessage"]</div>
+}
+else if (TempData["OrderRowMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["OrderRowMessage"]</div>
+}
+else if (TempData["DeliverMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["DeliverMessage"]</div>
+}
+else if (TempData["CreditMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["CreditMessage"]</div>
+}
+else if (TempData["ReversalMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["ReversalMessage"]</div>
+}
+else if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-warning">@TempData["ErrorMessage"]</div>
+}
+
+<h1>Details</h1>
+
+<div>
+    <hr />
+
+    @foreach (var order in Model.PaymentOrders)
+    {
+        <div automation="div-fullorder">
+
+            <div automation="div-order">
+                <div>
+                    <h2>Order #@count</h2>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => order.Id)
+                        </dt>
+                        <dd class="col-sm-10" automation="text-orderid">
+                            @Html.DisplayFor(model => order.Id)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => order.OrderStatus)
+                        </dt>
+                        <dd class="col-sm-10" automation="text-orderstatus">
+                            @Html.DisplayFor(model => order.OrderStatus)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => order.PaymentType)
+                        </dt>
+                        <dd class="col-sm-10" automation="text-paymenttype">
+                            @Html.DisplayFor(model => order.PaymentType)
+                        </dd>
+                    </dl>
+                </div>
+
+                <table class="table" automation="table-order">
+                    <thead class="collapsible" automation="toggle-actions" >
+                        <tr>
+                            <th>Actions</th>
+                            <th><div automation="toggle-actions">Expand</div><div automation="toggle-actions">Collapse</div></th>
+                        </tr>
+                    </thead>
+                    <tbody class="collapsible-content">
+
+                        @if (order.Actions != null)
+                        {
+                            var actions = typeof(Svea.WebPay.SDK.PaymentAdminApi.OrderActions).GetProperties()
+                              .Where(prop => prop.GetValue(order.Actions, null) != null)
+                              .Select(prop => prop.Name);
+
+                            foreach (var action in actions)
+                            {
+                                var automationTagName = $"a-{action.ToLower()}";
+                                <tr>
+                                    <td>@action</td>
+                                    <td>
+                                        <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Id" automation=@automationTagName>Execute</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        
+            @if (order.OrderRows != null && order.OrderRows.Count > 0)
+            {
+                <div>
+                    <h5>Order Rows</h5>
+
+                    @foreach (var orderRow in order.OrderRows)
+                    {
+                        <div automation="div-orderrow">
+                            <dl class="row">
+                                <dt class="col-sm-2">
+                                    Id
+                                </dt>
+                                <dd class="col-sm-10" automation="text-orderrowid">
+                                    @orderRow.OrderRowId
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Name
+                                </dt>
+                                <dd class="col-sm-10" automation="text-orderrowname">
+                                    @orderRow.Name
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Is Cancelled
+                                </dt>
+                                <dd class="col-sm-10" automation="text-orderrowcancelled">
+                                    @orderRow.IsCancelled
+                                </dd>
+                            </dl>
+
+                            <table class="table" automation="table-orderrow">
+                                <thead class="collapsible" automation="toggle-actions">
+                                    <tr>
+                                        <th>Actions</th>
+                                        <th><div automation="toggle-actions">Expand</div><div automation="toggle-actions">Collapse</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="collapsible-content">
+
+                                    @if (orderRow.Actions != null)
+                                    {
+                                        var actions = typeof(Svea.WebPay.SDK.PaymentAdminApi.OrderRowActions).GetProperties()
+                                          .Where(prop => prop.GetValue(orderRow.Actions, null) != null)
+                                          .Select(prop => prop.Name);
+
+                                        foreach (var action in actions)
+                                        {
+                                            var automationTagName = $"a-{action.ToLower()}";
+                                            <tr>
+                                                <td>@action</td>
+                                                <td>
+                                                    <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Id" asp-route-orderRowId="@orderRow.OrderRowId" automation=@automationTagName>Execute</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (order.Deliveries != null && order.Deliveries.Count > 0)
+            {
+                <div>
+                    <h5>Deliveries</h5>
+
+                    @foreach (var delivery in order.Deliveries)
+                    {
+                        <div automation="div-delivery">
+                            <dl class="row">
+                                <dt class="col-sm-2">
+                                    Id
+                                </dt>
+                                <dd class="col-sm-10" automation="text-deliveryid">
+                                    @delivery.Id
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Status
+                                </dt>
+                                <dd class="col-sm-10" automation="text-deliverystatus">
+                                    @delivery.Status
+                                </dd>
+                            </dl>
+
+                            <table class="table" automation="table-delivery">
+                                <thead class="collapsible" automation="toggle-actions">
+                                    <tr>
+                                        <th>Actions</th>
+                                        <th><div automation="toggle-actions">Expand</div><div automation="toggle-actions">Collapse</div></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="collapsible-content">
+
+                                    @if (delivery.Actions != null)
+                                    {
+                                        var actions = typeof(Svea.WebPay.SDK.PaymentAdminApi.DeliveryActions).GetProperties()
+                                          .Where(prop => prop.GetValue(delivery.Actions, null) != null)
+                                          .Select(prop => prop.Name);
+
+                                        foreach (var action in actions)
+                                        {                                            
+                                            var automationTagName = $"a-{action.ToLower()}";
+                                            <tr>
+                                                <td>@action</td>
+                                                <td>
+                                                    <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Id" asp-route-deliveryId="@delivery.Id" automation=@automationTagName>Execute</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        
+        count++;
+    }
+
+
+</div>

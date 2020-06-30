@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svea.WebPay.SDK", "Svea.WebPay.SDK\Svea.WebPay.SDK.csproj", "{4F1C84C2-82C3-40D0-AF64-3606E6FECB3E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Svea.WebPay.SDK.Tests", "Svea.WebPay.SDK.Tests\Svea.WebPay.SDK.Tests.csproj", "{3E545D48-3A3E-4B33-BCE3-9E7BC5BAEA96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{C6BB6430-5DA8-4F79-9C78-3A288027EF4A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.AspNetCore", "Samples\Sample.AspNetCore\Sample.AspNetCore.csproj", "{5F5681A0-6A69-47E0-A369-7AF4635A8A4A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.AspNetCore.SystemTests", "Samples\Sample.AspNetCore.SystemTests\Sample.AspNetCore.SystemTests.csproj", "{F2EC41C0-CD08-477D-9192-669855B298BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38DA8B44-EA0F-44E0-ADFD-DD61196EBB7D}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build_test_publish.yml = ..\.github\workflows\build_test_publish.yml
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F1C84C2-82C3-40D0-AF64-3606E6FECB3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F1C84C2-82C3-40D0-AF64-3606E6FECB3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F1C84C2-82C3-40D0-AF64-3606E6FECB3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F1C84C2-82C3-40D0-AF64-3606E6FECB3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E545D48-3A3E-4B33-BCE3-9E7BC5BAEA96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E545D48-3A3E-4B33-BCE3-9E7BC5BAEA96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E545D48-3A3E-4B33-BCE3-9E7BC5BAEA96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E545D48-3A3E-4B33-BCE3-9E7BC5BAEA96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F5681A0-6A69-47E0-A369-7AF4635A8A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F5681A0-6A69-47E0-A369-7AF4635A8A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F5681A0-6A69-47E0-A369-7AF4635A8A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F5681A0-6A69-47E0-A369-7AF4635A8A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2EC41C0-CD08-477D-9192-669855B298BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2EC41C0-CD08-477D-9192-669855B298BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2EC41C0-CD08-477D-9192-669855B298BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2EC41C0-CD08-477D-9192-669855B298BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F5681A0-6A69-47E0-A369-7AF4635A8A4A} = {C6BB6430-5DA8-4F79-9C78-3A288027EF4A}
+		{F2EC41C0-CD08-477D-9192-669855B298BB} = {C6BB6430-5DA8-4F79-9C78-3A288027EF4A}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2D76E595-9890-471D-81F5-25CCC5F31BA0}
+	EndGlobalSection
+EndGlobal

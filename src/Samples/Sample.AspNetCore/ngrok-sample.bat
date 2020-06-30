@@ -1,0 +1,1 @@
+C:\app\ngrok-stable-windows-amd64\ngrok.exe http https://localhost:44345 -subdomain=svea-sample -host-header=localhost:44345

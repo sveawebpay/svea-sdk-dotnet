@@ -9,7 +9,7 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         public EmailInput<TOwner> Email { get; private set; }
 
         [FindByName("nationalId")]
-        public TelInput<TOwner> OrganizationNumber { get; private set; }
+        public TextInput<TOwner> OrganizationNumber { get; private set; }
 
         [FindByName("phoneNumber")]
         public TelInput<TOwner> Phone { get; private set; }

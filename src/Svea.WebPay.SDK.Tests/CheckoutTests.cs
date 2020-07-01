@@ -109,7 +109,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(2461925, order.OrderId);
             Assert.Null(order.EmailAddress);
             Assert.Null(order.PhoneNumber);
-            Assert.Null(order.PaymentType);
+            Assert.Equal(PaymentType.Unknown, order.PaymentType);
             Assert.Null(order.Payment);
             Assert.Equal(CheckoutOrderStatus.Created, order.Status);
             Assert.Null(order.CustomerReference);

@@ -20,12 +20,15 @@ namespace Svea.WebPay.SDK.Json
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType.IsEnum && !objectType.IsDefined(typeof(FlagsAttribute));
+            var underlyingType = Nullable.GetUnderlyingType(objectType);
+            return objectType.IsEnum && !objectType.IsDefined(typeof(FlagsAttribute)) || (underlyingType != null && underlyingType.IsEnum);
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             InitMap(objectType);
+            var underlyingType = Nullable.GetUnderlyingType(objectType);
+            objectType = underlyingType != null ? underlyingType : objectType;
 
             if (reader.TokenType == JsonToken.String)
             {
@@ -74,6 +77,9 @@ namespace Svea.WebPay.SDK.Json
         #region Private methods
         private void InitMap(Type enumType)
         {
+            var underlyingType = Nullable.GetUnderlyingType(enumType);
+            enumType = underlyingType != null ? underlyingType : enumType;
+
             if (this._fromValueMap == null)
                 this._fromValueMap = new Dictionary<Type, Dictionary<string, object>>();
 
@@ -86,8 +92,7 @@ namespace Svea.WebPay.SDK.Json
             var fromMap = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
             var toMap = new Dictionary<object, string>();
 
-            FieldInfo[] fields = enumType.GetFields(BindingFlags.Static | BindingFlags.Public);
-
+            var fields = enumType.GetFields(BindingFlags.Static | BindingFlags.Public);
             foreach (FieldInfo field in fields)
             {
                 var name = field.Name;

@@ -23,18 +23,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 // Validate order info
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.DirectBank))
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.Rows.Should.BeEmpty()
 
                 // Validate order rows info
                 .Orders.Last().OrderRows.Should.HaveCount(0)
 
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                .Orders.Last().Deliveries.First().Status.Should.BeNull()
-                .Orders.Last().Deliveries.First().Table.Rows.Should.HaveCount(1)
-                .Orders.Last().Deliveries.First().Table.CreditAmount.Should.Exist();
+                .Orders.Last().Deliveries.First().Status.Should.BeNull();
 
             // Assert sdk/api response
             var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
@@ -73,17 +68,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 // Validate order info
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.DirectBank))
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.Rows.Should.BeEmpty()
 
                 // Validate order rows info
                 .Orders.Last().OrderRows.Should.HaveCount(0)
 
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                .Orders.Last().Deliveries.First().Status.Should.BeNull()
-                .Orders.Last().Deliveries.First().Table.Rows.Should.HaveCount(0);
+                .Orders.Last().Deliveries.First().Status.Should.BeNull();
 
             // Assert sdk/api response
             var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));

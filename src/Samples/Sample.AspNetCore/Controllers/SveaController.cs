@@ -11,6 +11,8 @@ namespace Sample.AspNetCore.Controllers
     using Svea.WebPay.SDK;
     using Svea.WebPay.SDK.CheckoutApi;
 
+    using System;
+
     using Cart = Models.Cart;
 
     [ApiController]
@@ -46,36 +48,31 @@ namespace Sample.AspNetCore.Controllers
                     var order = await _sveaClient.Checkout.GetOrder(orderId.Value);
                     if (order != null && order.Status == CheckoutOrderStatus.Final)
                     {
-                        var paymentOrder = await _sveaClient.PaymentAdmin.GetOrder(orderId.Value);
+                        _cartService.SveaOrderId = order.OrderId.ToString();
+                        _cartService.Update();
 
-                        if (paymentOrder != null)
+                        var products = _cartService.CartLines.Select(p => p.Product);
+
+                        _context.Products.AttachRange(products);
+
+                        var existing = _context.Orders.Find(order.OrderId.ToString());
+                        if (existing != null)
                         {
-                            _cartService.SveaOrderId = paymentOrder.Id.ToString();
-                            _cartService.Update();
-
-                            var products = _cartService.CartLines.Select(p => p.Product);
-
-                            _context.Products.AttachRange(products);
-
-                            var existing = _context.Orders.Find(paymentOrder.Id.ToString());
-                            if (existing != null)
-                            {
-                                return Ok();
-                            }
-
-                            _context.Orders.Add(new Order
-                            {
-                                SveaOrderId = _cartService.SveaOrderId,
-                                Lines = _cartService.CartLines.ToList()
-                            });
-                            _context.SaveChanges(true);
+                            return Ok();
                         }
+
+                        _context.Orders.Add(new Order
+                        {
+                            SveaOrderId = _cartService.SveaOrderId,
+                            Lines = _cartService.CartLines.ToList()
+                        });
+                        _context.SaveChanges(true);
                     }
                 }
 
                 return Ok();
             }
-            catch
+            catch (Exception e)
             {
                 return Ok();
             }

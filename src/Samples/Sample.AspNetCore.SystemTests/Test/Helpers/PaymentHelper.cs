@@ -1,47 +1,44 @@
 ﻿using Atata;
 using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Payment;
-using Sample.AspNetCore.SystemTests.PageObjectModels.ThankYou;
 using Sample.AspNetCore.SystemTests.Services;
 
 namespace Sample.AspNetCore.SystemTests.Test.Helpers
 {
     public static class PaymentHelper
     {
-        public static ThankYouPage PayWithCard(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage PayWithCard(this SveaPaymentFramePage page)
         {
             return page
-                .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
-                .PaymentMethods.Card.Click()
-                .Submit.ClickAndGo<CardPaymentPage>()
-                .CardNumber.IsVisible.WaitTo.BeTrue()
-                .CardNumber.Set(TestDataService.CreditCardNumber)
-                .Expiry.Set(TestDataService.CreditCardExpiratioDate)
-                .Cvc.Set(TestDataService.CreditCardCvc)
-                .Submit.Click()
-                .SwitchToRoot<ThankYouPage>();
+            .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
+            .PaymentMethods.Card.Click()
+            .Submit.ClickAndGo<CardPaymentPage>()
+            .CardNumber.IsVisible.WaitTo.BeTrue()
+            .CardNumber.Set(TestDataService.CreditCardNumber)
+            .Expiry.Set(TestDataService.CreditCardExpiratioDate)
+            .Cvc.Set(TestDataService.CreditCardCvc)
+            .Submit.Click()
+            .SwitchToRoot<SveaPaymentFramePage>();
         }
 
-        public static ThankYouPage PayWithDirektBank(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage PayWithDirektBank(this SveaPaymentFramePage page)
         {
             return page
                 .PaymentMethods.DirektBank.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.DirektBank.Click()
                 .PaymentMethods.DirektBank.Nordea.Click()
-                .Submit.Click()
-                .SwitchToRoot<ThankYouPage>();
+                .Submit.Click();
         }
 
-        public static ThankYouPage PayWithInvoice(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage PayWithInvoice(this SveaPaymentFramePage page)
         {
             return page
                 .PaymentMethods.Invoice.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Invoice.Click()
-                .Submit.Click()
-                .SwitchToRoot<ThankYouPage>();
+                .Submit.Click();
         }
 
-        public static ThankYouPage PayWithTrustly(this SveaPaymentFramePage page, Checkout.Option checkout)
+        public static SveaPaymentFramePage PayWithTrustly(this SveaPaymentFramePage page, Checkout.Option checkout)
         {
             return page
                 .PaymentMethods.Trustly.IsVisible.WaitTo.BeTrue()
@@ -66,44 +63,40 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .MessageCode.StoreValue(out code)
                 .Code.Set(code)
                 .Next.Click()
-                .SwitchToRoot<ThankYouPage>();
+                .SwitchToRoot<SveaPaymentFramePage>();
         }
 
-        public static ThankYouPage PayWithPaymentPlan(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage PayWithPaymentPlan(this SveaPaymentFramePage page)
         {
             return page
                 .PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.PaymentPlan.Click()
                 .PaymentMethods.PaymentPlan.Options[1].Click()
-                .Submit.Click()
-                .SwitchToRoot<ThankYouPage>();
+                .Submit.Click();
         }
 
-        public static ThankYouPage PayWithAccount(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage PayWithAccount(this SveaPaymentFramePage page)
         {
             return page
                 .PaymentMethods.Account.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Account.Click()
-                .Submit.Click()
-                .SwitchToRoot<ThankYouPage>();
+                .Submit.Click();
         }
 
-        public static ThankYouPage PayWithBlackFriday(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage PayWithBlackFriday(this SveaPaymentFramePage page)
         {
             return page
                 .PaymentMethods.BlackFriday.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.BlackFriday.Click()
-                .Submit.Click()
-                .SwitchToRoot<ThankYouPage>();
+                .Submit.Click();
         }
 
-        public static ThankYouPage PayWithSwish(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage PayWithSwish(this SveaPaymentFramePage page)
         {
             return page
                 .PaymentMethods.Swish.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Swish.Click()
-                .Submit.Click()
-                .SwitchToRoot<ThankYouPage>();
+                .Submit.Click();
         }
     }
 }

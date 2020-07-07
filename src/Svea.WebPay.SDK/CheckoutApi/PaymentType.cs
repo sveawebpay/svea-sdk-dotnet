@@ -2,6 +2,7 @@
 {
     public enum PaymentType
     {
+        Unknown,
         None,
 
         /// <summary>
@@ -92,6 +93,11 @@
         /// <summary>
         ///  (Tapiola, Finland)
         /// </summary>
-        DBTAPIOLAFI
+        DBTAPIOLAFI,
+
+        /// <summary>
+        /// Trustly
+        /// </summary>
+        TRUSTLY
     }
 }

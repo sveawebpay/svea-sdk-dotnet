@@ -30,8 +30,8 @@ namespace Sample.AspNetCore.SystemTests.Test.Base
                     WithOptions(DriverOptionsFactory.GetDriverOptions(Driver.Chrome) as ChromeOptions).
                 UseFirefox().
                     WithOptions(DriverOptionsFactory.GetDriverOptions(Driver.Firefox) as FirefoxOptions).
-                UseVerificationTimeout(TimeSpan.FromSeconds(10)).
-                UseElementFindTimeout(TimeSpan.FromSeconds(20)).
+                UseVerificationTimeout(TimeSpan.FromSeconds(3)).
+                UseElementFindTimeout(TimeSpan.FromSeconds(15)).
                 UseWaitingTimeout(TimeSpan.FromSeconds(30)).
                 AddNUnitTestContextLogging().
                 WithMinLevel(LogLevel.Trace).
@@ -50,8 +50,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Base
 #if DEBUG
             AtataContext.Configure()
                 .UseDriver(_driverAlias)
-                    //.UseBaseUrl("https://localhost:44345/")
-                    .UseBaseUrl("https://svea-webpay-sdk-001-dev.azurewebsites.net/")
+                    .UseBaseUrl("https://localhost:44345/")
             .Build();
             AtataContext.Current.Driver.Maximize();
 #elif DEV

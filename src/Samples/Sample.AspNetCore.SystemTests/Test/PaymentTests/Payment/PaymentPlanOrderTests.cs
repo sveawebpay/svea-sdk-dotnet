@@ -24,24 +24,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 // Validate order info
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Open))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.PaymentPlan))
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.Rows.Should.HaveCount(7)
-                .Orders.Last().Order.Table.DeliverOrder.Should.Exist()
-                .Orders.Last().Order.Table.CancelOrder.Should.Exist()
-                .Orders.Last().Order.Table.CancelOrderRows.Should.Exist()
-                .Orders.Last().Order.Table.AddOrderRow.Should.Exist()
-                .Orders.Last().Order.Table.AddOrderRows.Should.Exist()
-                .Orders.Last().Order.Table.UpdateOrderRows.Should.Exist()
-                .Orders.Last().Order.Table.ReplaceOrderRows.Should.Exist()
 
                 // Validate order row info
                 .Orders.Last().OrderRows.Count.Should.Equal(1)
                 .Orders.Last().OrderRows.First().IsCancelled.Should.EqualIgnoringCase(false.ToString())
                 .Orders.Last().OrderRows.First().Name.Should.Equal(products.First().Name)
-                .Orders.Last().OrderRows.First().Table.Toggle.Click()
-                .Orders.Last().OrderRows.First().Table.Rows.Should.HaveCount(2)
-                .Orders.Last().OrderRows.First().Table.CancelRow.Should.Exist()
-                .Orders.Last().OrderRows.First().Table.UpdateRow.Should.Exist()
 
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Should.HaveCount(0);
@@ -83,19 +70,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 // Validate order info
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.PaymentPlan))
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.Rows.Should.BeEmpty()
 
                 // Validate order row info
                 .Orders.Last().OrderRows.Should.HaveCount(0)
 
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Status.Should.BeNull()
-                .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                .Orders.Last().Deliveries.First().Table.Rows.Should.HaveCount(2)
-                .Orders.Last().Deliveries.First().Table.CreditNewRow.Should.Exist()
-                .Orders.Last().Deliveries.First().Table.CreditOrderRows.Should.Exist();
+                .Orders.Last().Deliveries.First().Status.Should.BeNull();
 
             // Assert sdk/api response
             var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
@@ -136,17 +117,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 // Validate order info
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Cancelled))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.PaymentPlan))
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.Rows.Should.BeEmpty()
 
                 // Validate order rows info
                 .Orders.Last().OrderRows.Should.HaveCount(0)
 
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Status.Should.BeNull()
-                .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                .Orders.Last().Deliveries.First().Table.Rows.Should.HaveCount(0);
+                .Orders.Last().Deliveries.First().Status.Should.BeNull();
 
             // Assert sdk/api response
             var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
@@ -184,15 +161,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 // Validate order info
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Cancelled))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.PaymentPlan))
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.Rows.Should.BeEmpty()
 
                 // Validate order rows info
                 .Orders.Last().OrderRows.Count.Should.Equal(1)
                 .Orders.Last().OrderRows.First().IsCancelled.Should.EqualIgnoringCase(true.ToString())
                 .Orders.Last().OrderRows.First().Name.Should.Equal(products.First().Name)
-                .Orders.Last().OrderRows.First().Table.Toggle.Click()
-                .Orders.Last().OrderRows.First().Table.Rows.Should.BeEmpty()
 
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Should.HaveCount(0);

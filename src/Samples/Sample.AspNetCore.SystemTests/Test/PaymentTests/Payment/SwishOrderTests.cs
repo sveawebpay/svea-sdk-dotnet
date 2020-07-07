@@ -27,17 +27,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 // Validate order info
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Swish))
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.AvailableActions.Should.BeEmpty()
-
-                // Validate order row info
-                .Orders.Last().OrderRows.Should.BeEmpty()
-
-                // Validate deliveries info
-                .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                .Orders.Last().Deliveries.First().Table.AvailableActions.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Table.CreditAmount.Should.Exist();
+                .Orders.Last().Order.Table.Toggle.Click();
 
             // Assert sdk/api response
             var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
@@ -47,11 +37,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
             Assert.That(response.OrderAmount.Value, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Swish)));
-            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
+            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
+            Assert.That(response.AvailableActions.Count, Is.EqualTo(0));
 
-            Assert.That(response.AvailableActions.Count, Is.EqualTo(0));                
-            Assert.That(response.OrderRows.Count, Is.EqualTo(1));
-            Assert.That(response.OrderRows.First().AvailableActions.Count, Is.EqualTo(0));
+            Assert.Null(response.OrderRows);
 
             Assert.That(response.Deliveries.Count, Is.EqualTo(1));
             CollectionAssert.AreEquivalent(

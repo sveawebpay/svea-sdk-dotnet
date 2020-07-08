@@ -2,6 +2,19 @@
 {
     public class Gui
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="layout">
+        /// <summary>
+        /// Defines the orientation of the device, either “desktop” or “portrait”.
+        /// </summary>
+        /// </param>
+        /// <param name="snippet">
+        /// <summary>
+        /// HTML-snippet including javascript to populate the iFrame.
+        /// </summary>
+        /// </param>
         public Gui(string layout, string snippet)
         {
             Layout = layout;

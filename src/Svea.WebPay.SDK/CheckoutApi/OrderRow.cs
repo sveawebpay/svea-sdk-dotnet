@@ -4,6 +4,67 @@
 
     public class OrderRow
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="articleNumber">
+        /// <summary>
+        /// Articlenumber as a string, can contain letters and numbers.
+        /// </summary>
+        /// <remarks>Max length: 256. Min length: 0.</remarks>
+        /// </param>
+        /// <param name="name">
+        /// <summary>
+        /// Article name.
+        /// </summary>
+        /// <remarks>Max length: 40. Min length: 0.</remarks>
+        /// </param>
+        /// <param name="quantity">
+        /// <summary>
+        /// Quantity of the product. 1-9 digits.
+        /// </summary>
+        /// <remarks>Required</remarks>
+        /// </param>
+        /// <param name="unitPrice">
+        /// <summary>
+        /// Price of the product including VAT. 1-13 digits, can be negative.
+        /// </summary>
+        /// <remarks>Required</remarks>
+        /// </param>
+        /// <param name="discountPercent">
+        /// <summary>
+        /// The discount percent of the product. Examples: 0-10000. No fractions.0 = 0%100 = 1%1000 = 10%9900 = 99%10000 = 100%
+        /// </summary>
+        /// </param>
+        /// <param name="vatPercent">
+        /// <summary>
+        /// The VAT percentage of the current product. Valid vat percentage for that country.
+        /// </summary>
+        /// <remarks>SE 6, 12, 25</remarks>
+        ///  </param>
+        /// <param name="unit">
+        /// <summary>
+        /// The unit type, e.g., “st”, “pc”, “kg” etc.
+        /// </summary>
+        /// <remarks>Max length: 4. Min length: 0.</remarks>
+        /// </param>
+        /// <param name="temporaryReference">
+        /// <summary>
+        /// Can be used when creating or updating an order. The returned rows will have their corresponding temporaryreference as they were given in the indata.
+        /// It will not be stored and will not be returned in GetOrder.
+        /// </summary>
+        /// </param>
+        /// <param name="rowNumber">
+        /// <summary>
+        /// The row number the row will have in the Webpay system
+        /// </summary>
+        /// </param>
+        /// <param name="merchantData">
+        /// <summary>
+        /// Metadata visible to the store
+        /// </summary>
+        /// <remarks>Max length: 255. Optional. Cleaned up from Checkout database after 45 days.</remarks>
+        /// </param>
         public OrderRow(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountPercent,
             MinorUnit vatPercent, string unit, string temporaryReference, int rowNumber, string merchantData = null)
         {
@@ -111,6 +172,5 @@
         /// </summary>
         /// <remarks>Max length: 255. Optional. Cleaned up from Checkout database after 45 days.</remarks>
         public string MerchantData { get; }
-
     }
 }

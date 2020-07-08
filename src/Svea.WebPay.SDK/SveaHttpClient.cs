@@ -171,17 +171,16 @@ namespace Svea.WebPay.SDK
         {
             await SetRequestHeaders(httpRequest);
 
-           
+            var requestBody = string.Empty;
+            if (httpRequest.Content != null)
+            {
+                requestBody = await httpRequest.Content.ReadAsStringAsync();
+            }
+
             var httpResponse = await client.SendAsync(httpRequest);
 
-            async Task<string> BuildErrorMessage(string httpResponseBody)
+            string BuildErrorMessage(string httpResponseBody)
             {
-                var requestBody = string.Empty;
-                if (httpRequest.Content != null)
-                {
-                    requestBody = await httpRequest.Content.ReadAsStringAsync();
-                }
-                
                 return $"{httpRequest.Method}: {httpRequest.RequestUri} failed with error code {httpResponse.StatusCode} using bearer token {httpRequest.Headers.Authorization?.Parameter}. Request body: {requestBody}. Response body: {httpResponseBody}";
             }
 
@@ -195,7 +194,7 @@ namespace Svea.WebPay.SDK
                          !string.IsNullOrWhiteSpace(httpResponseBody)
                              ? JsonConvert.DeserializeObject<ErrorResponse>(httpResponseBody)
                             : null,
-                       await BuildErrorMessage(httpResponseBody));
+                       BuildErrorMessage(httpResponseBody));
                 }
 
                 var responsObj = JsonConvert.DeserializeObject<TResponse>(httpResponseBody, JsonSerialization.Settings);
@@ -220,7 +219,7 @@ namespace Svea.WebPay.SDK
                 var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
                 throw new HttpResponseException(
                     httpResponse,
-                    message: await BuildErrorMessage(httpResponseBody),
+                    message: BuildErrorMessage(httpResponseBody),
                     innerException: ex);
             }
         }

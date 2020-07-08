@@ -6,7 +6,13 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 
     public class CardPaymentPage : Page<_>
     {
-        [FindById("CardNumber")] 
+        [FindByDescendantAttribute("value", values: "credit")]
+        public Label<_> CreditCard { get; set; }
+
+        [FindByDescendantAttribute("value", values: "debit")]
+        public Label<_> DebitCard { get; set; }
+
+        [FindById("CardNumber")]
         public TextInput<_> CardNumber { get; set; }
 
         [FindById("Expiry")]
@@ -17,7 +23,7 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 
         [FindById("AmountDiv")]
         public TextInput<_> TotalAmount { get; set; }
-        
+
         [FindById("submit-button")]
         public Button<_> Submit { get; set; }
 

@@ -2,7 +2,6 @@
 
 namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 {
-    [Wait(1, TriggerEvents.BeforeClick, AppliesTo = TriggerScope.Children)]
     [ControlDefinition("form[@data-testid='confirm-form']", ComponentTypeName = "Payment Methods Block")]
     public class PaymentMethodsBlock<TOwner> : Control<TOwner> where TOwner : PageObject<TOwner>
     {

@@ -2,6 +2,7 @@
 using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Payment;
 using Sample.AspNetCore.SystemTests.Services;
+using System;
 
 namespace Sample.AspNetCore.SystemTests.Test.Helpers
 {
@@ -14,6 +15,13 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             .PaymentMethods.Card.Click()
             .Submit.ClickAndGo<CardPaymentPage>()
             .CardNumber.IsVisible.WaitTo.BeTrue()
+            .Do(x =>
+            {
+                if (x.DebitCard.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }))
+                {
+                    x.DebitCard.Click();
+                }
+            })
             .CardNumber.Set(TestDataService.CreditCardNumber)
             .Expiry.Set(TestDataService.CreditCardExpiratioDate)
             .Cvc.Set(TestDataService.CreditCardCvc)

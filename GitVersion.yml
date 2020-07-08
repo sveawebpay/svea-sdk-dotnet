@@ -8,6 +8,16 @@ branches:
     track-merge-target: false
     tracks-release-branches: false
     is-release-branch: false
+  tags:
+    regex: ^tags/*
+    mode: ContinuousDelivery
+    tag: ''
+    increment: Patch
+    prevent-increment-of-merged-branch-version: true
+    track-merge-target: false
+    tracks-release-branches: false
+    is-release-branch: false
+    source-branches: ['master']
   release:
     regex: ^releases?[/-]
     mode: ContinuousDeployment
@@ -19,9 +29,9 @@ branches:
     is-release-branch: true
     pre-release-weight: 1000
   feature:
-    regex: ^feature?[/-]
+    regex: ^features?[/-]
     mode: ContinuousDelivery
-    tag: alpha.{BranchName}
+    tag: useBranchName
     increment: Inherit
     prevent-increment-of-merged-branch-version: false
     track-merge-target: false
@@ -39,7 +49,7 @@ branches:
     is-release-branch: false
   hotfix:
     regex: ^hotfix(es)?[/-]
-    mode: ContinuousDelivery
+    mode: ContinuousDeployment
     tag: beta
     increment: Patch
     prevent-increment-of-merged-branch-version: false

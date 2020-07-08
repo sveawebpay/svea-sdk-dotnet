@@ -2,6 +2,7 @@
 using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Payment;
 using Sample.AspNetCore.SystemTests.Services;
+using System;
 
 namespace Sample.AspNetCore.SystemTests.Test.Helpers
 {

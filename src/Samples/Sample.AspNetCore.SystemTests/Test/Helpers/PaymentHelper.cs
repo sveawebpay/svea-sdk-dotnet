@@ -66,7 +66,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .MessageCode.StoreValue(out string code)
                 .Code.Set(code)
                 .Next.Click()
-                .AccountOptions.IsVisible.WaitTo.BeTrue()
+                .AccountOptions.IsVisible.WaitTo.Within(60).BeTrue()
                 .Next.Click()
                 .MessageCode.StoreValue(out code)
                 .Code.Set(code)

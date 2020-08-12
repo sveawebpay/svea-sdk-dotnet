@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Svea.WebPay.SDK
 {
@@ -8,11 +7,6 @@ namespace Svea.WebPay.SDK
         [JsonConstructor]
         private MinorUnit(decimal value)
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "Negative amount value is not allowed.");
-            }
-
             Value = decimal.ToInt32(value);
         }
 

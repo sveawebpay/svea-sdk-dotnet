@@ -45,11 +45,11 @@ Step 1:
     "Secret": "xxxxxxx"
   },
   "MerchantSettings": {
-    "PushUri": "https://localhost:4434/push/{checkout.order.uri}",
-    "TermsUri": "https://localhost:4434/terms",
-    "CheckoutUri": "https://localhost:44345/CheckOut/LoadPaymentMenu",
-    "ConfirmationUri": "https://localhost:44345/checkout/thankyou",
-    "CheckoutValidationCallbackUri": "https://localhost:4434/validation/{checkout.order.uri}"
+    "PushUri": "https://{Your domain}/push/{checkout.order.uri}",
+    "TermsUri": "https://{Your domain}/terms",
+    "CheckoutUri": "https://{Your domain}/CheckOut/LoadPaymentMenu",
+    "ConfirmationUri": "https://{Your domain}/checkout/thankyou",
+    "CheckoutValidationCallbackUri": "https://{Your domain}/validation/{checkout.order.uri}"
   }
 }
 

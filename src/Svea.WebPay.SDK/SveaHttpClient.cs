@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -245,7 +246,8 @@ namespace Svea.WebPay.SDK
 
         private async Task SetRequestHeaders(HttpRequestMessage httpRequest)
         {
-            var timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+            var timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+
             var token = CreateAuthenticationToken(httpRequest.Content != null ? await httpRequest.Content.ReadAsStringAsync() : string.Empty, timestamp);
             httpRequest.Headers.Add("Authorization", "Svea" + " " + token);
             httpRequest.Headers.Add("Timestamp", timestamp);

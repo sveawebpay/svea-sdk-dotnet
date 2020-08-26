@@ -1,6 +1,7 @@
 ﻿using Atata;
 using NUnit.Framework;
 using Sample.AspNetCore.SystemTests.Services;
+using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
 using Svea.WebPay.SDK.PaymentAdminApi;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
         }
 
-        //[Ignore("Swish is not available as payment method")]
+        [RetryWithException(3)]
         [Test(Description = "4780: Köp som privatperson(Swish, om vi kan få till det på en merchant) -> kreditera transaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreditWithSwishAsPrivateAsync(Product[] products)

@@ -1,6 +1,7 @@
 ﻿using Atata;
 using NUnit.Framework;
 using Sample.AspNetCore.SystemTests.Services;
+using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
 using Svea.WebPay.SDK.PaymentAdminApi;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             : base(driverAlias)
         {
         }
-        
+
+        [RetryWithException(3)]
         [Test(Description = "4781: Köp som privatperson i anonyma flödet(Trustly) -> kreditera transaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreateOrderWithTrustlyAsPrivateAnonymousAsync(Product[] products)
@@ -30,7 +32,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Count.Should.Equal(1)
                 .Orders.Last().Deliveries.First().Status.Should.BeNull();
-
+            
             // Assert sdk/api response
             var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
 
@@ -54,6 +56,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             );
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4781: Köp som privatperson i anonyma flödet(Trustly) -> kreditera transaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreditWithTrustlyAsPrivateAnonymousAsync(Product[] products)

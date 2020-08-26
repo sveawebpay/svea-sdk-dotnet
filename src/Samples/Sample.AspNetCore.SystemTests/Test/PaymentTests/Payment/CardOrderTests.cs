@@ -1,6 +1,7 @@
 ﻿using Atata;
 using NUnit.Framework;
 using Sample.AspNetCore.SystemTests.Services;
+using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
 using Svea.WebPay.SDK.PaymentAdminApi;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreateOrderWithCardAsCompanyAsync(Product[] products)
@@ -51,6 +53,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries, Is.Null);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task DeliverWithCardAsCompanyAsync(Product[] products)
@@ -95,6 +98,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4772: Köp som privatperson i anonyma flödet(kort) -> makulera transaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreditWithCardAsPrivateAnonymousAsync(Product[] products)
@@ -135,6 +139,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries, Is.Null);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4771: Köp som företag i anonyma flödet(kort) -> makulera transaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreditWithCardAsCompanyAnonymousAsync(Product[] products)
@@ -175,6 +180,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries, Is.Null);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CancelWithCardAsCompanyAsync(Product[] products)
@@ -215,6 +221,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries, Is.Null);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4777: Köp som privatperson(kort)-> leverera korttransaktion -> makulera korttransaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CancelWithCardAsPrivateAsync(Product[] products)

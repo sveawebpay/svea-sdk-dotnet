@@ -1,6 +1,7 @@
 ﻿using Atata;
 using NUnit.Framework;
 using Sample.AspNetCore.SystemTests.Services;
+using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
 using Svea.WebPay.SDK.PaymentAdminApi;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4784: Köp som privatperson(faktura) -> leverera faktura -> kreditera faktura, 4783: Köp som privatperson(faktura) -> makulera faktura")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreateOrderWithInvoiceAsPrivateAsync(Product[] products)
@@ -57,6 +59,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries.Count, Is.EqualTo(0));
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4784: Köp som privatperson(faktura) -> leverera faktura -> kreditera faktura")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task DeliverWithInvoiceAsPrivateAsync(Product[] products)
@@ -102,6 +105,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             );
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4784: Köp som privatperson(faktura) -> leverera faktura -> kreditera faktura")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreditWithInvoiceAsPrivateAsync(Product[] products)
@@ -148,6 +152,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4776: Köp som företag(faktura) -> leverera faktura -> kreditera faktura")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreditWithInvoiceAsCompanyAsync(Product[] products)
@@ -194,6 +199,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4783: Köp som privatperson(faktura) -> makulera faktura")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CancelWithInvoiceAsPrivateAsync(Product[] products)
@@ -234,6 +240,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries.Count, Is.EqualTo(0));
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4775: Köp som företag(faktura) -> makulera faktura")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CancelWithInvoiceAsCompanyAsync(Product[] products)

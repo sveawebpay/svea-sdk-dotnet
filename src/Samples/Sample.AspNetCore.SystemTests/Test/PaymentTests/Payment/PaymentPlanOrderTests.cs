@@ -1,6 +1,7 @@
 ﻿using Atata;
 using NUnit.Framework;
 using Sample.AspNetCore.SystemTests.Services;
+using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
 using Svea.WebPay.SDK.PaymentAdminApi;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreateOrderWithPaymentPlanAsPrivateAsync(Product[] products)
@@ -56,6 +58,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries, Is.Null);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task DeliverWithPaymentPlanAsPrivateAsync(Product[] products)
@@ -101,6 +104,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             );
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreditWithPaymentPlanAsPrivateAsync(Product[] products)
@@ -147,6 +151,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4778: Köp som privatperson(delbetala) -> makulera delbetalning")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CancelWithPaymentPlanAsPrivateAsync(Product[] products)

@@ -457,7 +457,7 @@ namespace Sample.AspNetCore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> CreditOrderRows(long paymentId, int deliveryId)
+        public async Task<ActionResult> CreditOrderRows(long paymentId, long deliveryId)
         {
             try
             {

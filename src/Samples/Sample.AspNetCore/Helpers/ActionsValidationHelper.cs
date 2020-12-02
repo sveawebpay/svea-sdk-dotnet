@@ -56,7 +56,7 @@ namespace Sample.AspNetCore.Helpers
             return null;
         }
 
-        public static string ValidateDeliveryAction(Order order, int deliveryId, string deliveryAction)
+        public static string ValidateDeliveryAction(Order order, long deliveryId, string deliveryAction)
         {
             var orderError = ValidateOrderAction(order, null);
 

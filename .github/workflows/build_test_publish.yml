@@ -33,38 +33,33 @@ jobs:
       AZURE_WEBAPP_NAME: ${{ steps.setoutputvariables.outputs.AZURE_WEBAPP_NAME }}
       PUBLISH_PROFILE: ${{ steps.setoutputvariables.outputs.PUBLISH_PROFILE }}
       NUGETVERSIONV2: ${{ steps.setoutputvariables.outputs.NUGETVERSIONV2 }}
-    
+  
        
     steps:
       - uses: actions/checkout@v2
 
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.3
+        uses: gittools/actions/gitversion/setup@v0.9.6
         with:
-          versionSpec: '5.3.x'
+          versionSpec: '5.x.x'
  
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
  
       - name: Use GitVersion
         id: gitversion # step id used as reference for output values
-        uses: gittools/actions/gitversion/execute@v0.9.3
+        uses: gittools/actions/gitversion/execute@v0.9.6
 
       - name: Set dev environment variables
-        uses: allenevans/set-env@v1.1.0
-        if: ${{ startsWith(github.ref, 'refs/heads/develop') }} 
+        uses: allenevans/set-env@v2.0.0
+        if: ${{ startsWith(github.ref, 'refs/heads/develop') }} || ${{ github.event_name == 'pull_request' }}
         with: 
           ENVIRONMENT: dev
           AZURE_WEBAPP_NAME: svea-webpay-sdk-001-dev
           NUGETVERSIONV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
       - name: Set uat environment variables
-        uses: allenevans/set-env@v1.1.0
+        uses: allenevans/set-env@v2.0.0
         if: ${{ startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/hotfix/') || contains(github.ref, '-beta')}} 
         with: 
           ENVIRONMENT: uat
@@ -72,7 +67,7 @@ jobs:
           NUGETVERSIONV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
       - name: Set pro environment variables
-        uses: allenevans/set-env@v1.1.0
+        uses: allenevans/set-env@v2.0.0
         if: ${{ startsWith(github.ref, 'refs/tags/') && !contains(github.ref, 'refs/tags/*-*') }} 
         with: 
           ENVIRONMENT: pro

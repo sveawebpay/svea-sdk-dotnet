@@ -1,6 +1,7 @@
 ﻿using Atata;
 using NUnit.Framework;
 using Sample.AspNetCore.SystemTests.Services;
+using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
 using Svea.WebPay.SDK.PaymentAdminApi;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4473: Köp som privatperson(kontokredit)-> makulera delbetalning, 4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreateOrderWithAccountCreditAsPrivateAsync(Product[] products)
@@ -54,6 +56,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries.Count, Is.EqualTo(0));
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task DeliverWithAccountCreditAsPrivateAsync(Product[] products)
@@ -99,6 +102,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             );
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CreditWithAccountCreditAsPrivateAsync(Product[] products)
@@ -145,6 +149,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
         }
 
+        [RetryWithException(3)]
         [Test(Description = "4473: Köp som privatperson(kontokredit)-> makulera delbetalning")]
         [TestCaseSource(nameof(TestData), new object[] { true })]
         public async System.Threading.Tasks.Task CancelWithAccountCreditAsPrivateAsync(Product[] products)

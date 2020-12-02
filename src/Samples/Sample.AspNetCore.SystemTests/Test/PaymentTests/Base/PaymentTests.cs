@@ -125,7 +125,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             try
             {
                 return page
-                    .PageUrl.WaitTo.Within(TimeSpan.FromSeconds(60)).Contain("thankyou")
+                    .PageUrl.Should.Within(TimeSpan.FromSeconds(60)).Contain("thankyou")
                     .SwitchToRoot<ThankYouPage>()
                     .ThankYou.IsVisible.WaitTo.BeTrue();
             }

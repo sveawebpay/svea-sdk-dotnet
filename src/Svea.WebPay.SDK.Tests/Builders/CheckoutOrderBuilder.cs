@@ -14,6 +14,7 @@
         private string clientOrderNumber;
         private MerchantSettings merchantSettings;
         private Cart cart;
+        private bool requireElectronicIdAuthentication;
         private IList<Presetvalue> presetValues;
         private IdentityFlags identityFlags;
         private Guid? partnerKey;
@@ -22,7 +23,7 @@
         public CreateOrderModel Build()
         {
             return new CreateOrderModel(this.countryCode, this.currency, this.locale, this.clientOrderNumber, this.merchantSettings, this.cart,
-            this.presetValues, this.identityFlags, this.partnerKey, this.merchantData);
+            this.requireElectronicIdAuthentication, this.presetValues, this.identityFlags, this.partnerKey, this.merchantData);
         }
 
         public CheckoutOrderBuilder UseTestValues()

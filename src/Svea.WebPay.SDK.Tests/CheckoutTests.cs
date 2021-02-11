@@ -63,7 +63,7 @@ namespace Svea.WebPay.SDK.Tests
 
             Assert.Equal(4, actualOrder.Cart.Items[0].Quantity.ToInt());
             Assert.Equal(2000, actualOrder.Cart.Items[0].UnitPrice.ToInt());
-            Assert.Equal(0, actualOrder.Cart.Items[0].DiscountPercent.ToInt());
+            Assert.Equal(0, actualOrder.Cart.Items[0].DiscountAmount.ToInt());
             Assert.Equal(6, actualOrder.Cart.Items[0].VatPercent.ToInt());
         }
 
@@ -88,7 +88,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("Computer", item.Name);
             Assert.Equal(1000, item.Quantity.Value);
             Assert.Equal(500000, item.UnitPrice.Value);
-            Assert.Equal(1000, item.DiscountPercent.Value);
+            Assert.Equal(1000, item.DiscountAmount.Value);
             Assert.Equal(2500, item.VatPercent.Value);
             Assert.Equal("SEK", item.Unit);
             Assert.Null(item.TemporaryReference);

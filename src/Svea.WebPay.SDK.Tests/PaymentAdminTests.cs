@@ -131,7 +131,7 @@ namespace Svea.WebPay.SDK.Tests
                     name: "Slim Fit 512",
                     quantity: MinorUnit.FromInt(2),
                     unitPrice: MinorUnit.FromInt(1000),
-                    discountPercent: MinorUnit.FromInt(0),
+                    discountAmount: MinorUnit.FromInt(0),
                     vatPercent: MinorUnit.FromInt(12),
                     unit: "SEK",
                     TimeSpan.FromSeconds(15)
@@ -162,7 +162,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: MinorUnit.FromInt(2),
                             unitPrice: MinorUnit.FromInt(1000),
                             vatPercent: MinorUnit.FromInt(12),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: 3,
                             unit: "SEK",
                             articleNumber: "1234567890"
@@ -172,7 +172,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: MinorUnit.FromInt(3),
                             unitPrice: MinorUnit.FromInt(2000),
                             vatPercent: MinorUnit.FromInt(5),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: 4,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -249,7 +249,7 @@ namespace Svea.WebPay.SDK.Tests
                     orderRow.Name,
                     orderRow.Quantity,
                     orderRow.UnitPrice,
-                    orderRow.DiscountPercent,
+                    orderRow.DiscountAmount,
                     orderRow.VatPercent,
                     orderRow.Unit
                 )
@@ -277,7 +277,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: order.OrderRows.ElementAt(0).Quantity,
                             unitPrice: order.OrderRows.ElementAt(0).UnitPrice,
                             vatPercent: order.OrderRows.ElementAt(0).VatPercent,
-                            discountPercent: order.OrderRows.ElementAt(0).DiscountPercent,
+                            discountAmount: order.OrderRows.ElementAt(0).DiscountAmount,
                             rowId: order.OrderRows.ElementAt(0).OrderRowId,
                             unit: order.OrderRows.ElementAt(0).Unit,
                             articleNumber: order.OrderRows.ElementAt(0).ArticleNumber
@@ -287,7 +287,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: order.OrderRows.ElementAt(1).Quantity,
                             unitPrice: order.OrderRows.ElementAt(1).UnitPrice,
                             vatPercent: order.OrderRows.ElementAt(1).VatPercent,
-                            discountPercent: order.OrderRows.ElementAt(1).DiscountPercent,
+                            discountAmount: order.OrderRows.ElementAt(1).DiscountAmount,
                             rowId: order.OrderRows.ElementAt(1).OrderRowId,
                             unit: order.OrderRows.ElementAt(1).Unit,
                             articleNumber: order.OrderRows.ElementAt(1).ArticleNumber
@@ -365,7 +365,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: MinorUnit.FromInt(2),
                             unitPrice: MinorUnit.FromInt(1000),
                             vatPercent: MinorUnit.FromInt(12),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: 1,                            
                             unit: "SEK",
                             articleNumber: "1234567890"
@@ -375,7 +375,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: MinorUnit.FromInt(3),
                             unitPrice: MinorUnit.FromInt(2000),
                             vatPercent: MinorUnit.FromInt(5),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: 2,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -448,7 +448,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("Levis 511 Slim Fit", orderRow1.Name);
             Assert.Equal(200, orderRow1.Quantity.Value);
             Assert.Equal(89900, orderRow1.UnitPrice.Value);
-            Assert.Equal(0, orderRow1.DiscountPercent.Value);
+            Assert.Equal(0, orderRow1.DiscountAmount.Value);
             Assert.Equal(0, orderRow1.VatPercent.Value);
             Assert.Equal("SEK", orderRow1.Unit);
             Assert.False(orderRow1.IsCancelled);
@@ -467,7 +467,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("Levis 501 Jeans", orderRow2.Name);
             Assert.Equal(300, orderRow2.Quantity.Value);
             Assert.Equal(119000, orderRow2.UnitPrice.Value);
-            Assert.Equal(0, orderRow2.DiscountPercent.Value);
+            Assert.Equal(0, orderRow2.DiscountAmount.Value);
             Assert.Equal(0, orderRow2.VatPercent.Value);
             Assert.Equal("SEK", orderRow2.Unit);
             Assert.False(orderRow2.IsCancelled);
@@ -542,7 +542,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(200, orderRow1.Quantity.Value);
             Assert.Equal(89900, orderRow1.UnitPrice.Value);
             Assert.Equal(0, orderRow1.VatPercent.Value);
-            Assert.Equal(0, orderRow1.DiscountPercent.Value);
+            Assert.Equal(0, orderRow1.DiscountAmount.Value);
             Assert.Equal("SEK", orderRow1.Unit);
             Assert.Equal(1, orderRow1.AvailableActions.Count);
             Assert.Equal(new List<string> { "CanCreditRow" }, orderRow1.AvailableActions);
@@ -556,7 +556,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(300, orderRow2.Quantity.Value);
             Assert.Equal(119000, orderRow2.UnitPrice.Value);
             Assert.Equal(0, orderRow2.VatPercent.Value);
-            Assert.Equal(0, orderRow2.DiscountPercent.Value);
+            Assert.Equal(0, orderRow2.DiscountAmount.Value);
             Assert.Equal("SEK", orderRow2.Unit);
             Assert.Equal(1, orderRow2.AvailableActions.Count);
             Assert.Equal(new List<string> { "CanCreditRow" }, orderRow2.AvailableActions);
@@ -636,7 +636,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(200, orderRow1.Quantity.Value);
             Assert.Equal(89900, orderRow1.UnitPrice.Value);
             Assert.Equal(0, orderRow1.VatPercent.Value);
-            Assert.Equal(0, orderRow1.DiscountPercent.Value);
+            Assert.Equal(0, orderRow1.DiscountAmount.Value);
             Assert.Equal("SEK", orderRow1.Unit);
             Assert.Equal(0, orderRow1.AvailableActions.Count);
             Assert.Null(orderRow1.Actions.CancelOrderRow);
@@ -649,7 +649,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(300, orderRow2.Quantity.Value);
             Assert.Equal(119000, orderRow2.UnitPrice.Value);
             Assert.Equal(0, orderRow2.VatPercent.Value);
-            Assert.Equal(0, orderRow2.DiscountPercent.Value);
+            Assert.Equal(0, orderRow2.DiscountAmount.Value);
             Assert.Equal("SEK", orderRow2.Unit);
             Assert.Equal(0, orderRow2.AvailableActions.Count);
             Assert.Null(orderRow2.Actions.CancelOrderRow);
@@ -672,7 +672,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(-200, creditedOrderRow1.Quantity.Value);
             Assert.Equal(89900, creditedOrderRow1.UnitPrice.Value);
             Assert.Equal(0, creditedOrderRow1.VatPercent.Value);
-            Assert.Equal(0, creditedOrderRow1.DiscountPercent.Value);
+            Assert.Equal(0, creditedOrderRow1.DiscountAmount.Value);
             Assert.Equal("SEK", creditedOrderRow1.Unit);
 
             var creditedOrderRow2 = credit.OrderRows.ElementAt(1);
@@ -682,7 +682,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(-300, creditedOrderRow2.Quantity.Value);
             Assert.Equal(119000, creditedOrderRow2.UnitPrice.Value);
             Assert.Equal(0, creditedOrderRow2.VatPercent.Value);
-            Assert.Equal(0, creditedOrderRow2.DiscountPercent.Value);
+            Assert.Equal(0, creditedOrderRow2.DiscountAmount.Value);
             Assert.Equal("SEK", creditedOrderRow2.Unit);
 
             // Order Rows

@@ -1,11 +1,12 @@
 ﻿namespace Svea.WebPay.SDK.CheckoutApi
 {
+    using Svea.WebPay.SDK.PaymentAdminApi;
+
     using System;
 
-    public class OrderRow
+    public class OrderRow : OrderRowBase
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="articleNumber">
         /// <summary>
@@ -31,9 +32,9 @@
         /// </summary>
         /// <remarks>Required</remarks>
         /// </param>
-        /// <param name="discountPercent">
+        /// <param name="discountAmount">
         /// <summary>
-        /// The discount percent of the product. Examples: 0-10000. No fractions.0 = 0%100 = 1%1000 = 10%9900 = 99%10000 = 100%
+        /// The discount amount of the product. Examples: 0-10000.
         /// </summary>
         /// </param>
         /// <param name="vatPercent">
@@ -65,11 +66,11 @@
         /// </summary>
         /// <remarks>Max length: 255. Optional. Cleaned up from Checkout database after 45 days.</remarks>
         /// </param>
-        public OrderRow(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountPercent,
+        public OrderRow(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount,
             MinorUnit vatPercent, string unit, string temporaryReference, int rowNumber, string merchantData = null)
         {
             ArticleNumber = articleNumber;
-            DiscountPercent = discountPercent;
+            DiscountAmount = discountAmount;
             Unit = unit;
             TemporaryReference = temporaryReference;
             RowNumber = rowNumber;
@@ -83,11 +84,6 @@
             if (ArticleNumber?.Length > 256)
             {
                 throw new ArgumentOutOfRangeException(nameof(articleNumber), "Maximum 256 characters.");
-            }
-
-            if (DiscountPercent.Value.ToString().Length > 10000)
-            {
-                throw new ArgumentOutOfRangeException(nameof(discountPercent), "Value cannot be more than 100.");
             }
 
             if (Quantity.Value.ToString().Length > 9)
@@ -115,46 +111,6 @@
                 throw new ArgumentOutOfRangeException(nameof(merchantData), "Can only be 0-255 characters.");
             }
         }
-
-        /// <summary>
-        /// Articlenumber as a string, can contain letters and numbers.
-        /// </summary>
-        /// <remarks>Max length: 256. Min length: 0.</remarks>
-        public string ArticleNumber { get; }
-
-        /// <summary>
-        /// Article name.
-        /// </summary>
-        /// <remarks>Max length: 40. Min length: 0.</remarks>
-        public string Name { get; }
-
-        /// <summary>
-        /// Quantity of the product. 1-9 digits.
-        /// </summary>
-        /// <remarks>Required</remarks>
-        public MinorUnit Quantity { get; }
-
-        /// <summary>
-        /// Price of the product including VAT. 1-13 digits, can be negative.
-        /// </summary>
-        /// <remarks>Required</remarks>
-        public MinorUnit UnitPrice { get; }
-
-        /// <summary>
-        /// The discount percent of the product. Examples: 0-10000. No fractions.0 = 0%100 = 1%1000 = 10%9900 = 99%10000 = 100%
-        /// </summary>
-        public MinorUnit DiscountPercent { get; }
-
-        /// <summary>
-        /// The VAT percentage of the current product. Valid vat percentage for that country.
-        /// </summary>
-        public MinorUnit VatPercent { get; }
-
-        /// <summary>
-        /// The unit type, e.g., “st”, “pc”, “kg” etc.
-        /// </summary>
-        /// <remarks>Max length: 4. Min length: 0.</remarks>
-        public string Unit { get; }
 
         /// <summary>
         /// Can be used when creating or updating an order. The returned rows will have their corresponding temporaryreference as they were given in the indata.

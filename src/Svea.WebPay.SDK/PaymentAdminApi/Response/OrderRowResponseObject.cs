@@ -4,17 +4,17 @@
 
     using System.Collections.Generic;
 
-    public class OrderRowResponseObject
+    public class OrderRowResponseObject : OrderRowBase
     {
         [JsonConstructor]
-        internal OrderRowResponseObject(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountPercent,
+        internal OrderRowResponseObject(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount,
             MinorUnit vatPercent, string unit, bool isCancelled, int orderRowId, IList<string> actions)
         {
             ArticleNumber = articleNumber;
             Name = name;
             Quantity = quantity;
             UnitPrice = unitPrice;
-            DiscountPercent = discountPercent;
+            DiscountAmount = discountAmount;
             VatPercent = vatPercent;
             Unit = unit;
             IsCancelled = isCancelled;
@@ -23,13 +23,6 @@
         }
 
         internal int OrderRowId { get; }
-        internal string ArticleNumber { get; }
-        internal string Name { get; }
-        internal MinorUnit Quantity { get; }
-        internal MinorUnit UnitPrice { get; }
-        internal MinorUnit DiscountPercent { get; }
-        internal MinorUnit VatPercent { get; }
-        internal string Unit { get; }
         internal bool IsCancelled { get; }
         internal IList<string> Actions { get; }
     }

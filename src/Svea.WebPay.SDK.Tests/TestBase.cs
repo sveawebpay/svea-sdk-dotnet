@@ -6,6 +6,8 @@ namespace Svea.WebPay.SDK.Tests
     using Microsoft.Extensions.DependencyInjection;
     using Moq;
     using Moq.Protected;
+
+    using Svea.WebPay.SDK.Tests.Helpers;
     using Svea.WebPay.SDK.Tests.Models;
     using System.Net;
     using System.Threading;
@@ -159,6 +161,7 @@ namespace Svea.WebPay.SDK.Tests
         }
 
         #endregion
+
         public void Dispose()
         {
             serviceProvider?.Dispose();

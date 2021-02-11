@@ -95,7 +95,7 @@ namespace Sample.AspNetCore.Controllers
                             name: "Slim Fit 512",
                             quantity: MinorUnit.FromInt(2),
                             unitPrice: MinorUnit.FromInt(100),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             vatPercent: MinorUnit.FromInt(12),
                             unit: "SEK",
                             TimeSpan.FromSeconds(15)
@@ -131,7 +131,7 @@ namespace Sample.AspNetCore.Controllers
                             quantity: MinorUnit.FromInt(2),
                             unitPrice: MinorUnit.FromInt(100),
                             vatPercent: MinorUnit.FromInt(12),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"
@@ -141,7 +141,7 @@ namespace Sample.AspNetCore.Controllers
                             quantity: MinorUnit.FromInt(3),
                             unitPrice: MinorUnit.FromInt(200),
                             vatPercent: MinorUnit.FromInt(25),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -251,7 +251,6 @@ namespace Sample.AspNetCore.Controllers
                     var existingOrderRows = paymentOrder.OrderRows;
 
                     var newOrderRows = new List<NewOrderRow>();
-
                     foreach (var orderRow in existingOrderRows)
                     {
                         newOrderRows.Add(new NewOrderRow(
@@ -259,7 +258,7 @@ namespace Sample.AspNetCore.Controllers
                             MinorUnit.FromInt((orderRow.Quantity.Value + 1) % 4 + 1),
                             orderRow.UnitPrice,
                             orderRow.VatPercent,
-                            orderRow.DiscountPercent,
+                            orderRow.DiscountAmount,
                             orderRow.OrderRowId,
                             orderRow.Unit,
                             orderRow.ArticleNumber
@@ -297,7 +296,7 @@ namespace Sample.AspNetCore.Controllers
                             quantity: MinorUnit.FromInt(2),
                             unitPrice: MinorUnit.FromInt(100),
                             vatPercent: MinorUnit.FromInt(12),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"
@@ -307,7 +306,7 @@ namespace Sample.AspNetCore.Controllers
                             quantity: MinorUnit.FromInt(3),
                             unitPrice: MinorUnit.FromInt(200),
                             vatPercent: MinorUnit.FromInt(25),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -374,7 +373,7 @@ namespace Sample.AspNetCore.Controllers
                             orderRow.Name,
                             orderRow.Quantity,
                             orderRow.UnitPrice,
-                            orderRow.DiscountPercent,
+                            orderRow.DiscountAmount,
                             orderRow.VatPercent,
                             orderRow.Unit
                         )

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class AddOrderRowRequest : IResourceRequest
+    public class AddOrderRowRequest : OrderRowBase, IResourceRequest
     {
         /// <summary>
         /// OrderRowRequest
@@ -11,14 +11,14 @@
         /// <param name="name">Article name. 1-40 characters.</param>
         /// <param name="quantity">Quantity of the product.</param>
         /// <param name="unitPrice">Price of the product including VAT.</param>
-        /// <param name="discountPercent">The discount percentage of the product.</param>
+        /// <param name="discountAmount">The discount amount of the product.</param>
         /// <param name="vatPercent">The VAT percentage of the credit amount. Valid vat percentage for that country.</param>
         /// <param name="unit">The unit type, e.g., “st”, “pc”, “kg” etc. 0-4 characters.</param>
         /// <param name="pollingTimeout">If set the task will be polled until the resource is complete or the timeout has passed. If null the resource will be returned if complete, otherwise the task is returned. </param>
-        public AddOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountPercent, MinorUnit vatPercent, string unit, TimeSpan? pollingTimeout = null)
+        public AddOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount, MinorUnit vatPercent, string unit, TimeSpan? pollingTimeout = null)
         {
             ArticleNumber = articleNumber;
-            DiscountPercent = discountPercent;
+            DiscountAmount = discountAmount;
             Unit = unit;
             PollingTimeout = pollingTimeout;
 
@@ -30,11 +30,6 @@
             if (ArticleNumber?.Length > 256)
             {
                 throw new ArgumentOutOfRangeException(nameof(articleNumber), "Maximum 256 characters.");
-            }
-
-            if (DiscountPercent.Value.ToString().Length > 10000)
-            {
-                throw new ArgumentOutOfRangeException(nameof(discountPercent), "Value cannot be more than 100.");
             }
 
             if (Quantity.Value.ToString().Length > 9)
@@ -58,13 +53,6 @@
             }
         }
 
-        public string ArticleNumber { get; }
-        public string Name { get; }
-        public MinorUnit Quantity { get; }
-        public MinorUnit UnitPrice { get; }
-        public MinorUnit DiscountPercent { get; }
-        public MinorUnit VatPercent { get; }
-        public string Unit { get; }
         public TimeSpan? PollingTimeout { get; }
     }
 }

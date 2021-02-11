@@ -58,7 +58,7 @@ namespace Sample.AspNetCore.Controllers
                 var sek = new CurrencyCode("SEK");
                 var paymentOrderRequest = new CreateOrderModel(seRegion, sek, new Language("sv-SE"), DateTime.Now.Ticks.ToString(),
                     new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(_merchantSettings.PushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, _merchantSettings.CheckoutValidationCallbackUri),
-                    new Svea.WebPay.SDK.CheckoutApi.Cart(orderItems));
+                    new Svea.WebPay.SDK.CheckoutApi.Cart(orderItems), false);
 
                 var data = await _sveaClient.Checkout.CreateOrder(paymentOrderRequest);
 

@@ -32,7 +32,7 @@ namespace Sample.AspNetCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Reference,ImageUrl,ItemUrl,Type,Class,Price")]
+        public async Task<IActionResult> Create([Bind("Id,Name,Reference,ImageUrl,ItemUrl,Type,Class,Price,DiscountAmount")]
             Product product)
         {
             if (!ModelState.IsValid)
@@ -97,7 +97,7 @@ namespace Sample.AspNetCore.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("Id,Name,Reference,ImageUrl,ItemUrl,Type,Class,Price")]
+            [Bind("Id,Name,Reference,ImageUrl,ItemUrl,Type,Class,Price,DiscountAmount")]
             Product product)
         {
             if (id != product.ProductId)

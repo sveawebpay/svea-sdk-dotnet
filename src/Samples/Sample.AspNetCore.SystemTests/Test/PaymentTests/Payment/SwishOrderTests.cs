@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(3)]
         [Test(Description = "4780: Köp som privatperson(Swish, om vi kan få till det på en merchant) -> kreditera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false })]
         public async System.Threading.Tasks.Task CreditWithSwishAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Swish)

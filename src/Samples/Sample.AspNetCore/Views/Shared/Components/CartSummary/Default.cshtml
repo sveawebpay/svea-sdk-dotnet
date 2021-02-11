@@ -27,22 +27,19 @@
                 </form>
             </td>
             <td class="text-left">@line.Product.Name</td>
-            <td class="text-right"> @line.Product.Price.ToString("c", CultureInfo.CreateSpecificCulture("sv-SE"))</td>
+            <td class="text-right"> @((line.Product.Price - line.Product.DiscountAmount).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))</td>
             <td class="text-right">
-                @((line.Quantity * line.Product.Price).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))
+                @((line.Quantity * (line.Product.Price - line.Product.DiscountAmount)).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))
             </td>
             <td>
                 <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
                     <input type="hidden" name="Id"
                            value="@line.Product.ProductId"/>
-                    @*<input type="hidden" name="returnUrl"
-                            value="@Model.ReturnUrl" />*@
                     <button type="submit" class="btn btn-sm btn-danger">
                         Remove
                     </button>
                 </form>
             </td>
-
         </tr>
     }
     </tbody>
@@ -56,7 +53,12 @@
     </tfoot>
 </table>
 <div class="text-center">
-    <a class="btn btn-primary" automation="button-checkout" asp-action="LoadPaymentMenu" asp-controller="CheckOut">
-        Checkout
-    </a>
+    <for-row>
+        <a class="btn btn-primary" automation="button-checkout-require" asp-action="LoadPaymentMenu" asp-route-requireBankId="true" asp-controller="CheckOut">
+            Checkout (Require BankId)
+        </a>
+        <a class="btn btn-primary" automation="button-checkout" asp-action="LoadPaymentMenu" asp-route-requireBankId="false" asp-controller="CheckOut">
+            Checkout
+        </a>
+    </for-row>
 </div>

@@ -19,6 +19,9 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
         [FindByAutomation("button-checkout", Index = 0)]
         public Link<PaymentPage, _> AnonymousCheckout { get; set; }
 
+        [FindByAutomation("button-checkout-require", Index = 0)]
+        public Link<PaymentPage, _> CheckoutAndRequireBankId { get; set; }
+
         [FindByAutomation("button-checkout", Index = 1)]
         public Link<PaymentPage, _> StandardCheckout { get; set; }
 
@@ -48,6 +51,8 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
             [FindByXPath("a[1]")] public Link<_> Open { get; set; }
 
             [FindByXPath("td[5]")] public Text<_> Price { get; set; }
+
+            [FindByXPath("td[6]")] public Text<_> OriginalPrice { get; set; }
         }
     }
 }

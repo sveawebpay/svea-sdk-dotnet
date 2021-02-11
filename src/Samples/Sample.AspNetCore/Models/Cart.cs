@@ -29,7 +29,7 @@ namespace Sample.AspNetCore.Models
 
         public virtual decimal CalculateTotal()
         {
-            return CartLineCollection.Sum(e => e.Quantity * e.Product.Price);
+            return CartLineCollection.Sum(e => e.Quantity * (e.Product.Price - e.Product.DiscountAmount));
         }
 
 
@@ -71,7 +71,7 @@ namespace Sample.AspNetCore.Models
 
         public decimal CalculateTotal()
         {
-            return Quantity * Product.Price;
+            return Quantity * (Product.Price - Product.DiscountAmount);
         }
     }
 }

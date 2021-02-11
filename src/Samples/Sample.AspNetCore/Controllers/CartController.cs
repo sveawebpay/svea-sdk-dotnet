@@ -74,7 +74,6 @@ namespace Sample.AspNetCore.Controllers
             return RedirectToAction("Index", "Products");
         }
 
-
         [HttpPost]
         public IActionResult UpdateQuantity(int id, int quantity)
         {

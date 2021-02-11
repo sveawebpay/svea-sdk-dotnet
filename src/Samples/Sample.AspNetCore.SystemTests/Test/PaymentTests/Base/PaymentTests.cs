@@ -76,12 +76,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
                     foreach (var product in products)
                     {
-                        product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value)].Name.Value;
+                        product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasDiscount == !string.IsNullOrEmpty(y.OriginalPrice.Value)].Name.Value;
 
                         x
                         .Products.Rows[y => y.Name.Value == product.Name].AddToCart.ClickAndGo<ProductsPage>()
                         .Products.Rows[y => y.Name.Value == product.Name].Price.StoreNumericalValue(out var price, characterToRemove: " ")
-                        .Products.Rows[y => y.Name.Value == product.Name].Price.StoreCurrency(out var currency, characterToRemove: " ");
+                        .Products.Rows[y => y.Name.Value == product.Name].Price.StoreCurrency(out var currency, characterToRemove: " ")
+                        .Products.Rows[y => y.Name.Value == product.Name].OriginalPrice.StoreNumericalValue(out var originalPrice, characterToRemove: " ");
 
                         if (product.Quantity != 1)
                         {
@@ -92,17 +93,71 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
                         product.UnitPrice = price;
                         product.Currency = currency;
+                        product.DiscountAmount = product.HasDiscount ? (originalPrice - price) : 0;
                     }
 
                     _amount = $"{ products.Sum(p => p.UnitPrice * p.Quantity) } {products.First().Currency}";
                 });
         }
 
-        protected SveaPaymentFramePage GoToSveaPaymentFrame(Product[] products)
+        protected SveaPaymentFramePage GoToSveaPaymentFrame(Product[] products, bool requireBankId = false)
         {
-            return SelectProducts(products)
-                .AnonymousCheckout.ClickAndGo()
-                .SveaFrame.SwitchTo<SveaPaymentFramePage>();
+            if (requireBankId)
+            {
+                return SelectProducts(products)
+                    .CheckoutAndRequireBankId.ClickAndGo()
+                    .SveaFrame.SwitchTo<SveaPaymentFramePage>();
+            }
+            else 
+            {
+                return SelectProducts(products)
+                    .AnonymousCheckout.ClickAndGo()
+                    .SveaFrame.SwitchTo<SveaPaymentFramePage>();
+            }
+        }
+
+        protected SveaPaymentFramePage GoToBankId(Product[] products, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
+        {
+            var page = GoToSveaPaymentFrame(products, requireBankId: true);
+
+            try
+            {
+                page.IdentifyEntity(checkout, entity);
+            }
+            catch (StaleElementReferenceException)
+            {
+                page.RefreshPage()
+                    .SwitchToFrame<SveaPaymentFramePage>(By.Id("svea-checkout-iframe"))
+                    .IdentifyEntity(checkout, entity);
+            }
+
+            switch(paymentMethod)
+            {
+                case PaymentMethods.Option.Invoice:
+                    page
+                        .PaymentMethods.Invoice.IsVisible.WaitTo.BeTrue()
+                        .PaymentMethods.Invoice.Click()
+                        .Submit.Click();
+                    break;
+
+                case PaymentMethods.Option.PaymentPlan:
+                    page
+                        .PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue()
+                        .PaymentMethods.PaymentPlan.Click()
+                        .PaymentMethods.PaymentPlan.Options[1].Click()
+                        .Submit.Click();
+                    break;
+
+
+                case PaymentMethods.Option.AccountCredit:
+                    page
+                        .PaymentMethods.Account.IsVisible.WaitTo.BeTrue()
+                        .PaymentMethods.Account.Click()
+                        .Submit.Click();
+                    break;
+            }
+
+            return page;
         }
 
         protected ThankYouPage GoToThankYouPage(Product[] products, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
@@ -119,7 +174,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     .SwitchToFrame<SveaPaymentFramePage>(By.Id("svea-checkout-iframe"))
                     .IdentifyEntity(checkout, entity);
             }
-                
+            
             page.Pay(checkout, entity, paymentMethod, _amount);
 
             try
@@ -142,19 +197,22 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                 .Header.Orders.ClickAndGo();
         }
 
-        protected static IEnumerable TestData(bool singleProduct = true)
+        protected static IEnumerable TestData(bool singleProduct = true, bool hasDiscount = false)
         {
             var data = new List<object>();
 
             if (singleProduct)
+            {
                 data.Add(new[]
-                {
-                    new Product { Quantity = 1 }
+                   {
+                    new Product { Quantity = 1, HasDiscount = hasDiscount }
                 });
+            }
+                
             else
                 data.Add(new[]
                 {
-                    new Product { Quantity = 3 },
+                    new Product { Quantity = 3, HasDiscount = hasDiscount },
                     new Product { Quantity = 2 }
                 });
 

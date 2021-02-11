@@ -54,6 +54,8 @@ namespace Sample.AspNetCore.Controllers
                 var noRegion = new RegionInfo("NO");
                 var nok = new CurrencyCode("NOK");
 
+                var usRegion = new RegionInfo("US");
+
                 var seRegion = new RegionInfo("SE");
                 var sek = new CurrencyCode("SEK");
                 var paymentOrderRequest = new CreateOrderModel(seRegion, sek, new Language("sv-SE"), DateTime.Now.Ticks.ToString(),

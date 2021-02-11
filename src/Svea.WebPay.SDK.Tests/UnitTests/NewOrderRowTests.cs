@@ -1,0 +1,50 @@
+﻿using System;
+
+namespace Svea.WebPay.SDK.Tests.UnitTests
+{
+    using Svea.WebPay.SDK.PaymentAdminApi.Models;
+
+    using Xunit;
+
+    public class NewOrderRowTests
+    {
+        [Theory]
+        [InlineData("ref1", "Name", 20, 1000, 100, 0, "st", 1)]
+        public void CreateNewOrderRow_DoesNotThrow_WhenGivenValidNewOrderRow(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
+            int vatPercent, string unit, long? rowid)
+        {
+            //ACT
+            var ex = Record.Exception(() => new NewOrderRow(name,
+                MinorUnit.FromInt(quantity),
+                MinorUnit.FromInt(unitPrice),
+                MinorUnit.FromInt(vatPercent),
+                MinorUnit.FromInt(discountAmount),
+                rowid, unit, articleNumber));
+
+            //ASSERT
+            Assert.Null(ex);
+        }
+
+
+        [Theory]
+        [InlineData("adsfasdfasdfffffffffffffffasdfasdfasdfasdfasdfaasdfoiuashdfiuasdhbbffiasydbfuaysdfvbvbuyasdfgvgvuaysdfgasudyfgasudyfgasuydfgasuyidfgasiuydffgasudyfgasuydfgasuiydfgasuydfgasoydfgaosydfgasddfsuygasdfyuagagysdfdfausyduaysdfguasdyfgausydfguyasdfggasudyfgusdyfdy", "Name", 20, 1000, 100, 0, "st", 1)]
+        [InlineData("ref1", "Name", 1000000000, 1000, 100, 0, "st", 1)]
+        [InlineData("ref1111", "Name", 20, 10000000000000, 100, 0, "st", 1)]
+        [InlineData("ref1", "Name", 20, 1000, -1, 0, "st", 1)]
+        [InlineData("ref1", "Name", 20, 1000, 1001, 0, "st", 1)]
+        [InlineData("ref1", "Name", 20, 1000, 100, 0, "stttt", 1)]
+        [InlineData("ref1", "", 20, 1000, 100, 0, "st", 1)]
+        [InlineData("ref1", "adsfasdfasdfffffffffffffffasdfasdsdfsdfsd", 20, 1000, 100, 0, "st", 1)]
+        public void ThrowsArgumentException_WhenGivenInvalidNewOrderRow(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
+            int vatPercent, string unit, long? rowid)
+        {
+            //ASSERT
+            Assert.Throws<ArgumentOutOfRangeException>(() => new NewOrderRow(name,
+                MinorUnit.FromInt(quantity),
+                MinorUnit.FromInt(unitPrice),
+                MinorUnit.FromInt(vatPercent),
+                MinorUnit.FromInt(discountAmount),
+                rowid, unit, articleNumber));
+        }
+    }
+}

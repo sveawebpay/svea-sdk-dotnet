@@ -56,7 +56,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             ClientOrderNumber = clientOrderNumber;
             MerchantSettings = merchantSettings;
             Cart = cart;
-            //RequireElectronicIdAuthentication = requireElectronicIdAuthentication;
+            RequireElectronicIdAuthentication = requireElectronicIdAuthentication;
             PresetValues = presetValues;
             IdentityFlags = identityFlags;
             PartnerKey = partnerKey;

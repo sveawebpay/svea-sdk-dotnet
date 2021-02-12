@@ -198,15 +198,14 @@ namespace Svea.WebPay.SDK
                        BuildErrorMessage(httpResponseBody));
                 }
 
-                if (httpResponse.StatusCode == HttpStatusCode.NoContent || string.IsNullOrWhiteSpace(httpResponseBody))
+                var responsObj = new TResponse();
+                if (httpResponse.StatusCode != HttpStatusCode.NoContent && !string.IsNullOrWhiteSpace(httpResponseBody))
                 {
-                    return new TResponse();
-                }
-
-                var responsObj = JsonSerializer.Deserialize<TResponse>(httpResponseBody, JsonSerialization.Settings);
-                if (responsObj == null)
-                {
-                    responsObj = new TResponse();
+                    responsObj = JsonSerializer.Deserialize<TResponse>(httpResponseBody, JsonSerialization.Settings);
+                    if (responsObj == null)
+                    {
+                        responsObj = new TResponse();
+                    }
                 }
 
                 SetLocation(responsObj, httpResponse);

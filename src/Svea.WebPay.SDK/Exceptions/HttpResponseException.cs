@@ -1,12 +1,12 @@
-﻿using System;
-using System.Net.Http;
-
-namespace Svea.WebPay.SDK
+﻿namespace Svea.WebPay.SDK.Exceptions
 {
-    public class HttpResponseException : Exception
+    using System;
+    using System.Net.Http;
+
+    internal class HttpResponseException : Exception
     {
         public HttpResponseException(HttpResponseMessage httpResponse,
-            object problemResponse = null,
+            ErrorResponse problemResponse = null,
             string message = null,
             Exception innerException = null)
             : base(message, innerException)

@@ -10,6 +10,7 @@ using Svea.WebPay.SDK.Json;
 
 namespace Svea.WebPay.SDK
 {
+    using Svea.WebPay.SDK.Exceptions;
     using Svea.WebPay.SDK.PaymentAdminApi;
     using Svea.WebPay.SDK.PaymentAdminApi.Request;
     using Svea.WebPay.SDK.PaymentAdminApi.Response;

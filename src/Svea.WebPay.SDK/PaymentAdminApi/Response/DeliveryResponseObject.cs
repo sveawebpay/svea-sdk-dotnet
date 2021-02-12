@@ -1,16 +1,16 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-    using Newtonsoft.Json;
 
     using Svea.WebPay.SDK.PaymentAdminApi.Models;
 
     using System;
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
     public class DeliveryResponseObject
     {
         [JsonConstructor]
-        internal DeliveryResponseObject(IList<string> actions, DateTime creationDate, long creditedAmount, IList<Credit> credits,
+        public DeliveryResponseObject(IList<string> actions, DateTime creationDate, long creditedAmount, IList<Credit> credits,
             long deliveryAmount, DateTime? dueDate, long id, long? invoiceId, IList<OrderRowResponseObject> orderRows, string status)
         {
             Actions = actions;
@@ -25,15 +25,34 @@
             Status = status;
         }
 
-        internal IList<string> Actions { get; }
-        internal DateTime CreationDate { get; }
-        internal long CreditedAmount { get; }
-        internal IList<Credit> Credits { get; }
-        internal long DeliveryAmount { get; }
-        internal DateTime? DueDate { get; }
-        internal long Id { get; }
-        internal long? InvoiceId { get; }
-        internal IList<OrderRowResponseObject> OrderRows { get; }
-        internal string Status { get; }
+        [JsonInclude]
+        public IList<string> Actions { get; }
+
+        [JsonInclude]
+        public DateTime CreationDate { get; }
+
+        [JsonInclude]
+        public long CreditedAmount { get; }
+
+        [JsonInclude]
+        public IList<Credit> Credits { get; }
+
+        [JsonInclude]
+        public long DeliveryAmount { get; }
+
+        [JsonInclude]
+        public DateTime? DueDate { get; }
+
+        [JsonInclude]
+        public long Id { get; }
+
+        [JsonInclude]
+        public long? InvoiceId { get; }
+
+        [JsonInclude]
+        public IList<OrderRowResponseObject> OrderRows { get; }
+
+        [JsonInclude]
+        public string Status { get; }
     }
 }

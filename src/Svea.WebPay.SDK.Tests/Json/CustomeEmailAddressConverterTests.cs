@@ -1,11 +1,12 @@
-﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿
 using Svea.WebPay.SDK.Json;
 using Xunit;
 
 namespace Svea.WebPay.SDK.Tests.Json
 {
+    using System.Text.Json;
+
+    
     public class CustomeEmailAddressConverterTests
     {
         private readonly string address = "email@example.com";
@@ -15,14 +16,10 @@ namespace Svea.WebPay.SDK.Tests.Json
         public void CanDeSerialize_EmailAddress()
         {
             //ARRANGE
-
-            var jsonObject = new JObject
-            {
-                { "x", this.address }
-            };
+            var jsonObject = $"{{ \"x\": \"{this.address}\" }}";
 
             //ACT
-            var result = JsonConvert.DeserializeObject<EmailAddress>(jsonObject.ToString(), JsonSerialization.Settings);
+            var result = JsonSerializer.Deserialize<EmailAddress>(jsonObject, JsonSerialization.Settings);
 
             //ASSERT
             Assert.Equal(this.address, result.ToString());
@@ -33,12 +30,12 @@ namespace Svea.WebPay.SDK.Tests.Json
         public void CanSerialize_EmailAddress()
         {
             //ARRANGE
-            var emailAddress = new  { EmailAddress = new EmailAddress(this.address) };
+            var emailAddress = new { EmailAddress = new EmailAddress(this.address) };
 
             //ACT
-            var result = JsonConvert.SerializeObject(emailAddress, JsonSerialization.Settings);
-            var obj = JObject.Parse(result);
-            obj.TryGetValue("EmailAddress", StringComparison.InvariantCultureIgnoreCase, out var address);
+            var result = JsonSerializer.Serialize(emailAddress, JsonSerialization.Settings);
+            var obj = JsonDocument.Parse(result);
+            obj.RootElement.TryGetProperty("emailAddress", out var address);
 
             //ASSERT
             Assert.Equal(this.address, address.ToString());

@@ -1,17 +1,18 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public class AddOrderRowResponseObject
     {
         public AddOrderRowResponseObject() { }
         
         [JsonConstructor]
-        internal AddOrderRowResponseObject(long[] orderRowId)
+        public AddOrderRowResponseObject(long[] orderRowId)
         {
             OrderRowId = orderRowId;
         }
 
-        internal long[] OrderRowId { get; }
+        [JsonInclude]
+        public long[] OrderRowId { get; }
     }
 }

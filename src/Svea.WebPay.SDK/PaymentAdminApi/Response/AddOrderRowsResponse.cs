@@ -1,6 +1,7 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-    using Newtonsoft.Json;
+
+    using System.Text.Json.Serialization;
 
     public class AddOrderRowsResponse
     {
@@ -15,6 +16,7 @@
         /// <summary>
         /// The row IDs of the newly created OrderRows.
         /// </summary>
+        [JsonInclude]
         public long[] OrderRowId { get; }
     }
 }

@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Svea.WebPay.SDK.Json;
 
 namespace Svea.WebPay.SDK
@@ -15,6 +14,7 @@ namespace Svea.WebPay.SDK
     using Svea.WebPay.SDK.PaymentAdminApi.Response;
 
     using System.Net;
+    using System.Text.Json;
     using System.Threading;
 
     using Task = System.Threading.Tasks.Task;
@@ -193,13 +193,17 @@ namespace Svea.WebPay.SDK
                     throw new HttpResponseException(
                         httpResponse,
                          !string.IsNullOrWhiteSpace(httpResponseBody)
-                             ? JsonConvert.DeserializeObject<ErrorResponse>(httpResponseBody)
+                             ? JsonSerializer.Deserialize<ErrorResponse>(httpResponseBody)
                             : null,
                        BuildErrorMessage(httpResponseBody));
                 }
 
-                var responsObj = JsonConvert.DeserializeObject<TResponse>(httpResponseBody, JsonSerialization.Settings);
+                if (httpResponse.StatusCode == HttpStatusCode.NoContent || string.IsNullOrWhiteSpace(httpResponseBody))
+                {
+                    return new TResponse();
+                }
 
+                var responsObj = JsonSerializer.Deserialize<TResponse>(httpResponseBody, JsonSerialization.Settings);
                 if (responsObj == null)
                 {
                     responsObj = new TResponse();
@@ -269,7 +273,7 @@ namespace Svea.WebPay.SDK
 
             if (payload != null)
             {
-                var content = JsonConvert.SerializeObject(payload, JsonSerialization.Settings);
+                var content = JsonSerializer.Serialize(payload, JsonSerialization.Settings);
                 httpRequestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
             }
 

@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace Svea.WebPay.SDK
+﻿namespace Svea.WebPay.SDK
 {
+    using System.Text.Json.Serialization;
+
     public class MinorUnit
     {
         [JsonConstructor]

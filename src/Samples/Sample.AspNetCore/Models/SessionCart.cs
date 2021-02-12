@@ -3,12 +3,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-using Newtonsoft.Json;
 
 using Sample.AspNetCore.Extensions;
 
 namespace Sample.AspNetCore.Models
 {
+    using System.Text.Json.Serialization;
+
     public class SessionCart : Cart
     {
         public const string CartSessionKey = "_Cart";

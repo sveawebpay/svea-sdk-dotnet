@@ -1,14 +1,15 @@
-﻿using Newtonsoft.Json;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace Svea.WebPay.SDK.Json
 {
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+
     //Original code found here: https://gist.github.com/gubenkoved/999eb73e227b7063a67a50401578c3a7
-    public class TypesafeEnumConverter : JsonConverter
+    public class TypesafeEnumConverter : JsonConverter<Type>
     {
         [ThreadStatic]
         private Dictionary<Type, Dictionary<string, object>> _fromValueMap; // string representation to Enum value map
@@ -18,38 +19,32 @@ namespace Svea.WebPay.SDK.Json
 
         public string UnknownValue { get; set; } = "Unknown";
 
-        public override bool CanConvert(Type objectType)
+        public override Type Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            var underlyingType = Nullable.GetUnderlyingType(objectType);
-            return objectType.IsEnum && !objectType.IsDefined(typeof(FlagsAttribute)) || (underlyingType != null && underlyingType.IsEnum);
-        }
+            InitMap(typeToConvert);
+            var underlyingType = Nullable.GetUnderlyingType(typeToConvert);
+            typeToConvert = underlyingType != null ? underlyingType : typeToConvert;
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            InitMap(objectType);
-            var underlyingType = Nullable.GetUnderlyingType(objectType);
-            objectType = underlyingType != null ? underlyingType : objectType;
-
-            if (reader.TokenType == JsonToken.String)
+            if (reader.TokenType == JsonTokenType.String)
             {
-                var enumText = reader.Value.ToString();
+                var enumText = reader.GetString();
 
-                var val = FromValue(objectType, enumText);
+                var val = FromValue(typeToConvert, enumText);
 
                 if (val != null)
                     return val;
             }
-            else if (reader.TokenType == JsonToken.Integer)
+            else if (reader.TokenType == JsonTokenType.Number)
             {
-                var enumVal = Convert.ToInt32(reader.Value);
-                var values = (int[])Enum.GetValues(objectType);
+                var enumVal = reader.GetInt32();
+                var values = (int[])Enum.GetValues(typeToConvert);
                 if (values.Contains(enumVal))
                 {
-                    return Enum.Parse(objectType, enumVal.ToString());
+                    return Enum.Parse(typeToConvert, enumVal.ToString()).GetType();
                 }
             }
 
-            var names = Enum.GetNames(objectType);
+            var names = Enum.GetNames(typeToConvert);
 
             var unknownName = names
                 .Where(n => string.Equals(n, UnknownValue, StringComparison.OrdinalIgnoreCase))
@@ -57,13 +52,13 @@ namespace Svea.WebPay.SDK.Json
 
             if (unknownName == null)
             {
-                throw new JsonSerializationException($"Unable to parse '{reader.Value}' to enum {objectType}. Consider adding Unknown as fail-back value.");
+                throw new JsonException($"Unable to parse '{reader.GetString()}' to enum {typeToConvert}. Consider adding Unknown as fail-back value.");
             }
 
-            return Enum.Parse(objectType, unknownName);
+            return Enum.Parse(typeToConvert, unknownName).GetType();
         }
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, Type value, JsonSerializerOptions options)
         {
             Type enumType = value.GetType();
 
@@ -71,10 +66,8 @@ namespace Svea.WebPay.SDK.Json
 
             var val = ToValue(enumType, value);
 
-            writer.WriteValue(val);
+            writer.WriteStringValue(val);
         }
-
-        #region Private methods
         private void InitMap(Type enumType)
         {
             var underlyingType = Nullable.GetUnderlyingType(enumType);
@@ -113,15 +106,14 @@ namespace Svea.WebPay.SDK.Json
             return map[obj];
         }
 
-        private object FromValue(Type enumType, string value)
+        private Type FromValue(Type enumType, string value)
         {
             Dictionary<string, object> map = this._fromValueMap[enumType];
 
             if (!map.ContainsKey(value))
                 return null;
 
-            return map[value];
+            return map[value].GetType();
         }
-        #endregion
     }
 }

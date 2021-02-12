@@ -1,16 +1,16 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-    using Newtonsoft.Json;
 
     using System;
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
     public class OrderResponseObject
     {
         public OrderResponseObject(){}
 
         [JsonConstructor]
-        internal OrderResponseObject(IList<string> actions, Address billingAddress, MinorUnit cancelledAmount, DateTime creationDate,
+        public OrderResponseObject(IList<string> actions, Address billingAddress, MinorUnit cancelledAmount, DateTime creationDate,
             string currency, string customerReference, IList<DeliveryResponseObject> deliveries, EmailAddress emailAddress, long id,
             bool isCompany, string merchantOrderId, string nationalId, MinorUnit orderAmount, IList<OrderRowResponseObject> orderRows,
             OrderStatus orderStatus, PaymentType paymentType, string phoneNumber, Address shippingAddress, bool? sveaWillBuy)
@@ -36,24 +36,61 @@
             SveaWillBuy = sveaWillBuy;
         }
 
-        internal IList<string> Actions { get; }
-        internal Address BillingAddress { get; }
-        internal MinorUnit CancelledAmount { get; }
-        internal DateTime CreationDate { get; }
-        internal string Currency { get; }
-        internal string CustomerReference { get; }
-        internal IList<DeliveryResponseObject> Deliveries { get; }
-        internal EmailAddress EmailAddress { get; }
-        internal long Id { get; }
-        internal bool IsCompany { get; }
-        internal string MerchantOrderId { get; }
-        internal string NationalId { get; }
-        internal MinorUnit OrderAmount { get; }
-        internal IList<OrderRowResponseObject> OrderRows { get; }
-        internal OrderStatus OrderStatus { get; }
-        internal PaymentType PaymentType { get; }
-        internal string PhoneNumber { get; }
-        internal Address ShippingAddress { get; }
-        internal bool? SveaWillBuy { get; }
+        [JsonInclude]
+        public IList<string> Actions { get; }
+
+        [JsonInclude]
+        public Address BillingAddress { get; }
+
+        [JsonInclude]
+        public MinorUnit CancelledAmount { get; }
+
+        [JsonInclude]
+        public DateTime CreationDate { get; }
+
+        [JsonInclude]
+        public string Currency { get; }
+
+        [JsonInclude]
+        public string CustomerReference { get; }
+        
+        [JsonInclude]
+        public IList<DeliveryResponseObject> Deliveries { get; }
+
+        [JsonInclude]
+        public EmailAddress EmailAddress { get; }
+
+        [JsonInclude]
+        public long Id { get; }
+
+        [JsonInclude]
+        public bool IsCompany { get; }
+
+        [JsonInclude]
+        public string MerchantOrderId { get; }
+
+        [JsonInclude]
+        public string NationalId { get; }
+
+        [JsonInclude]
+        public MinorUnit OrderAmount { get; }
+
+        [JsonInclude]
+        public IList<OrderRowResponseObject> OrderRows { get; }
+
+        [JsonInclude]
+        public OrderStatus OrderStatus { get; }
+
+        [JsonInclude]
+        public PaymentType PaymentType { get; }
+
+        [JsonInclude]
+        public string PhoneNumber { get; }
+
+        [JsonInclude]
+        public Address ShippingAddress { get; }
+
+        [JsonInclude]
+        public bool? SveaWillBuy { get; }
     }
 }

@@ -51,8 +51,17 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                             return resource;
                         };
                         
-                        AddOrderRows = async payload => await client.HttpPost<AddOrderRowsResponse>(
-                            new Uri($"/api/v1/orders/{orderResponse.Id}/rows/addOrderRows", UriKind.Relative), payload);
+                        AddOrderRows = async payload =>
+                        {
+                            var response = await client.HttpPost<ResourceResponseObject<AddOrderRowsResponseObject>, AddOrderRowsResponseObject>(
+                                new Uri($"/api/v1/orders/{orderResponse.Id}/rows/addOrderRows", UriKind.Relative),payload);
+
+                            var resource = new ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>(response, () => new AddOrderRowsResponse(response.Resource));
+
+                            return resource;
+                        };
+
+
                         break;
                     case OrderActionType.CanUpdateOrderRow:
                         UpdateOrderRows = async payload => await client.HttpPost<object>(
@@ -110,7 +119,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
         /// This method is used to add several order rows to an order, assuming that the order has the action "CanAddOrderRow".
         /// If the new order amount will exceed the current order amount, a credit check will be taken.
         /// </summary>
-        public Func<AddOrderRowsRequest, Task<AddOrderRowsResponse>> AddOrderRows { get; internal set; }
+        public Func<AddOrderRowsRequest, Task<ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>>> AddOrderRows { get; internal set; }
 
         /// <summary>
         /// This method is used to update several order rows, assuming that the order has the action "CanUpdateOrderRow", and the order rows have the action "CanUpdateRow".

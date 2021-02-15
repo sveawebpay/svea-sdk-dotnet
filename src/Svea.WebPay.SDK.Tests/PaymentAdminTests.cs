@@ -149,7 +149,7 @@ namespace Svea.WebPay.SDK.Tests
             // Arrange
             var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
-            var expectedResponse = JsonSerializer.Deserialize<AddOrderRowsResponse>(DataSample.AddOrderRowsResponse);
+            var expectedResponse = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowsResponse);
 
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, DataSample.AddOrderRowsResponse));
 
@@ -179,13 +179,12 @@ namespace Svea.WebPay.SDK.Tests
                             articleNumber: "0987654321"
                         )
                     }
-                    
                 )
             );
 
             // Assert
             // List of OrderRowId
-            Assert.Equal(expectedResponse.OrderRowId, resourceResponse.OrderRowId);
+            Assert.Equal(expectedResponse.OrderRowId, resourceResponse.Resource.OrderRowId);
         }
 
         [Fact]

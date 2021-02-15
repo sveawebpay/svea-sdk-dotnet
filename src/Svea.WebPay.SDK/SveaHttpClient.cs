@@ -13,6 +13,7 @@ namespace Svea.WebPay.SDK
     using Svea.WebPay.SDK.PaymentAdminApi.Request;
     using Svea.WebPay.SDK.PaymentAdminApi.Response;
 
+    using System.Diagnostics;
     using System.Net;
     using System.Text.Json;
     using System.Threading;
@@ -139,13 +140,24 @@ namespace Svea.WebPay.SDK
                     var response = await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage);
 
                     response.TaskUri = response.ResourceUri;
-                    PaymentAdminApi.Models.Task taskResponse;
-                    do
-                    {
-                        taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri);
-                    } while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
 
-                    response.ResourceUri = taskResponse.ResourceUri;
+                    try
+                    {
+                        PaymentAdminApi.Models.Task taskResponse;
+                        do
+                        {
+                            taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri);
+                        } while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
+
+                        response.ResourceUri = taskResponse.ResourceUri;
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        var ex = new HttpRequestException($"Resource object was not returned: {e.Message}");
+                        logger.LogError(ex, ex.Message);
+
+                        throw ex;
+                    }
 
                     return response;
                 }
@@ -178,11 +190,13 @@ namespace Svea.WebPay.SDK
                 requestBody = await httpRequest.Content.ReadAsStringAsync();
             }
 
+
             var httpResponse = await client.SendAsync(httpRequest);
 
             string BuildErrorMessage(string httpResponseBody)
             {
-                return $"{httpRequest.Method}: {httpRequest.RequestUri} failed with error code {httpResponse.StatusCode} using bearer token {httpRequest.Headers.Authorization?.Parameter}. Request body: {requestBody}. Response body: {httpResponseBody}";
+                return
+                    $"{httpRequest.Method}: {httpRequest.RequestUri} failed with error code {httpResponse.StatusCode} using bearer token {httpRequest.Headers.Authorization?.Parameter}. Request body: {requestBody}. Response body: {httpResponseBody}";
             }
 
             try
@@ -192,10 +206,10 @@ namespace Svea.WebPay.SDK
                 {
                     throw new HttpResponseException(
                         httpResponse,
-                         !string.IsNullOrWhiteSpace(httpResponseBody)
-                             ? JsonSerializer.Deserialize<ErrorResponse>(httpResponseBody)
+                        !string.IsNullOrWhiteSpace(httpResponseBody)
+                            ? JsonSerializer.Deserialize<ErrorResponse>(httpResponseBody)
                             : null,
-                       BuildErrorMessage(httpResponseBody));
+                        BuildErrorMessage(httpResponseBody));
                 }
 
                 var responsObj = new TResponse();

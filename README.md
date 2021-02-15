@@ -118,7 +118,7 @@ Important to note is that AllowAutoRedirect needs to be set to false in your Htt
 
 ## 5. Polling of Tasks
 
-When executing theese actions 'Add order row', 'Deliver order', 'Credit order rows' and 'Credit new row' a Task is created in Svea. When you create the request object
+When executing theese actions **'Add order row'**, **'Add order rows'**, **'Deliver order'**, **'Credit order rows'** and **'Credit new row'** a Task is created in Svea. When you create the request object
 for the specific action you have the option to specify a 'Polling timeout (TimeSpan)'. This will allow the SDK to poll the task until the timeout is reached or the task is done.
 Then the resource object will be returned. If not specified the SDK will try once if the Task has not finished the Task Uri will be returned and the polling needs to be done by the user.
 

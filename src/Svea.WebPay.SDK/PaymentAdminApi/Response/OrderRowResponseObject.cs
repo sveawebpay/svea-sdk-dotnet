@@ -1,13 +1,12 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-    using Newtonsoft.Json;
-
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
     public class OrderRowResponseObject : OrderRowBase
     {
         [JsonConstructor]
-        internal OrderRowResponseObject(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount,
+        public OrderRowResponseObject(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount,
             MinorUnit vatPercent, string unit, bool isCancelled, int orderRowId, IList<string> actions)
         {
             ArticleNumber = articleNumber;
@@ -22,8 +21,13 @@
             Actions = actions;
         }
 
-        internal int OrderRowId { get; }
-        internal bool IsCancelled { get; }
-        internal IList<string> Actions { get; }
+        [JsonInclude]
+        public int OrderRowId { get; }
+
+        [JsonInclude]
+        public bool IsCancelled { get; }
+
+        [JsonInclude]
+        public IList<string> Actions { get; }
     }
 }

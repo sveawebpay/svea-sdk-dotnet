@@ -4,10 +4,19 @@ using System.Linq;
 
 namespace Sample.AspNetCore.Models
 {
+    using System.Text.Json.Serialization;
+
     public class Cart
     {
-        private List<CartLine> CartLineCollection { get; } = new List<CartLine>();
-        public virtual IEnumerable<CartLine> CartLines => CartLineCollection;
+        private List<CartLine> CartLineCollection { get; set; } = new List<CartLine>();
+
+        [JsonInclude]
+        public virtual IEnumerable<CartLine> CartLines
+        {
+            get => CartLineCollection;
+            private set => CartLineCollection = value.ToList();
+        }
+
         public string SveaOrderId { get; set; }
         public bool Vat { get; set; }
 

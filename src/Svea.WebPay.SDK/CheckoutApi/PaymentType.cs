@@ -2,7 +2,7 @@
 {
     public enum PaymentType
     {
-        Unknown,
+        Unknown = default,
         None,
 
         /// <summary>

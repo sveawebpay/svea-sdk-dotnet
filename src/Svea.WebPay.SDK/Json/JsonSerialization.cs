@@ -1,28 +1,33 @@
-﻿using Newtonsoft.Json;
-
-using Svea.WebPay.SDK.CheckoutApi;
-
-using System.Collections.Generic;
-
-namespace Svea.WebPay.SDK.Json
+﻿namespace Svea.WebPay.SDK.Json
 {
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+
     public static class JsonSerialization
     {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        static JsonSerialization()
         {
-            ContractResolver = new LowercaseContractResolver(),
-            StringEscapeHandling = StringEscapeHandling.EscapeNonAscii,
-            NullValueHandling = NullValueHandling.Ignore,
-            Converters = new List<JsonConverter>
+            Settings = new JsonSerializerOptions
             {
-                new TypesafeEnumConverter(),
-                new CustomMinorUnitConverter(typeof(MinorUnit)),
-                new CustomEmailAddressConverter(typeof(EmailAddress)),
-                new CustomCurrencyCodeConverter(typeof(CurrencyCode)),
-                new CustomLanguageConverter(),
-                new CustomRegionInfoConverter(),
-                new CustomUriConverter()
-            }
-        };
+                IgnoreNullValues = true,
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true,
+                MaxDepth = 64,
+                IgnoreReadOnlyProperties = false,
+                Converters =
+                {
+                    new CustomEmailAddressConverter(),
+                    new CustomCurrencyCodeConverter(),
+                    new CustomLanguageConverter(),
+                    new CustomMinorUnitConverter(),
+                    new CustomRegionInfoConverter(),
+                    new CustomUriConverter(),
+                    new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+                }
+            };
+        }
+
+        public static JsonSerializerOptions Settings { get; private set; }
     }
 }

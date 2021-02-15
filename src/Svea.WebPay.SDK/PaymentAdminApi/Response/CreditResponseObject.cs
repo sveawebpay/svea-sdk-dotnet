@@ -1,17 +1,18 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public class CreditResponseObject
     {
         public CreditResponseObject() { }
 
         [JsonConstructor]
-        internal CreditResponseObject(string creditId)
+        public CreditResponseObject(string creditId)
         {
             CreditId = creditId;
         }
 
-        internal string CreditId { get; }
+        [JsonInclude]
+        public string CreditId { get; }
     }
 }

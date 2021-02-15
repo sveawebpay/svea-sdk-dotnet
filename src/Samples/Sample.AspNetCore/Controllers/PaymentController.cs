@@ -148,9 +148,9 @@ namespace Sample.AspNetCore.Controllers
                         )
                     };
 
-                    var response = await paymentOrder.Actions.AddOrderRows(new AddOrderRowsRequest(newOrderRows));
+                    var response = await paymentOrder.Actions.AddOrderRows(new AddOrderRowsRequest(newOrderRows, TimeSpan.FromSeconds(15)));
 
-                    TempData["OrderRowMessage"] = $"Order row has been added -> {string.Join(", ", response.OrderRowId) }";
+                    TempData["OrderRowMessage"] = $"Order row has been added -> {string.Join(", ", response.ResourceUri.AbsoluteUri) }";
                 }
             }
             catch (Exception e)
@@ -331,7 +331,7 @@ namespace Sample.AspNetCore.Controllers
         #region OrderRow
 
         [HttpGet]
-        public async Task<ActionResult> CancelRow(long paymentId, int orderRowId)
+        public async Task<ActionResult> CancelOrderRow(long paymentId, int orderRowId)
         {
             try
             {
@@ -356,7 +356,7 @@ namespace Sample.AspNetCore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> UpdateRow(long paymentId, int orderRowId)
+        public async Task<ActionResult> UpdateOrderRow(long paymentId, int orderRowId)
         {
             try
             {

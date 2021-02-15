@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
-
-namespace Svea.WebPay.SDK.CheckoutApi
+﻿namespace Svea.WebPay.SDK.CheckoutApi
 {
+    using Svea.WebPay.SDK.Json;
+
+    using System.Text.Json.Serialization;
+
     public class Data
     {
         public Data() { }
@@ -105,7 +107,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </param>
         [JsonConstructor]
         public Data(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency, 
-            string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType paymentType, 
+            string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType? paymentType, 
             CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId)
         {
             MerchantSettings = merchantSettings;
@@ -122,7 +124,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             OrderId = orderId;
             EmailAddress = emailAddress;
             PhoneNumber = phoneNumber;
-            PaymentType = paymentType;
+            PaymentType = paymentType ?? CheckoutApi.PaymentType.Unknown;
             Status = status;
             CustomerReference = customerReference;
             SveaWillBuyOrder = sveaWillBuyOrder;
@@ -136,97 +138,121 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// Specific merchant URIs
         /// </summary>
         /// <remarks>Required.</remarks>
+        [JsonInclude]
         public MerchantSettings MerchantSettings { get; }
 
         /// <summary>
         /// Order rows.
         /// </summary>
+        [JsonInclude]
         public Cart Cart { get; }
 
         /// <summary>
         /// Identified customer of the order.
         /// </summary>
+        [JsonInclude]
         public Customer Customer { get; }
 
         /// <summary>
         /// Shipping address of identified customer.
         /// </summary>
+        [JsonInclude]
         public Address ShippingAddress { get; }
 
         /// <summary>
         /// Billing address of identified customer.
         /// </summary>
+        [JsonInclude]
         public Address BillingAddress { get; }
 
+        [JsonInclude]
         public Gui Gui { get; }
 
         /// <summary>
         /// The current locale of the checkout, i.e.sv-SE etc.
         /// </summary>
         /// <remarks>Required.</remarks>
+        [JsonInclude]
         public string Locale { get; }
 
         /// <summary>
         /// The current currency as defined by ISO 4217, i.e. SEK, NOK etc.
         /// </summary>
         /// <remarks>Required.</remarks>
+        [JsonInclude]
         public string Currency { get; }
 
         /// <summary>
         /// Defined by two-letter ISO 3166-1 alpha-2, i.e. SE, DE, FI etc.
         /// </summary>
+        [JsonInclude]
         public string CountryCode { get; }
 
         /// <summary>
         /// A list containing the preset values, if any.
         /// </summary>
+        [JsonInclude]
         public Presetvalue[] PresetValues { get; }
 
+        [JsonInclude]
         public string ClientOrderNumber { get; }
+        
+        [JsonInclude]
         public long OrderId { get; }
+        
+        [JsonInclude]
         public string EmailAddress { get; }
 
         /// <summary>
         /// The customer’s phone number
         /// </summary>
+        [JsonInclude]
         public string PhoneNumber { get; }
 
         /// <summary>
         /// The final payment method for the order. Will only have a value when the order is finalized, otherwise unknown.
         /// </summary>
-        public PaymentType PaymentType { get; }
+        [JsonInclude]
+        public PaymentType? PaymentType { get;  }
 
         /// <summary>
         /// The current state of the order
         /// </summary>
+        [JsonInclude]
         public CheckoutOrderStatus Status { get; }
 
         /// <summary>
         /// B2B Customer reference
         /// </summary>
+        [JsonInclude]
         public object CustomerReference { get; }
 
         /// <summary>
         /// True = Svea will buy this invoice. False = Svea will not buy this invoice. null = Selected payment method is not Invoice.
         /// </summary>
+        [JsonInclude]
         public bool? SveaWillBuyOrder { get; }
 
+        [JsonInclude]
         public IdentityFlags IdentityFlags { get; }
 
         /// <summary>
         /// Metadata visible to the store
         /// </summary>
         /// <remarks>Optional. Cleaned up from Checkout database after 45 days.</remarks>
+        [JsonInclude]
         public object MerchantData { get; }
 
         /// <summary>
         /// The final payment method for the order. Will only have a value when the order is finalized, otherwise null.
         /// </summary>
+        [JsonInclude]
         public PaymentInfo Payment { get; }
 
         /// <summary>
         /// A company’s ID in the PEPPOL network, which allows the company to receive PEPPOL invoices. A PEPPOL ID can be entered when placing a B2B order using the payment method invoice.
         /// </summary>
+        [JsonInclude]
         public string PeppolId { get; }
     }
 }

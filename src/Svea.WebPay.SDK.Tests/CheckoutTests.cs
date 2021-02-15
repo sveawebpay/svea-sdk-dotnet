@@ -3,7 +3,6 @@ using Svea.WebPay.SDK.CheckoutApi;
 using Xunit;
 using Svea.WebPay.SDK.Extensions;
 using Svea.WebPay.SDK.Tests.Builders;
-using Newtonsoft.Json;
 using Svea.WebPay.SDK.Tests.Helpers;
 using Svea.WebPay.SDK.Json;
 using System.Linq;
@@ -11,7 +10,8 @@ using OrderRow = Svea.WebPay.SDK.CheckoutApi.OrderRow;
 
 namespace Svea.WebPay.SDK.Tests
 {
-    
+    using System.Text.Json;
+
     public class CheckoutTests : TestBase
     {
         private readonly CheckoutOrderBuilder checkoutOrderBuilder = new CheckoutOrderBuilder();
@@ -20,7 +20,7 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task CreateOrder_Should_Serialize_AsExpected()
         {
             // Arrange
-            var expectedOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
+            var expectedOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutCreateOrderResponse));
             var request = checkoutOrderBuilder.UseTestValues().Build();
 
@@ -35,8 +35,8 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task GetOrder_Should_Serialize_AsExpected()
         {
             // Arrange
-            var createdOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
-            var expectedOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutGetOrderResponse, JsonSerialization.Settings);
+            var createdOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
+            var expectedOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutGetOrderResponse, JsonSerialization.Settings);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutGetOrderResponse));
 
             // Act
@@ -50,8 +50,8 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task UpdateOrder_Should_Serialize_AsExpected()
         {
             // Arrange
-            var createdOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutUpdateOrderResponse, JsonSerialization.Settings);
-            var expectedOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutUpdateOrderResponse, JsonSerialization.Settings);
+            var createdOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutUpdateOrderResponse, JsonSerialization.Settings);
+            var expectedOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutUpdateOrderResponse, JsonSerialization.Settings);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutUpdateOrderResponse));
 
             // Act
@@ -71,7 +71,7 @@ namespace Svea.WebPay.SDK.Tests
         public void Order_Should_Serialize_AsExpected()
         {
             // Act
-            var order = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutGetOrderResponse, JsonSerialization.Settings);
+            var order = JsonSerializer.Deserialize<Data>(DataSample.CheckoutGetOrderResponse, JsonSerialization.Settings);
 
             // Assert
             Assert.Null(order.MerchantSettings.CheckoutValidationCallBackUri);

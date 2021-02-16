@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Atata;
 
 namespace Sample.AspNetCore.SystemTests.PageObjectModels.Base

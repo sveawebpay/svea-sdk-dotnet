@@ -1,11 +1,8 @@
 ﻿using Atata;
 using NUnit.Framework;
 using Sample.AspNetCore.SystemTests.PageObjectModels;
-using Sample.AspNetCore.SystemTests.Services;
 using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
-using Svea.WebPay.SDK.PaymentAdminApi;
-using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 {

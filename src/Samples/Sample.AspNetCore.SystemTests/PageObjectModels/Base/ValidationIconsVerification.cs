@@ -1,7 +1,5 @@
 ﻿using System;
-
 using Atata;
-
 using OpenQA.Selenium;
 
 namespace Sample.AspNetCore.SystemTests.PageObjectModels.Base

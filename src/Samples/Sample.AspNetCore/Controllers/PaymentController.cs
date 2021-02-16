@@ -370,7 +370,7 @@ namespace Sample.AspNetCore.Controllers
                     await orderRow.Actions.UpdateOrderRow(
                         new UpdateOrderRowRequest(
                             orderRow.ArticleNumber,
-                            orderRow.Name,
+                            orderRow.Name + " Updated",
                             orderRow.Quantity,
                             orderRow.UnitPrice,
                             orderRow.DiscountAmount,

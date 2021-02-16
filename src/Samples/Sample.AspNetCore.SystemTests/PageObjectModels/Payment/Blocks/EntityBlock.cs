@@ -1,7 +1,4 @@
 ﻿using Atata;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 {

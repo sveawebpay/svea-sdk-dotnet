@@ -1,5 +1,6 @@
 ﻿using Atata;
 using NUnit.Framework;
+using Sample.AspNetCore.SystemTests.PageObjectModels.Orders;
 using Sample.AspNetCore.SystemTests.Services;
 using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
@@ -281,11 +282,28 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         }
 
         [RetryWithException(3)]
-        [Test(Description = "")]
+        [Test(Description = "5702: RequireElectronicIdAuthentication] As a user I want to have a setting that will trigger BankId to be required on orders in the checkout")]
         [TestCaseSource(nameof(TestData), new object[] { true, false })]
         public void EnsureRequireIdAuthenticationShowUpWithInvoice(Product[] products)
         {
             GoToBankId(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice);
+        }
+
+        [RetryWithException(3)]
+        [Test(Description = "5738")]
+        [TestCaseSource(nameof(TestData), new object[] { false, false })]
+        public void UpdateOrderWithInvoiceAsPrivateAsync(Product[] products)
+        {
+            GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
+                .Orders.Last().Order.OrderId.StoreValue(out var orderId)
+                .Orders.Last().OrderRows.Last().Table.Toggle.Click()
+                .Orders.Last().OrderRows.Last().Table.UpdateRow.ClickAndGo<OrdersPage>()
+                .Orders.Last().OrderRows.Last().Table.Toggle.Click()
+                .Orders.Last().OrderRows.Last().Name.Should.Contain("Updated")
+                .Orders.Last().OrderRows.First().Table.Toggle.Click()
+                .Orders.Last().OrderRows.First().Table.UpdateRow.ClickAndGo<OrdersPage>()
+                .Orders.Last().OrderRows.First().Table.Toggle.Click()
+                .Orders.Last().OrderRows.First().Name.Should.Contain("Updated");
         }
     }
 }

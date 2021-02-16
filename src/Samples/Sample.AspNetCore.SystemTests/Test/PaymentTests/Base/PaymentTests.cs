@@ -1,5 +1,4 @@
 ﻿using Atata;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using OpenQA.Selenium;
@@ -100,12 +99,18 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                 });
         }
 
-        protected SveaPaymentFramePage GoToSveaPaymentFrame(Product[] products, bool requireBankId = false)
+        protected SveaPaymentFramePage GoToSveaPaymentFrame(Product[] products, bool requireBankId = false, bool isInternational = false)
         {
             if (requireBankId)
             {
                 return SelectProducts(products)
                     .CheckoutAndRequireBankId.ClickAndGo()
+                    .SveaFrame.SwitchTo<SveaPaymentFramePage>();
+            }
+            else if (isInternational)
+            {
+                return SelectProducts(products)
+                    .InternationalCheckout.ClickAndGo()
                     .SveaFrame.SwitchTo<SveaPaymentFramePage>();
             }
             else 
@@ -137,7 +142,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     page
                         .PaymentMethods.Invoice.IsVisible.WaitTo.BeTrue()
                         .PaymentMethods.Invoice.Click()
-                        .Submit.Click();
+                        .Submit.Click()
+                        .BankId.Should.BeVisible();
                     break;
 
                 case PaymentMethods.Option.PaymentPlan:
@@ -145,7 +151,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                         .PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue()
                         .PaymentMethods.PaymentPlan.Click()
                         .PaymentMethods.PaymentPlan.Options[1].Click()
-                        .Submit.Click();
+                        .Submit.Click()
+                        .BankId.Should.BeVisible();
                     break;
 
 
@@ -153,7 +160,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     page
                         .PaymentMethods.Account.IsVisible.WaitTo.BeTrue()
                         .PaymentMethods.Account.Click()
-                        .Submit.Click();
+                        .Submit.Click()
+                        .BankId.Should.BeVisible();
                     break;
             }
 

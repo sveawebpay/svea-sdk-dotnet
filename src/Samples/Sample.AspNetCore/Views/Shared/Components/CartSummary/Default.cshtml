@@ -54,11 +54,14 @@
 </table>
 <div class="text-center">
     <for-row>
-        <a class="btn btn-primary" automation="button-checkout-require" asp-action="LoadPaymentMenu" asp-route-requireBankId="true" asp-controller="CheckOut">
+        <a class="btn btn-primary" automation="button-checkout-require" asp-action="LoadPaymentMenu" asp-route-requireBankId="true" asp-route-isInternational="false" asp-controller="CheckOut">
             Checkout (Require BankId)
         </a>
-        <a class="btn btn-primary" automation="button-checkout" asp-action="LoadPaymentMenu" asp-route-requireBankId="false" asp-controller="CheckOut">
+        <a class="btn btn-primary" automation="button-checkout" asp-action="LoadPaymentMenu" asp-route-requireBankId="false" asp-route-isInternational="false" asp-controller="CheckOut">
             Checkout
+        </a>
+        <a class="btn btn-primary" automation="button-checkout-international" asp-action="LoadPaymentMenu" asp-route-requireBankId="false" asp-route-isInternational="true" asp-controller="CheckOut">
+            Checkout (International)
         </a>
     </for-row>
 </div>

@@ -32,9 +32,9 @@ namespace Sample.AspNetCore.Controllers
         }
 
 
-        public async Task<IActionResult> LoadPaymentMenu(bool requireBankId)
+        public async Task<IActionResult> LoadPaymentMenu(bool requireBankId, bool isInternational)
         {
-            var data = await CreatePaymentOrder(null, requireBankId);
+            var data = await CreatePaymentOrder(requireBankId, isInternational);
 
             var snippet = data.Gui.Snippet;
 
@@ -46,7 +46,7 @@ namespace Sample.AspNetCore.Controllers
             return View("Checkout", SveaCheckoutSource);
         }
 
-        public async Task<Svea.WebPay.SDK.CheckoutApi.Data> CreatePaymentOrder(string consumerProfileRef = null, bool requireBanKId = false)
+        public async Task<Svea.WebPay.SDK.CheckoutApi.Data> CreatePaymentOrder(bool requireBanKId = false, bool isInternational = false)
         {
             var orderItems = _cartService.CartLines.ToOrderItems().ToList();
             try
@@ -54,11 +54,11 @@ namespace Sample.AspNetCore.Controllers
                 var noRegion = new RegionInfo("NO");
                 var nok = new CurrencyCode("NOK");
 
-                var usRegion = new RegionInfo("US");
+                RegionInfo region = isInternational ? new RegionInfo("US") : new RegionInfo("SE");
 
-                var seRegion = new RegionInfo("SE");
                 var sek = new CurrencyCode("SEK");
-                var paymentOrderRequest = new CreateOrderModel(seRegion, sek, new Language("sv-SE"), DateTime.Now.Ticks.ToString(),
+
+                var paymentOrderRequest = new CreateOrderModel(region, sek, new Language("sv-SE"), DateTime.Now.Ticks.ToString(),
                     new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(_merchantSettings.PushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, _merchantSettings.CheckoutValidationCallbackUri),
                     new Svea.WebPay.SDK.CheckoutApi.Cart(orderItems), requireBanKId);
 

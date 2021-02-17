@@ -1,4 +1,5 @@
-﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
+﻿
+namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
     using System.Collections.Generic;
     using System.Text.Json.Serialization;

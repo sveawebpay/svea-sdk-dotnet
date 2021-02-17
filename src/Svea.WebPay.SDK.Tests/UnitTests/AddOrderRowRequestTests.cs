@@ -11,6 +11,8 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
     {
         [Theory]
         [InlineData("ref1", "Name", 20, 1000, 100, 0, "st")]
+        [InlineData("", "Name", 20, 1000, 100, 0, "st")]
+        [InlineData("", "N", 20, 1000, 100, 0, "st")]
         public void CreateAddOrderRowRequest_DoesNotThrow_WhenGivenValidAddOrderRowRequest(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
             int vatPercent, string unit)
         {
@@ -44,6 +46,47 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
                 MinorUnit.FromInt(unitPrice),
                 MinorUnit.FromInt(discountAmount),
                 MinorUnit.FromInt(vatPercent), unit));
+        }
+
+        [Theory]
+        [InlineData("ref1", "Name", 20, 1000, 100, 0, "st")]
+        public void ThrowsArgumentException_IfMinorUnitIsNull(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
+            int vatPercent, string unit)
+        {
+            //ASSERT
+            Assert.Throws<ArgumentNullException>(() => new AddOrderRowRequest(articleNumber, name,
+                null,
+                MinorUnit.FromInt(unitPrice),
+                MinorUnit.FromInt(discountAmount),
+                MinorUnit.FromInt(vatPercent), unit));
+
+            Assert.Throws<ArgumentNullException>(() => new AddOrderRowRequest(articleNumber, name,
+                MinorUnit.FromInt(quantity),
+                null,
+                MinorUnit.FromInt(discountAmount),
+                MinorUnit.FromInt(vatPercent),
+                unit));
+
+            Assert.Throws<ArgumentNullException>(() => new AddOrderRowRequest(articleNumber, name,
+                MinorUnit.FromInt(quantity),
+                MinorUnit.FromInt(unitPrice),
+                MinorUnit.FromInt(discountAmount),
+                null,
+                unit));
+        }
+
+        [Theory]
+        [InlineData("ref1", "Name", 20, 1000, 100, 0, "st")]
+        public void ThrowsArgumentException_IfNameIsNull(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
+            int vatPercent, string unit)
+        {
+            //ASSERT
+            Assert.Throws<ArgumentNullException>(() => new AddOrderRowRequest(articleNumber, null,
+                MinorUnit.FromInt(quantity),
+                MinorUnit.FromInt(unitPrice),
+                MinorUnit.FromInt(discountAmount),
+                MinorUnit.FromInt(vatPercent),
+                unit));
         }
     }
 }

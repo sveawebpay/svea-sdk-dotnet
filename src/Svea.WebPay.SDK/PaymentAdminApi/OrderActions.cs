@@ -43,10 +43,10 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                     case OrderActionType.CanAddOrderRow:
                         AddOrderRow = async payload =>
                         {
-                            var response = await client.HttpPost<ResourceResponseObject<AddOrderRowResponseObject>, AddOrderRowResponseObject>(
+                            var response = await client.HttpPost<ResourceResponseObject<AddOrderRowsResponseObject>, AddOrderRowsResponseObject>(
                                 new Uri($"/api/v1/orders/{orderResponse.Id}/rows", UriKind.Relative), payload);
 
-                            var resource = new ResourceResponse<AddOrderRowResponseObject, AddOrderRowResponse>(response, () => new AddOrderRowResponse(response.Resource));
+                            var resource = new ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>(response, () => new AddOrderRowsResponse(response.Resource));
 
                             return resource;
                         };
@@ -54,7 +54,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                         AddOrderRows = async payload =>
                         {
                             var response = await client.HttpPost<ResourceResponseObject<AddOrderRowsResponseObject>, AddOrderRowsResponseObject>(
-                                new Uri($"/api/v1/orders/{orderResponse.Id}/rows/addOrderRows", UriKind.Relative),payload);
+                                new Uri($"/api/v1/orders/{orderResponse.Id}/rows/addOrderRows", UriKind.Relative), payload);
 
                             var resource = new ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>(response, () => new AddOrderRowsResponse(response.Resource));
 
@@ -113,7 +113,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
         /// “CanAddOrderRow”.
         /// If the new order amount will exceed the current order amount, a credit check will be taken.
         /// </summary>
-        public Func<AddOrderRowRequest, Task<ResourceResponse<AddOrderRowResponseObject, AddOrderRowResponse>>> AddOrderRow { get; internal set; }
+        public Func<AddOrderRowRequest, Task<ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>>> AddOrderRow { get; internal set; }
 
         /// <summary>
         /// This method is used to add several order rows to an order, assuming that the order has the action "CanAddOrderRow".

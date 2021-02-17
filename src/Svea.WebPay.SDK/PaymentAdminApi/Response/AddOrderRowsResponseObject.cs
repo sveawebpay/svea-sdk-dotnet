@@ -1,12 +1,12 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-
     using System.Text.Json.Serialization;
 
     public class AddOrderRowsResponseObject
     {
         public AddOrderRowsResponseObject() { }
         
+
         [JsonConstructor]
         public AddOrderRowsResponseObject(long[] orderRowId)
         {

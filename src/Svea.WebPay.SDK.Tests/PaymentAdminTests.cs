@@ -119,8 +119,8 @@ namespace Svea.WebPay.SDK.Tests
             // Arrange
             var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
-            var orderRowResponseObject = JsonSerializer.Deserialize<AddOrderRowResponseObject>(DataSample.AddOrderRowResponse);
-            var expectedOrderRow = new AddOrderRowResponse(orderRowResponseObject);
+            var orderRowResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
+            var expectedOrderRow = new AddOrderRowsResponse(orderRowResponseObject);
 
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowResponse));
 
@@ -149,9 +149,10 @@ namespace Svea.WebPay.SDK.Tests
             // Arrange
             var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var orderRowsResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
             var expectedResponse = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowsResponse);
 
-            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, DataSample.AddOrderRowsResponse));
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowsResponse));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662);

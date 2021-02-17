@@ -1,6 +1,5 @@
 ﻿namespace Svea.WebPay.SDK.CheckoutApi
 {
-    using Svea.WebPay.SDK.PaymentAdminApi;
 
     using System;
 
@@ -79,6 +78,7 @@
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
             UnitPrice = unitPrice ?? throw new ArgumentNullException(nameof(unitPrice));
+            DiscountAmount = discountAmount ?? throw new ArgumentNullException(nameof(discountAmount));
             VatPercent = vatPercent ?? throw new ArgumentNullException(nameof(vatPercent));
 
             if (ArticleNumber?.Length > 256)

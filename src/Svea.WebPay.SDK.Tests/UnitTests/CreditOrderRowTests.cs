@@ -3,6 +3,7 @@
 namespace Svea.WebPay.SDK.Tests.UnitTests
 {
     using Svea.WebPay.SDK.PaymentAdminApi.Models;
+    using Svea.WebPay.SDK.PaymentAdminApi.Request;
 
     using Xunit;
 
@@ -10,6 +11,7 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
     {
         [Theory]
         [InlineData("Name", 1000, 0)]
+        [InlineData("N", 1000, 0)]
         public void CreateCreditOrderRow_DoesNotThrow_WhenGivenValidCreditOrderRow(string name, long unitPrice, int vatPercent)
         {
             //ACT
@@ -30,6 +32,30 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ASSERT
             Assert.Throws<ArgumentOutOfRangeException>(() => new CreditOrderRow(name,
+                MinorUnit.FromInt(unitPrice),
+                MinorUnit.FromInt(vatPercent)));
+        }
+
+        [Theory]
+        [InlineData("Name", 1000, 0)]
+        public void ThrowsArgumentException_IfMinorUnitIsNull(string name, long unitPrice, int vatPercent)
+        {
+            //ASSERT
+            Assert.Throws<ArgumentNullException>(() => new CreditOrderRow(name,
+                null,
+                MinorUnit.FromInt(vatPercent)));
+
+            Assert.Throws<ArgumentNullException>(() => new CreditOrderRow(name,
+                MinorUnit.FromInt(unitPrice),
+                null));
+        }
+
+        [Theory]
+        [InlineData(1000, 0)]
+        public void ThrowsArgumentException_IfNameIsNull(long unitPrice, int vatPercent)
+        {
+            //ASSERT
+            Assert.Throws<ArgumentNullException>(() => new CreditOrderRow(null,
                 MinorUnit.FromInt(unitPrice),
                 MinorUnit.FromInt(vatPercent)));
         }

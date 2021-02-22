@@ -132,6 +132,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.dotnetCoreVersion }}
+          source-url: https://nuget.pkg.github.com/{{ github.repository_owner }}/index.json
 
       - name: Install dependencies
         run: dotnet restore ${{ env.SlnPath }}
@@ -198,7 +199,7 @@ jobs:
           
       - name: Publish test package to GitHub Package Registry
         if: ${{ github.event_name != 'pull_request' && needs.variables.outputs.ENVIRONMENT == 'dev'}}
-        run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{secrets.GITHUB_TOKEN}} --source  https://nuget.pkg.github.com/sveawebpay --skip-duplicate
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{secrets.GITHUB_TOKEN}} --source  https://nuget.pkg.github.com/{{ github.repository_owner }}/index.json --skip-duplicate
       
       - name: Publish to nuget
         if: ${{ github.event_name == 'release' }}

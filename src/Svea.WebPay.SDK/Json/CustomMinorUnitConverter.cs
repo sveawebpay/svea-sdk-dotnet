@@ -50,48 +50,7 @@ namespace Svea.WebPay.SDK.Json
 
         public override void Write(Utf8JsonWriter writer, MinorUnit value, JsonSerializerOptions options)
         {
-            //var t = JToken.FromObject(value);
-
-            //if (t.Type != JTokenType.Object)
-            //    t.WriteTo(writer);
-            //else
-                writer.WriteNumberValue(value.Value);
+            writer.WriteNumberValue(value.Value);
         }
-
-
-        //public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        //{
-        //    try
-        //    {
-        //        long value;
-        //        if (reader.Value == null)
-        //        {
-        //            var jo = JObject.Load(reader);
-
-        //            value = (long)jo.First.Values().FirstOrDefault();
-        //        }
-        //        else
-        //        {
-        //            value = (long)reader.Value;
-        //        }
-
-        //        return new MinorUnit(value);
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw new JsonSerializationException($"Error converting {reader.Value ?? "Null"} to {objectType.Name}.", exception);
-        //    }
-        //}
-
-
-        //public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        //{
-        //    var t = JToken.FromObject(value);
-
-        //    if (t.Type != JTokenType.Object)
-        //        t.WriteTo(writer);
-        //    else
-        //        writer.WriteValue(value.ToString());
-        //}
     }
 }

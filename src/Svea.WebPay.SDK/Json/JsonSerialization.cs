@@ -28,6 +28,6 @@
             };
         }
 
-        public static JsonSerializerOptions Settings { get; private set; }
+        public static JsonSerializerOptions Settings { get; }
     }
 }

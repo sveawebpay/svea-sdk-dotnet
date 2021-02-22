@@ -68,6 +68,7 @@ namespace Svea.WebPay.SDK.Json
 
             writer.WriteStringValue(val);
         }
+
         private void InitMap(Type enumType)
         {
             var underlyingType = Nullable.GetUnderlyingType(enumType);

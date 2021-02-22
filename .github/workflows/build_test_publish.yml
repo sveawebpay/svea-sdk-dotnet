@@ -198,7 +198,7 @@ jobs:
           
       - name: Publish test package to GitHub Package Registry
         if: ${{ github.event_name != 'pull_request' && needs.variables.outputs.ENVIRONMENT == 'dev'}}
-        run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{github.token}} --source  https://nuget.pkg.github.com/sveawebpay/index.json --skip-duplicate
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{secrets.GITHUB_TOKEN}} --source  https://nuget.pkg.github.com/sveawebpay --skip-duplicate
       
       - name: Publish to nuget
         if: ${{ github.event_name == 'release' }}

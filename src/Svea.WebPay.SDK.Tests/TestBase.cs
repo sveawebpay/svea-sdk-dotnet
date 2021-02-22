@@ -4,12 +4,17 @@ using System.Net.Http;
 namespace Svea.WebPay.SDK.Tests
 {
     using Microsoft.Extensions.DependencyInjection;
+
     using Moq;
     using Moq.Protected;
+
+    using Svea.WebPay.SDK.Tests.Helpers;
     using Svea.WebPay.SDK.Tests.Models;
+
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
+
     using Credentials = Svea.WebPay.SDK.Credentials;
 
     public abstract class TestBase : IDisposable
@@ -18,7 +23,7 @@ namespace Svea.WebPay.SDK.Tests
 
         protected SveaConfiguration Configuration;
 
-        private readonly ServiceProvider serviceProvider;
+        private readonly ServiceProvider _serviceProvider;
 
         protected TestBase()
         {
@@ -27,7 +32,7 @@ namespace Svea.WebPay.SDK.Tests
             Configuration = TestHelper.GetApplicationConfiguration(appRoot);
 
             var services = new ServiceCollection();
-            serviceProvider = services.BuildServiceProvider();
+            _serviceProvider = services.BuildServiceProvider();
 
             var handler = new HttpClientHandler
             {
@@ -60,7 +65,7 @@ namespace Svea.WebPay.SDK.Tests
                 )
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK,
+                    StatusCode = string.IsNullOrWhiteSpace(responseMsg) ? HttpStatusCode.NoContent : HttpStatusCode.OK,
                     Headers =
                     {
                         Location = location != null ? new Uri(location) : null
@@ -76,7 +81,7 @@ namespace Svea.WebPay.SDK.Tests
         {
             var actionResponse = new HttpResponseMessage()
             {
-                StatusCode = HttpStatusCode.OK,
+                StatusCode = string.IsNullOrWhiteSpace(actionResponseMsg) ? HttpStatusCode.NoContent : HttpStatusCode.OK,
                 Content = new StringContent(actionResponseMsg)
             };
 
@@ -89,7 +94,7 @@ namespace Svea.WebPay.SDK.Tests
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK,
+                    StatusCode = string.IsNullOrWhiteSpace(responseMsg) ? HttpStatusCode.NoContent : HttpStatusCode.OK,
                     Content = new StringContent(responseMsg),
                 })
                 .ReturnsAsync(actionResponse);
@@ -101,7 +106,7 @@ namespace Svea.WebPay.SDK.Tests
         {
             var actionResponse = new HttpResponseMessage()
             {
-                StatusCode = HttpStatusCode.OK,
+                StatusCode = string.IsNullOrWhiteSpace(actionResponseMsg) ? HttpStatusCode.NoContent : HttpStatusCode.OK,
                 Content = new StringContent(actionResponseMsg),
                 Headers =
                 {
@@ -111,7 +116,7 @@ namespace Svea.WebPay.SDK.Tests
 
             var taskResponse = new HttpResponseMessage()
             {
-                StatusCode = HttpStatusCode.OK,
+                StatusCode = string.IsNullOrWhiteSpace(taskResponseMsg) ? HttpStatusCode.NoContent : HttpStatusCode.OK,
                 Content = new StringContent(taskResponseMsg),
                 Headers =
                 {
@@ -121,7 +126,7 @@ namespace Svea.WebPay.SDK.Tests
 
             var resourceResponse = new HttpResponseMessage()
             {
-                StatusCode = HttpStatusCode.OK,
+                StatusCode = string.IsNullOrWhiteSpace(resourceResponseMsg) ? HttpStatusCode.NoContent : HttpStatusCode.OK,
                 Content = new StringContent(resourceResponseMsg)
             };
 
@@ -137,7 +142,7 @@ namespace Svea.WebPay.SDK.Tests
                     ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.OK,
+                    StatusCode = string.IsNullOrWhiteSpace(responseMsg) ? HttpStatusCode.NoContent : HttpStatusCode.OK,
                     Content = new StringContent(responseMsg),
                 })
                 .ReturnsAsync(actionResponse)
@@ -159,9 +164,10 @@ namespace Svea.WebPay.SDK.Tests
         }
 
         #endregion
+
         public void Dispose()
         {
-            serviceProvider?.Dispose();
+            _serviceProvider?.Dispose();
         }
     }
 }

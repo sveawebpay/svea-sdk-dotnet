@@ -1,14 +1,13 @@
-﻿using System;
-
-namespace Svea.WebPay.SDK.Tests.Json
+﻿namespace Svea.WebPay.SDK.Tests.Json
 {
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-
     using Svea.WebPay.SDK.CheckoutApi;
     using Svea.WebPay.SDK.Json;
 
+    using System.Text.Json;
+
     using Xunit;
+
+    using JsonSerializer = System.Text.Json.JsonSerializer;
 
     public class CustomCurrencyCodeConverterTests
     {
@@ -18,11 +17,11 @@ namespace Svea.WebPay.SDK.Tests.Json
         public void CanDeSerialize_CurrencyCode()
         {
             //ARRANGE
-
-            var jsonObject = new JObject { { "currency", this.currencyCode } };
+            var jsonObject = $"{{ \"x\": \"{this.currencyCode}\" }}";
+           
 
             //ACT
-            var result = JsonConvert.DeserializeObject<CurrencyCode>(jsonObject.ToString(), JsonSerialization.Settings);
+            var result = JsonSerializer.Deserialize<CurrencyCode>(jsonObject, JsonSerialization.Settings);
 
             //ASSERT
             Assert.Equal(this.currencyCode, result.ToString());
@@ -37,12 +36,12 @@ namespace Svea.WebPay.SDK.Tests.Json
 
 
             //ACT
-            var result = JsonConvert.SerializeObject(currency, JsonSerialization.Settings);
-            var obj = JObject.Parse(result);
-            obj.TryGetValue("CurrencyCode", StringComparison.InvariantCultureIgnoreCase, out var code);
+            var result = JsonSerializer.Serialize(currency, JsonSerialization.Settings);
+            var obj = JsonDocument.Parse(result);
+            obj.RootElement.TryGetProperty("currencyCode", out var code);
 
             //ASSERT
-            Assert.Equal(this.currencyCode, code);
+            Assert.Equal(this.currencyCode, code.GetString());
         }
     }
 }

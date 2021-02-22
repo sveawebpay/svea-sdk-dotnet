@@ -5,16 +5,18 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Svea.WebPay.SDK.Json;
 
 namespace Svea.WebPay.SDK
 {
+    using Svea.WebPay.SDK.Exceptions;
     using Svea.WebPay.SDK.PaymentAdminApi;
     using Svea.WebPay.SDK.PaymentAdminApi.Request;
     using Svea.WebPay.SDK.PaymentAdminApi.Response;
 
+    using System.Diagnostics;
     using System.Net;
+    using System.Text.Json;
     using System.Threading;
 
     using Task = System.Threading.Tasks.Task;
@@ -139,13 +141,24 @@ namespace Svea.WebPay.SDK
                     var response = await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage);
 
                     response.TaskUri = response.ResourceUri;
-                    PaymentAdminApi.Models.Task taskResponse;
-                    do
-                    {
-                        taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri);
-                    } while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
 
-                    response.ResourceUri = taskResponse.ResourceUri;
+                    try
+                    {
+                        PaymentAdminApi.Models.Task taskResponse;
+                        do
+                        {
+                            taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri);
+                        } while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
+
+                        response.ResourceUri = taskResponse.ResourceUri;
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        var ex = new HttpRequestException($"Resource object was not returned: {e.Message}");
+                        logger.LogError(ex, ex.Message);
+
+                        throw ex;
+                    }
 
                     return response;
                 }
@@ -178,11 +191,13 @@ namespace Svea.WebPay.SDK
                 requestBody = await httpRequest.Content.ReadAsStringAsync();
             }
 
+
             var httpResponse = await client.SendAsync(httpRequest);
 
             string BuildErrorMessage(string httpResponseBody)
             {
-                return $"{httpRequest.Method}: {httpRequest.RequestUri} failed with error code {httpResponse.StatusCode} using bearer token {httpRequest.Headers.Authorization?.Parameter}. Request body: {requestBody}. Response body: {httpResponseBody}";
+                return
+                    $"{httpRequest.Method}: {httpRequest.RequestUri} failed with error code {httpResponse.StatusCode} using bearer token {httpRequest.Headers.Authorization?.Parameter}. Request body: {requestBody}. Response body: {httpResponseBody}";
             }
 
             try
@@ -192,17 +207,20 @@ namespace Svea.WebPay.SDK
                 {
                     throw new HttpResponseException(
                         httpResponse,
-                         !string.IsNullOrWhiteSpace(httpResponseBody)
-                             ? JsonConvert.DeserializeObject<ErrorResponse>(httpResponseBody)
+                        !string.IsNullOrWhiteSpace(httpResponseBody)
+                            ? JsonSerializer.Deserialize<ErrorResponse>(httpResponseBody)
                             : null,
-                       BuildErrorMessage(httpResponseBody));
+                        BuildErrorMessage(httpResponseBody));
                 }
 
-                var responsObj = JsonConvert.DeserializeObject<TResponse>(httpResponseBody, JsonSerialization.Settings);
-
-                if (responsObj == null)
+                var responsObj = new TResponse();
+                if (httpResponse.StatusCode != HttpStatusCode.NoContent && !string.IsNullOrWhiteSpace(httpResponseBody))
                 {
-                    responsObj = new TResponse();
+                    responsObj = JsonSerializer.Deserialize<TResponse>(httpResponseBody, JsonSerialization.Settings);
+                    if (responsObj == null)
+                    {
+                        responsObj = new TResponse();
+                    }
                 }
 
                 SetLocation(responsObj, httpResponse);
@@ -269,7 +287,7 @@ namespace Svea.WebPay.SDK
 
             if (payload != null)
             {
-                var content = JsonConvert.SerializeObject(payload, JsonSerialization.Settings);
+                var content = JsonSerializer.Serialize(payload, JsonSerialization.Settings);
                 httpRequestMessage.Content = new StringContent(content, Encoding.UTF8, "application/json");
             }
 

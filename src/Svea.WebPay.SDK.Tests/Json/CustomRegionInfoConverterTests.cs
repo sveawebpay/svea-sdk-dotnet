@@ -1,15 +1,14 @@
-﻿using System;
-
-namespace Svea.WebPay.SDK.Tests.Json
+﻿namespace Svea.WebPay.SDK.Tests.Json
 {
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-
     using Svea.WebPay.SDK.Json;
 
+    using System.Collections.Generic;
     using System.Globalization;
+    using System.Text.Json;
 
     using Xunit;
+
+    using JsonSerializer = System.Text.Json.JsonSerializer;
 
     public class CustomRegionInfoConverterTests
     {
@@ -20,10 +19,10 @@ namespace Svea.WebPay.SDK.Tests.Json
         public void CanDeSerialize_RegionInfo(string regionInfoString)
         {
             //ARRANGE
-            var jsonObject = new JObject { { "region", regionInfoString } };
-
+            var jsonObject = $"{{ \"x\": \"{regionInfoString}\" }}";
+            
             //ACT
-            var result = JsonConvert.DeserializeObject<RegionInfo>(jsonObject.ToString(), JsonSerialization.Settings);
+            var result = JsonSerializer.Deserialize<RegionInfo>(jsonObject, JsonSerialization.Settings);
 
             //ASSERT
             Assert.Equal(regionInfoString, result.Name);
@@ -43,12 +42,12 @@ namespace Svea.WebPay.SDK.Tests.Json
             };
 
             //ACT
-            var result = JsonConvert.SerializeObject(dummy, JsonSerialization.Settings);
-            var obj = JObject.Parse(result);
+            var result = JsonSerializer.Serialize(dummy, JsonSerialization.Settings);
+            var obj = JsonDocument.Parse(result);
 
-            obj.TryGetValue("Region", StringComparison.InvariantCultureIgnoreCase, out var region);
+            obj.RootElement.TryGetProperty("region", out var region);
             //ASSERT
-            Assert.Equal(regionInfoString, region);
+            Assert.Equal(regionInfoString, region.GetString());
         }
     }
 }

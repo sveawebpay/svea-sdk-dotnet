@@ -15,6 +15,8 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
 
         public DetailsB2CIdentificationBlock<_> B2CIdentification { get; private set; }
 
+        public InternationalIdentificationBlock<_> International { get; private set; }
+
         public DetailsB2CAnonymousBlock<_> B2CAnonymous { get; private set; }
 
         public PaymentMethodsBlock<_> PaymentMethods { get; private set; }
@@ -22,5 +24,8 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
         [Wait(1, TriggerEvents.BeforeAndAfterClick)]
         [FindByCss("button[data-testid='submit-button']")]
         public Button<_> Submit { get; private set; }
+
+        [FindByCss("div[data-testid='bankid-dialog']")]
+        public Control<_> BankId{ get; private set; }
     }
 }

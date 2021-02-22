@@ -1,5 +1,4 @@
 ﻿using Atata;
-
 using Sample.AspNetCore.SystemTests.PageObjectModels.Base;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Payment;
 
@@ -16,11 +15,14 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
 
         [FindByXPath("table[1]")] public Table<ProductItem, _> Products { get; set; }
 
-        [FindByAutomation("button-checkout", Index = 0)]
+        [FindByAutomation("button-checkout")]
         public Link<PaymentPage, _> AnonymousCheckout { get; set; }
 
-        [FindByAutomation("button-checkout", Index = 1)]
-        public Link<PaymentPage, _> StandardCheckout { get; set; }
+        [FindByAutomation("button-checkout-require")]
+        public Link<PaymentPage, _> CheckoutAndRequireBankId { get; set; }
+
+        [FindByAutomation("button-checkout-international")]
+        public Link<PaymentPage, _> InternationalCheckout { get; set; }
 
         [FindByXPath("table[2]//tfoot[1]//td[2]")]
         public Text<_> TotalAmount { get; set; }
@@ -48,6 +50,8 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
             [FindByXPath("a[1]")] public Link<_> Open { get; set; }
 
             [FindByXPath("td[5]")] public Text<_> Price { get; set; }
+
+            [FindByXPath("td[6]")] public Text<_> OriginalPrice { get; set; }
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </summary>
         /// </param>
         /// <param name="cart"></param>
+        /// <param name="requireElectronicIdAuthentication"></param>
         /// <param name="presetValues"></param>
         /// <param name="identityFlags"></param>
         /// <param name="partnerKey">
@@ -46,7 +47,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// <remarks>Max length: 6000. Optional. Cleaned up from Checkout database after 45 days.</remarks>
         /// </param>
         public CreateOrderModel(RegionInfo countryCode, CurrencyCode currency, Language locale, string clientOrderNumber,
-            MerchantSettings merchantSettings, Cart cart, IList<Presetvalue> presetValues = null,
+            MerchantSettings merchantSettings, Cart cart, bool requireElectronicIdAuthentication, IList<Presetvalue> presetValues = null,
             IdentityFlags identityFlags = null, Guid? partnerKey = null, string merchantData = null)
         {
             CountryCode = countryCode;
@@ -55,6 +56,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             ClientOrderNumber = clientOrderNumber;
             MerchantSettings = merchantSettings;
             Cart = cart;
+            RequireElectronicIdAuthentication = requireElectronicIdAuthentication;
             PresetValues = presetValues;
             IdentityFlags = identityFlags;
             PartnerKey = partnerKey;
@@ -83,6 +85,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         public MerchantSettings MerchantSettings { get; }
 
         public Cart Cart { get; }
+        public bool RequireElectronicIdAuthentication { get; }
         public IList<Presetvalue> PresetValues { get; }
         public IdentityFlags IdentityFlags { get; }
 

@@ -4,10 +4,19 @@ using System.Linq;
 
 namespace Sample.AspNetCore.Models
 {
+    using System.Text.Json.Serialization;
+
     public class Cart
     {
-        private List<CartLine> CartLineCollection { get; } = new List<CartLine>();
-        public virtual IEnumerable<CartLine> CartLines => CartLineCollection;
+        private List<CartLine> CartLineCollection { get; set; } = new List<CartLine>();
+
+        [JsonInclude]
+        public virtual IEnumerable<CartLine> CartLines
+        {
+            get => CartLineCollection;
+            private set => CartLineCollection = value.ToList();
+        }
+
         public string SveaOrderId { get; set; }
         public bool Vat { get; set; }
 
@@ -29,7 +38,7 @@ namespace Sample.AspNetCore.Models
 
         public virtual decimal CalculateTotal()
         {
-            return CartLineCollection.Sum(e => e.Quantity * e.Product.Price);
+            return CartLineCollection.Sum(e => e.Quantity * (e.Product.Price - e.Product.DiscountAmount));
         }
 
 
@@ -71,7 +80,7 @@ namespace Sample.AspNetCore.Models
 
         public decimal CalculateTotal()
         {
-            return Quantity * Product.Price;
+            return Quantity * (Product.Price - Product.DiscountAmount);
         }
     }
 }

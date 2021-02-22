@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.Extensions
                     line.Product.Name,
                     MinorUnit.FromDecimal(line.Quantity),
                     MinorUnit.FromDecimal(line.Product.Price),
-                    MinorUnit.FromDecimal(0),
+                    MinorUnit.FromDecimal(line.Product.DiscountAmount),
                     MinorUnit.FromDecimal(line.Product.VatPercentage),
                     null,
                     null,

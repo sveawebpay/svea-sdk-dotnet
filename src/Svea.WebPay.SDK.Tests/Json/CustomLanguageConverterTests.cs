@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace Svea.WebPay.SDK.Tests.Json
+﻿namespace Svea.WebPay.SDK.Tests.Json
 {
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Linq;
-
     using Svea.WebPay.SDK.CheckoutApi;
     using Svea.WebPay.SDK.Json;
+
+    using System.Collections.Generic;
+    using System.Text.Json;
 
     using Xunit;
 
@@ -19,10 +17,10 @@ namespace Svea.WebPay.SDK.Tests.Json
         public void CanDeSerialize_Language()
         {
             //ARRANGE
-            var jsonObject = new JObject { { "language", this.languageString } };
+            var jsonObject = $"{{ \"x\": \"{this.languageString}\" }}";
 
             //ACT
-            var result = JsonConvert.DeserializeObject<Language>(jsonObject.ToString(), JsonSerialization.Settings);
+            var result = JsonSerializer.Deserialize<Language>(jsonObject, JsonSerialization.Settings);
 
             //ASSERT
             Assert.Equal(this.languageString, result.ToString());
@@ -39,13 +37,13 @@ namespace Svea.WebPay.SDK.Tests.Json
             };
 
             //ACT
-            var result = JsonConvert.SerializeObject(dummy, JsonSerialization.Settings);
-            var obj = JObject.Parse(result);
+            var result = JsonSerializer.Serialize(dummy, JsonSerialization.Settings);
+            var obj = JsonDocument.Parse(result);
 
-            obj.TryGetValue("Language", StringComparison.InvariantCultureIgnoreCase, out var language);
+            obj.RootElement.TryGetProperty("language",  out var language);
             
             //ASSERT
-            Assert.Equal(this.languageString, language);
+            Assert.Equal(this.languageString, language.GetString());
         }
     }
 }

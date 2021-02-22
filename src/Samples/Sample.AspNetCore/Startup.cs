@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Svea.WebPay.SDK.Extensions;
 
 using Sample.AspNetCore.Data;
 using Sample.AspNetCore.Extensions;
@@ -13,10 +12,6 @@ using Sample.AspNetCore.Models;
 
 namespace Sample.AspNetCore
 {
-    using Newtonsoft.Json;
-
-    using Svea.WebPay.SDK.Extensions;
-
     using System;
 
     using JsonSerializer = System.Text.Json.JsonSerializer;

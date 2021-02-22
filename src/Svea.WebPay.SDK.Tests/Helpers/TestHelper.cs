@@ -1,4 +1,4 @@
-﻿namespace Svea.WebPay.SDK.Tests
+﻿namespace Svea.WebPay.SDK.Tests.Helpers
 {
     using Microsoft.Extensions.Configuration;
 

@@ -1,10 +1,10 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Models
 {
-    using Newtonsoft.Json;
 
     using Svea.WebPay.SDK.PaymentAdminApi.Response;
 
     using System;
+    using System.Text.Json.Serialization;
 
     public class Task : IResourceResponse
     {
@@ -16,11 +16,14 @@
             Id = id;
             Status = status;
         }
-
+        
+        [JsonInclude]
         public long Id { get; }
 
+        [JsonInclude]
         public string Status { get; }
 
+        [JsonInclude]
         public Uri ResourceUri { get; set; }
     }
 }

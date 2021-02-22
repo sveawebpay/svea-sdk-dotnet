@@ -4,7 +4,6 @@ using Svea.WebPay.SDK.PaymentAdminApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 using Svea.WebPay.SDK.Tests.Helpers;
 using Svea.WebPay.SDK.Json;
 using Svea.WebPay.SDK.PaymentAdminApi.Response;
@@ -13,13 +12,15 @@ using Svea.WebPay.SDK.PaymentAdminApi.Request;
 
 namespace Svea.WebPay.SDK.Tests
 {
+    using System.Text.Json;
+
     public class PaymentAdminTests : TestBase
     {
         [Fact]
         public async System.Threading.Tasks.Task GetOrderWithId_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
             var expectedOrder = new Order(orderResponseObject, null);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.AdminGetOrder));
 
@@ -34,7 +35,7 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task GetOrderWithUri_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
             var expectedOrder = new Order(orderResponseObject, null);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.AdminGetOrder));
 
@@ -49,7 +50,7 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task GetTaskWithId_Should_Serialize_AsExpected()
         {
             // Arrange
-            var expectedTask = JsonConvert.DeserializeObject<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.TaskResponse, expectedTask.ResourceUri.OriginalString));
 
             // Act
@@ -63,7 +64,7 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task GetTaskWithUri_Should_Serialize_AsExpected()
         {
             // Arrange
-            var expectedTask = JsonConvert.DeserializeObject<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.TaskResponse, expectedTask.ResourceUri.OriginalString));
 
             // Act
@@ -78,8 +79,8 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task Deliver_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
-            var expectedTask = JsonConvert.DeserializeObject<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedOrder = new Order(orderResponseObject, null);
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AdminDeliveredOrder));
 
@@ -96,8 +97,8 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task DeliverOrderPartially_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminPartiallyDeliveredOrder, JsonSerialization.Settings);
-            var expectedTask = JsonConvert.DeserializeObject<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminPartiallyDeliveredOrder, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedOrder = new Order(orderResponseObject, null);
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AdminPartiallyDeliveredOrder));
 
@@ -116,10 +117,10 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task AddOrderRow_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
-            var expectedTask = JsonConvert.DeserializeObject<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
-            var orderRowResponseObject = JsonConvert.DeserializeObject<AddOrderRowResponseObject>(DataSample.AddOrderRowResponse);
-            var expectedOrderRow = new AddOrderRowResponse(orderRowResponseObject);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var orderRowResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
+            var expectedOrderRow = new AddOrderRowsResponse(orderRowResponseObject);
 
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowResponse));
 
@@ -131,7 +132,7 @@ namespace Svea.WebPay.SDK.Tests
                     name: "Slim Fit 512",
                     quantity: MinorUnit.FromInt(2),
                     unitPrice: MinorUnit.FromInt(1000),
-                    discountPercent: MinorUnit.FromInt(0),
+                    discountAmount: MinorUnit.FromInt(0),
                     vatPercent: MinorUnit.FromInt(12),
                     unit: "SEK",
                     TimeSpan.FromSeconds(15)
@@ -146,11 +147,12 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task AddOrderRows_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
-            var expectedTask = JsonConvert.DeserializeObject<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
-            var expectedResponse = JsonConvert.DeserializeObject<AddOrderRowsResponse>(DataSample.AddOrderRowsResponse);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var orderRowsResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
+            var expectedResponse = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowsResponse);
 
-            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, DataSample.AddOrderRowsResponse));
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowsResponse));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
@@ -162,7 +164,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: MinorUnit.FromInt(2),
                             unitPrice: MinorUnit.FromInt(1000),
                             vatPercent: MinorUnit.FromInt(12),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: 3,
                             unit: "SEK",
                             articleNumber: "1234567890"
@@ -172,27 +174,26 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: MinorUnit.FromInt(3),
                             unitPrice: MinorUnit.FromInt(2000),
                             vatPercent: MinorUnit.FromInt(5),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: 4,
                             unit: "SEK",
                             articleNumber: "0987654321"
                         )
                     }
-                    
                 )
             );
 
             // Assert
             // List of OrderRowId
-            Assert.Equal(expectedResponse.OrderRowId, resourceResponse.OrderRowId);
+            Assert.Equal(expectedResponse.OrderRowId, resourceResponse.Resource.OrderRowId);
         }
 
         [Fact]
         public async System.Threading.Tasks.Task CreditOrderRows_Should_Serialize_AsExpected()
         {
             // Arrange
-            var creditResponseObject = JsonConvert.DeserializeObject<CreditResponseObject>(DataSample.CreditResponse, JsonSerialization.Settings);
-            var expectedTask = JsonConvert.DeserializeObject<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var creditResponseObject = JsonSerializer.Deserialize<CreditResponseObject>(DataSample.CreditResponse, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedCreditResponse = new CreditResponse(creditResponseObject);
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.CreditResponse));
 
@@ -211,8 +212,8 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task CreditNewRow_Should_Serialize_AsExpected()
         {
             // Arrange
-            var creditResponseObject = JsonConvert.DeserializeObject<CreditResponseObject>(DataSample.CreditResponse, JsonSerialization.Settings);
-            var expectedTask = JsonConvert.DeserializeObject<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var creditResponseObject = JsonSerializer.Deserialize<CreditResponseObject>(DataSample.CreditResponse, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedCreditResponse = new CreditResponse(creditResponseObject);
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.CreditResponse));
 
@@ -249,7 +250,7 @@ namespace Svea.WebPay.SDK.Tests
                     orderRow.Name,
                     orderRow.Quantity,
                     orderRow.UnitPrice,
-                    orderRow.DiscountPercent,
+                    orderRow.DiscountAmount,
                     orderRow.VatPercent,
                     orderRow.Unit
                 )
@@ -277,7 +278,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: order.OrderRows.ElementAt(0).Quantity,
                             unitPrice: order.OrderRows.ElementAt(0).UnitPrice,
                             vatPercent: order.OrderRows.ElementAt(0).VatPercent,
-                            discountPercent: order.OrderRows.ElementAt(0).DiscountPercent,
+                            discountAmount: order.OrderRows.ElementAt(0).DiscountAmount,
                             rowId: order.OrderRows.ElementAt(0).OrderRowId,
                             unit: order.OrderRows.ElementAt(0).Unit,
                             articleNumber: order.OrderRows.ElementAt(0).ArticleNumber
@@ -287,7 +288,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: order.OrderRows.ElementAt(1).Quantity,
                             unitPrice: order.OrderRows.ElementAt(1).UnitPrice,
                             vatPercent: order.OrderRows.ElementAt(1).VatPercent,
-                            discountPercent: order.OrderRows.ElementAt(1).DiscountPercent,
+                            discountAmount: order.OrderRows.ElementAt(1).DiscountAmount,
                             rowId: order.OrderRows.ElementAt(1).OrderRowId,
                             unit: order.OrderRows.ElementAt(1).Unit,
                             articleNumber: order.OrderRows.ElementAt(1).ArticleNumber
@@ -365,7 +366,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: MinorUnit.FromInt(2),
                             unitPrice: MinorUnit.FromInt(1000),
                             vatPercent: MinorUnit.FromInt(12),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: 1,                            
                             unit: "SEK",
                             articleNumber: "1234567890"
@@ -375,7 +376,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: MinorUnit.FromInt(3),
                             unitPrice: MinorUnit.FromInt(2000),
                             vatPercent: MinorUnit.FromInt(5),
-                            discountPercent: MinorUnit.FromInt(0),
+                            discountAmount: MinorUnit.FromInt(0),
                             rowId: 2,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -392,7 +393,7 @@ namespace Svea.WebPay.SDK.Tests
         public void CreatedOrder_Should_Serialize_AsExpected()
         {
             // Act
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
             var order = new Order(orderResponseObject, null);
 
             // Assert
@@ -448,7 +449,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("Levis 511 Slim Fit", orderRow1.Name);
             Assert.Equal(200, orderRow1.Quantity.Value);
             Assert.Equal(89900, orderRow1.UnitPrice.Value);
-            Assert.Equal(0, orderRow1.DiscountPercent.Value);
+            Assert.Equal(0, orderRow1.DiscountAmount.Value);
             Assert.Equal(0, orderRow1.VatPercent.Value);
             Assert.Equal("SEK", orderRow1.Unit);
             Assert.False(orderRow1.IsCancelled);
@@ -467,7 +468,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("Levis 501 Jeans", orderRow2.Name);
             Assert.Equal(300, orderRow2.Quantity.Value);
             Assert.Equal(119000, orderRow2.UnitPrice.Value);
-            Assert.Equal(0, orderRow2.DiscountPercent.Value);
+            Assert.Equal(0, orderRow2.DiscountAmount.Value);
             Assert.Equal(0, orderRow2.VatPercent.Value);
             Assert.Equal("SEK", orderRow2.Unit);
             Assert.False(orderRow2.IsCancelled);
@@ -484,7 +485,7 @@ namespace Svea.WebPay.SDK.Tests
         public void DeliveredOrder_Should_Serialize_AsExpected()
         {
             // Act
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject > (DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
             var order = new Order(orderResponseObject, null);
 
             // Assert
@@ -542,7 +543,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(200, orderRow1.Quantity.Value);
             Assert.Equal(89900, orderRow1.UnitPrice.Value);
             Assert.Equal(0, orderRow1.VatPercent.Value);
-            Assert.Equal(0, orderRow1.DiscountPercent.Value);
+            Assert.Equal(0, orderRow1.DiscountAmount.Value);
             Assert.Equal("SEK", orderRow1.Unit);
             Assert.Equal(1, orderRow1.AvailableActions.Count);
             Assert.Equal(new List<string> { "CanCreditRow" }, orderRow1.AvailableActions);
@@ -556,7 +557,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(300, orderRow2.Quantity.Value);
             Assert.Equal(119000, orderRow2.UnitPrice.Value);
             Assert.Equal(0, orderRow2.VatPercent.Value);
-            Assert.Equal(0, orderRow2.DiscountPercent.Value);
+            Assert.Equal(0, orderRow2.DiscountAmount.Value);
             Assert.Equal("SEK", orderRow2.Unit);
             Assert.Equal(1, orderRow2.AvailableActions.Count);
             Assert.Equal(new List<string> { "CanCreditRow" }, orderRow2.AvailableActions);
@@ -578,7 +579,7 @@ namespace Svea.WebPay.SDK.Tests
         public void CreditedOrder_Should_Serialize_AsExpected()
         {
             // Act
-            var orderResponseObject = JsonConvert.DeserializeObject<OrderResponseObject>(DataSample.AdminOrderRowsCredited, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminOrderRowsCredited, JsonSerialization.Settings);
             var order = new Order(orderResponseObject, null);
 
             // Assert
@@ -636,7 +637,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(200, orderRow1.Quantity.Value);
             Assert.Equal(89900, orderRow1.UnitPrice.Value);
             Assert.Equal(0, orderRow1.VatPercent.Value);
-            Assert.Equal(0, orderRow1.DiscountPercent.Value);
+            Assert.Equal(0, orderRow1.DiscountAmount.Value);
             Assert.Equal("SEK", orderRow1.Unit);
             Assert.Equal(0, orderRow1.AvailableActions.Count);
             Assert.Null(orderRow1.Actions.CancelOrderRow);
@@ -649,7 +650,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(300, orderRow2.Quantity.Value);
             Assert.Equal(119000, orderRow2.UnitPrice.Value);
             Assert.Equal(0, orderRow2.VatPercent.Value);
-            Assert.Equal(0, orderRow2.DiscountPercent.Value);
+            Assert.Equal(0, orderRow2.DiscountAmount.Value);
             Assert.Equal("SEK", orderRow2.Unit);
             Assert.Equal(0, orderRow2.AvailableActions.Count);
             Assert.Null(orderRow2.Actions.CancelOrderRow);
@@ -672,7 +673,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(-200, creditedOrderRow1.Quantity.Value);
             Assert.Equal(89900, creditedOrderRow1.UnitPrice.Value);
             Assert.Equal(0, creditedOrderRow1.VatPercent.Value);
-            Assert.Equal(0, creditedOrderRow1.DiscountPercent.Value);
+            Assert.Equal(0, creditedOrderRow1.DiscountAmount.Value);
             Assert.Equal("SEK", creditedOrderRow1.Unit);
 
             var creditedOrderRow2 = credit.OrderRows.ElementAt(1);
@@ -682,7 +683,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(-300, creditedOrderRow2.Quantity.Value);
             Assert.Equal(119000, creditedOrderRow2.UnitPrice.Value);
             Assert.Equal(0, creditedOrderRow2.VatPercent.Value);
-            Assert.Equal(0, creditedOrderRow2.DiscountPercent.Value);
+            Assert.Equal(0, creditedOrderRow2.DiscountAmount.Value);
             Assert.Equal("SEK", creditedOrderRow2.Unit);
 
             // Order Rows

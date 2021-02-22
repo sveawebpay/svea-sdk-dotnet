@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(3)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false })]
         public async System.Threading.Tasks.Task CreateOrderWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
@@ -60,7 +60,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(3)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false })]
         public async System.Threading.Tasks.Task DeliverWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
@@ -106,7 +106,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(3)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false })]
         public async System.Threading.Tasks.Task CreditWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
@@ -153,7 +153,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(3)]
         [Test(Description = "4778: Köp som privatperson(delbetala) -> makulera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false })]
         public async System.Threading.Tasks.Task CancelWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
@@ -193,5 +193,12 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Deliveries, Is.Null);
         }
 
+        [RetryWithException(3)]
+        [Test(Description = "5702: RequireElectronicIdAuthentication] As a user I want to have a setting that will trigger BankId to be required on orders in the checkout")]
+        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        public void EnsureRequireIdAuthenticationShowUpWithPaymentPlan(Product[] products)
+        {
+            GoToBankId(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan);
+        }
     }
 }

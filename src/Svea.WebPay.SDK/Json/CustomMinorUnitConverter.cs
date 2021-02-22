@@ -22,7 +22,7 @@ namespace Svea.WebPay.SDK.Json
                     throw new JsonException();
                 }
 
-                long unit = 0l;
+                var unit = 0L;
                 while (reader.Read())
                 {
                     if (reader.TokenType == JsonTokenType.PropertyName)

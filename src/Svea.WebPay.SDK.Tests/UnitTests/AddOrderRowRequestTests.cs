@@ -76,8 +76,8 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         }
 
         [Theory]
-        [InlineData("ref1", "Name", 20, 1000, 100, 0, "st")]
-        public void ThrowsArgumentException_IfNameIsNull(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
+        [InlineData("ref1", 20, 1000, 100, 0, "st")]
+        public void ThrowsArgumentException_IfNameIsNull(string articleNumber, int quantity, long unitPrice, int discountAmount,
             int vatPercent, string unit)
         {
             //ASSERT

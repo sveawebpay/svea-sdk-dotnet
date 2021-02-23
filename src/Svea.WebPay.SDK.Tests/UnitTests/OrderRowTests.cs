@@ -73,13 +73,6 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
             Assert.Throws<ArgumentNullException>(() => new OrderRow(articleNumber, name,
                 new MinorUnit(quantity),
                 new MinorUnit(unitPrice),
-                null,
-                new MinorUnit(vatPercent),
-                unit, temporaryReference, rowNumber, merchantData));
-
-            Assert.Throws<ArgumentNullException>(() => new OrderRow(articleNumber, name,
-                new MinorUnit(quantity),
-                new MinorUnit(unitPrice),
                 new MinorUnit(discountAmount),
                 null,
                 unit, temporaryReference, rowNumber, merchantData));

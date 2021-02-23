@@ -43,7 +43,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Currency, Is.EqualTo("SEK"));
             Assert.That(response.IsCompany, Is.False);
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Invoice)));
             Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
 
@@ -89,7 +89,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Currency, Is.EqualTo("SEK"));
             Assert.That(response.IsCompany, Is.False);
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Invoice)));
             Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
@@ -97,7 +97,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.OrderRows, Is.Empty);
 
             Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-            Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(0));
             Assert.That(response.Deliveries.First().Status, Is.EqualTo("Sent"));
             CollectionAssert.AreEquivalent(
@@ -137,7 +137,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Currency, Is.EqualTo("SEK"));
             Assert.That(response.IsCompany, Is.False);
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Invoice)));
             Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
@@ -145,8 +145,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.OrderRows, Is.Empty);
 
             Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-            Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+            Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.Deliveries.First().Credits.Count, Is.EqualTo(1));
             Assert.That(response.Deliveries.First().Status, Is.EqualTo("Sent"));
 
@@ -184,7 +184,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Currency, Is.EqualTo("SEK"));
             Assert.That(response.IsCompany, Is.True);
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Invoice)));
             Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
@@ -192,8 +192,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.OrderRows, Is.Empty);
 
             Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-            Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+            Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.Deliveries.First().Credits.Count, Is.EqualTo(1));
             Assert.That(response.Deliveries.First().Status, Is.EqualTo("Sent"));
 
@@ -229,8 +229,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Currency, Is.EqualTo("SEK"));
             Assert.That(response.IsCompany, Is.False);
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.CancelledAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.CancelledAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Invoice)));
             Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -270,7 +270,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Currency, Is.EqualTo("SEK"));
             Assert.That(response.IsCompany, Is.True);
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Invoice)));
             Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 

@@ -43,7 +43,7 @@
                 throw new ArgumentOutOfRangeException(nameof(unitPrice), "Value cannot be longer than 11 digits.");
             }
 
-            if (DiscountAmount != null)
+            if (DiscountAmount != null && DiscountAmount != 0)
             {
 	            if (DiscountAmount < 0)
 	            {

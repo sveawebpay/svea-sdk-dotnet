@@ -536,7 +536,20 @@
                     ""TemporaryReference"":null,
                     ""RowNumber"":1,
                     ""MerchantData"":null
-                }]
+                },
+		         {
+		            ""ArticleNumber"":""7c7068f1-5223-4043-9be2-7adfe4fe9856"",
+			        ""Name"":""Order Discount"",
+			        ""Quantity"":100,
+			        ""UnitPrice"":-107060,
+			        ""DiscountPercent"":0,
+			        ""DiscountAmount"":0,
+			        ""VatPercent"":0,
+			        ""Unit"":"""",
+			        ""TemporaryReference"":null,
+			        ""RowNumber"":3,
+			        ""MerchantData"":null
+			    }]
             },
             ""Customer"":null,
             ""ShippingAddress"":null,

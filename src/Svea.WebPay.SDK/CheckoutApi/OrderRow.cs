@@ -86,12 +86,12 @@
                 throw new ArgumentOutOfRangeException(nameof(articleNumber), "Maximum 256 characters.");
             }
 
-            if (Quantity?.ToString().Length > 9)
+            if (Quantity.InLowestMonetaryUnit.ToString().Length > 9)
             {
                 throw new ArgumentOutOfRangeException(nameof(quantity), "Value cannot be longer than 7 digits.");
             }
 
-            if (UnitPrice?.ToString().Length > 13)
+            if (UnitPrice.InLowestMonetaryUnit.ToString().Length > 13)
             {
                 throw new ArgumentOutOfRangeException(nameof(unitPrice), "Value cannot be longer than 11 digits.");
             }

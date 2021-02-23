@@ -21,7 +21,7 @@
                 throw new ArgumentOutOfRangeException(nameof(name), "Can only be 1-40 characters.");
             }
 
-            if (UnitPrice.Value.ToString().Length > 13)
+            if (UnitPrice.ToString().Length > 13)
             {
                 throw new ArgumentOutOfRangeException(nameof(unitPrice), "Value cannot be longer than 11 digits.");
             }

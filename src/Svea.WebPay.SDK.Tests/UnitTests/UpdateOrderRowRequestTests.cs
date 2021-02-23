@@ -18,10 +18,10 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ACT
             var ex = Record.Exception(() => new UpdateOrderRowRequest(articleNumber, name,
-                MinorUnit.FromInt(quantity),
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent), unit));
+                new MinorUnit(quantity),
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent), unit));
 
             //ASSERT
             Assert.Null(ex);
@@ -42,10 +42,10 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ASSERT
             Assert.Throws<ArgumentOutOfRangeException>(() => new UpdateOrderRowRequest(articleNumber, name,
-                MinorUnit.FromInt(quantity),
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent), unit));
+                new MinorUnit(quantity),
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent), unit));
         }
 
         [Theory]
@@ -56,20 +56,20 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
             //ASSERT
             Assert.Throws<ArgumentNullException>(() => new UpdateOrderRowRequest(articleNumber, name,
                 null,
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent), unit));
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent), unit));
 
             Assert.Throws<ArgumentNullException>(() => new UpdateOrderRowRequest(articleNumber, name,
-                MinorUnit.FromInt(quantity),
+                new MinorUnit(quantity),
                 null,
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent), unit));
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent), unit));
 
             Assert.Throws<ArgumentNullException>(() => new UpdateOrderRowRequest(articleNumber, name,
-                MinorUnit.FromInt(quantity),
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
+                new MinorUnit(quantity),
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
                 null, unit));
         }
 
@@ -80,10 +80,10 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ASSERT
             Assert.Throws<ArgumentNullException>(() => new UpdateOrderRowRequest(articleNumber, null,
-                MinorUnit.FromInt(quantity),
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent), unit));
+                new MinorUnit(quantity),
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent), unit));
         }
     }
 }

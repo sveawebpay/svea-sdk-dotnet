@@ -38,10 +38,10 @@
                 new OrderRow(
                     "ABC80",
                     "Computer",
-                    MinorUnit.FromInt(10),
-                    MinorUnit.FromDecimal(5000),
-                    MinorUnit.FromDecimal(10),
-                    MinorUnit.FromDecimal(25),
+                    new MinorUnit(10),
+                    new MinorUnit(5000),
+                    new MinorUnit(10),
+                    new MinorUnit(25),
                     null,
                     null,
                     1)

@@ -61,10 +61,10 @@ namespace Svea.WebPay.SDK.Tests
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
 
-            Assert.Equal(4, actualOrder.Cart.Items[0].Quantity.ToInt());
-            Assert.Equal(2000, actualOrder.Cart.Items[0].UnitPrice.ToInt());
-            Assert.Equal(0, actualOrder.Cart.Items[0].DiscountAmount.ToInt());
-            Assert.Equal(6, actualOrder.Cart.Items[0].VatPercent.ToInt());
+            Assert.Equal(4, actualOrder.Cart.Items[0].Quantity);
+            Assert.Equal(2000, actualOrder.Cart.Items[0].UnitPrice);
+            Assert.Equal(0, actualOrder.Cart.Items[0].DiscountAmount);
+            Assert.Equal(6, actualOrder.Cart.Items[0].VatPercent);
         }
 
         [Fact]
@@ -86,10 +86,10 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(1, order.Cart.Items.Count);
             Assert.Equal("ABC80", item.ArticleNumber);
             Assert.Equal("Computer", item.Name);
-            Assert.Equal(1000, item.Quantity.Value);
-            Assert.Equal(500000, item.UnitPrice.Value);
-            Assert.Equal(1000, item.DiscountAmount.Value);
-            Assert.Equal(2500, item.VatPercent.Value);
+            Assert.Equal(10, item.Quantity);
+            Assert.Equal(5000, item.UnitPrice);
+            Assert.Equal(10, item.DiscountAmount);
+            Assert.Equal(25, item.VatPercent);
             Assert.Equal("SEK", item.Unit);
             Assert.Null(item.TemporaryReference);
             Assert.Equal(1, item.RowNumber);
@@ -126,10 +126,10 @@ namespace Svea.WebPay.SDK.Tests
                 new OrderRow(
                     "ABC80",
                     "Computer",
-                    MinorUnit.FromInt(4),
-                    MinorUnit.FromDecimal(2000),
-                    MinorUnit.FromDecimal(0),
-                    MinorUnit.FromDecimal(6),
+                    new MinorUnit(4),
+                    new MinorUnit(2000),
+                    new MinorUnit(0),
+                    new MinorUnit(6),
                     null,
                     null,
                     2)

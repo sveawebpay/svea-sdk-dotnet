@@ -10,8 +10,8 @@
     public class DeliveryResponseObject
     {
         [JsonConstructor]
-        public DeliveryResponseObject(IList<string> actions, DateTime creationDate, long creditedAmount, IList<Credit> credits,
-            long deliveryAmount, DateTime? dueDate, long id, long? invoiceId, IList<OrderRowResponseObject> orderRows, string status)
+        public DeliveryResponseObject(IList<string> actions, DateTime creationDate, MinorUnit creditedAmount, IList<Credit> credits,
+            MinorUnit deliveryAmount, DateTime? dueDate, long id, long? invoiceId, IList<OrderRowResponseObject> orderRows, string status)
         {
             Actions = actions;
             CreationDate = creationDate;
@@ -32,13 +32,13 @@
         public DateTime CreationDate { get; }
 
         [JsonInclude]
-        public long CreditedAmount { get; }
+        public MinorUnit CreditedAmount { get; }
 
         [JsonInclude]
         public IList<Credit> Credits { get; }
 
         [JsonInclude]
-        public long DeliveryAmount { get; }
+        public MinorUnit DeliveryAmount { get; }
 
         [JsonInclude]
         public DateTime? DueDate { get; }

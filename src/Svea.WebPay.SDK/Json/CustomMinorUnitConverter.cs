@@ -14,7 +14,7 @@ namespace Svea.WebPay.SDK.Json
             {
                 if (reader.TokenType == JsonTokenType.Number)
                 {
-                    return new MinorUnit(reader.GetInt64());
+                    return MinorUnit.FromLowestMonetaryUnit(reader.GetInt64());
                 }
 
                 if (reader.TokenType != JsonTokenType.StartObject)
@@ -36,7 +36,7 @@ namespace Svea.WebPay.SDK.Json
 
                     if (reader.TokenType == JsonTokenType.EndObject)
                     {
-                        return new MinorUnit(unit);
+                        return MinorUnit.FromLowestMonetaryUnit(unit);
                     }
                 }
 
@@ -50,7 +50,7 @@ namespace Svea.WebPay.SDK.Json
 
         public override void Write(Utf8JsonWriter writer, MinorUnit value, JsonSerializerOptions options)
         {
-            writer.WriteNumberValue(value.Value);
+            writer.WriteNumberValue(value.InLowestMonetaryUnit);
         }
     }
 }

@@ -30,16 +30,6 @@
                 throw new ArgumentOutOfRangeException(nameof(articleNumber), "Maximum 256 characters.");
             }
 
-            if (DiscountAmount < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be less than zero.");
-            }
-
-            if (DiscountAmount > unitPrice)
-            {
-                throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be greater than unit price.");
-            }
-
             if (Quantity.ToString().Length > 9)
             {
                 throw new ArgumentOutOfRangeException(nameof(quantity), "Value cannot be longer than 7 digits.");
@@ -48,6 +38,19 @@
             if (UnitPrice.ToString().Length > 13)
             {
                 throw new ArgumentOutOfRangeException(nameof(unitPrice), "Value cannot be longer than 11 digits.");
+            }
+
+            if (DiscountAmount != null)
+            {
+	            if (DiscountAmount < 0)
+	            {
+		            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be less than zero.");
+	            }
+
+	            if (DiscountAmount > unitPrice * quantity)
+	            {
+		            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be greater than unit price * quantity.");
+	            }
             }
 
             if (Name.Length < 1 || Name.Length > 40)

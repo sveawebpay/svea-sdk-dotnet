@@ -33,7 +33,7 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         [InlineData("ref1", "Name", 1000000000, 1000, 100, 0, "st")]
         [InlineData("ref1111", "Name", 20, 10000000000000, 100, 0, "st")]
         [InlineData("ref1", "Name", 20, 1000, -1, 0, "st")]
-        [InlineData("ref1", "Name", 20, 1000, 1001, 0, "st")]
+        [InlineData("ref1", "Name", 20, 1000, 20001, 0, "st")]
         [InlineData("ref1", "Name", 20, 1000, 100, 0, "stttt")]
         [InlineData("ref1", "", 20, 1000, 100, 0, "st")]
         [InlineData("ref1", "adsfasdfasdfffffffffffffffasdfasdsdfsdfsd", 20, 1000, 100, 0, "st")]

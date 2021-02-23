@@ -105,7 +105,7 @@
 
 	            if (DiscountAmount > unitPrice * quantity)
 	            {
-		            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be greater than unit price.");
+		            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be greater than unit price * quantity.");
 	            }
             }
 

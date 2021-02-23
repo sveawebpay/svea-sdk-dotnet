@@ -17,10 +17,10 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ACT
             var ex = Record.Exception(() => new OrderRow(articleNumber, name, 
-                MinorUnit.FromInt(quantity), 
-                MinorUnit.FromInt(unitPrice), 
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent),
+                new MinorUnit(quantity), 
+                new MinorUnit(unitPrice), 
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent),
                 unit, temporaryReference, rowNumber, merchantData));
 
             //ASSERT
@@ -33,7 +33,7 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         [InlineData("ref1", "Name", 1000000000, 1000, 100, 0, "st", "ref2", 1, "data")]
         [InlineData("ref1111", "Name", 20, 10000000000000, 100, 0, "st", "ref2", 1, "data")]
         [InlineData("ref1", "Name", 20, 1000, -1, 0, "st", "ref2", 1, "data")]
-        [InlineData("ref1", "Name", 20, 1000, 1001, 0, "st", "ref2", 1, "data")]
+        [InlineData("ref1", "Name", 20, 1000, 20001, 0, "st", "ref2", 1, "data")]
         [InlineData("ref1", "Name", 20, 1000, 100, 0, "stttt", "ref2", 1, "data")]
         [InlineData("ref1", "", 20, 1000, 100, 0, "st", "ref2", 1, "data")]
         [InlineData("ref1", "adsfasdfasdfffffffffffffffasdfasdsdfsdfsd", 20, 1000, 100, 0, "st", "ref2", 1, "data")]
@@ -43,10 +43,10 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ASSERT
             Assert.Throws<ArgumentOutOfRangeException>(() => new OrderRow(articleNumber, name,
-                MinorUnit.FromInt(quantity),
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent),
+                new MinorUnit(quantity),
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent),
                 unit, temporaryReference, rowNumber, merchantData));
         }
 
@@ -58,29 +58,29 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
             //ASSERT
             Assert.Throws<ArgumentNullException>(() => new OrderRow(articleNumber, name,
                 null,
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent),
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent),
                 unit, temporaryReference, rowNumber, merchantData));
 
             Assert.Throws<ArgumentNullException>(() => new OrderRow(articleNumber, name,
-                MinorUnit.FromInt(quantity),
+                new MinorUnit(quantity),
                 null,
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent),
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent),
                 unit, temporaryReference, rowNumber, merchantData));
 
             Assert.Throws<ArgumentNullException>(() => new OrderRow(articleNumber, name,
-                MinorUnit.FromInt(quantity),
-                MinorUnit.FromInt(unitPrice),
+                new MinorUnit(quantity),
+                new MinorUnit(unitPrice),
                 null,
-                MinorUnit.FromInt(vatPercent),
+                new MinorUnit(vatPercent),
                 unit, temporaryReference, rowNumber, merchantData));
 
             Assert.Throws<ArgumentNullException>(() => new OrderRow(articleNumber, name,
-                MinorUnit.FromInt(quantity),
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
+                new MinorUnit(quantity),
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
                 null,
                 unit, temporaryReference, rowNumber, merchantData));
         }
@@ -92,10 +92,10 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ASSERT
             Assert.Throws<ArgumentNullException>(() => new OrderRow(articleNumber, null,
-                MinorUnit.FromInt(quantity),
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(discountAmount),
-                MinorUnit.FromInt(vatPercent),
+                new MinorUnit(quantity),
+                new MinorUnit(unitPrice),
+                new MinorUnit(discountAmount),
+                new MinorUnit(vatPercent),
                 unit, temporaryReference, rowNumber, merchantData));
         }
     }

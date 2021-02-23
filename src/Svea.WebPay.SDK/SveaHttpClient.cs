@@ -1,27 +1,25 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+
+using Svea.WebPay.SDK.Exceptions;
+using Svea.WebPay.SDK.Json;
+using Svea.WebPay.SDK.PaymentAdminApi.Request;
+using Svea.WebPay.SDK.PaymentAdminApi.Response;
+
+using System;
 using System.Globalization;
+using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Svea.WebPay.SDK.Json;
+
+using Task = System.Threading.Tasks.Task;
 
 namespace Svea.WebPay.SDK
 {
-    using Svea.WebPay.SDK.Exceptions;
-    using Svea.WebPay.SDK.PaymentAdminApi;
-    using Svea.WebPay.SDK.PaymentAdminApi.Request;
-    using Svea.WebPay.SDK.PaymentAdminApi.Response;
-
-    using System.Diagnostics;
-    using System.Net;
-    using System.Text.Json;
-    using System.Threading;
-
-    using Task = System.Threading.Tasks.Task;
-
-    public class SveaHttpClient : ISveaHttpClient
+	public class SveaHttpClient : ISveaHttpClient
     {
         private readonly HttpClient client;
         private readonly Credentials credentials;

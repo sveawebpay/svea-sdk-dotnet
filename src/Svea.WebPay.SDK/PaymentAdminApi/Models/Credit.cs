@@ -6,7 +6,7 @@
 
     public class Credit
     {
-        public Credit(IList<string> actions, long amount, IList<OrderRowResponseObject> orderRows)
+        public Credit(IList<string> actions, MinorUnit amount, IList<OrderRowResponseObject> orderRows)
         {
             Actions = actions;
             Amount = amount;
@@ -14,7 +14,7 @@
         }
 
         public IList<string> Actions { get; }
-        public long Amount { get; }
+        public MinorUnit Amount { get; }
         public IList<OrderRowResponseObject> OrderRows { get; }
     }
 }

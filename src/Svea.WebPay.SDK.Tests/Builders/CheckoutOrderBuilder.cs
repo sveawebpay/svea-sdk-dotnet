@@ -14,16 +14,10 @@
         private string clientOrderNumber;
         private MerchantSettings merchantSettings;
         private Cart cart;
-        private bool requireElectronicIdAuthentication;
-        private IList<Presetvalue> presetValues;
-        private IdentityFlags identityFlags;
-        private Guid? partnerKey;
-        private string merchantData;
 
         public CreateOrderModel Build()
         {
-            return new CreateOrderModel(this.countryCode, this.currency, this.locale, this.clientOrderNumber, this.merchantSettings, this.cart,
-            this.requireElectronicIdAuthentication, this.presetValues, this.identityFlags, this.partnerKey, this.merchantData);
+            return new CreateOrderModel(this.countryCode, this.currency, this.locale, this.clientOrderNumber, this.merchantSettings, this.cart, false);
         }
 
         public CheckoutOrderBuilder UseTestValues()
@@ -38,10 +32,10 @@
                 new OrderRow(
                     "ABC80",
                     "Computer",
-                    MinorUnit.FromInt(10),
-                    MinorUnit.FromDecimal(5000),
-                    MinorUnit.FromDecimal(10),
-                    MinorUnit.FromDecimal(25),
+                    new MinorUnit(10),
+                    new MinorUnit(5000),
+                    new MinorUnit(10),
+                    new MinorUnit(25),
                     null,
                     null,
                     1)

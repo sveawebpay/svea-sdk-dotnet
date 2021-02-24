@@ -192,12 +192,11 @@ namespace Sample.AspNetCore.Controllers
                 var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanDeliverOrder);
-
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRowIds = paymentOrder.OrderRows.Select(row => (long)row.OrderRowId).ToList();
                     var response = await paymentOrder.Actions.DeliverOrder(
-                        new DeliveryRequest(orderRowIds, pollingTimeout: TimeSpan.FromSeconds(15))
+                        new DeliveryRequest(orderRowIds,  pollingTimeout: TimeSpan.FromSeconds(15))
                     );
 
                     TempData["DeliverMessage"] = $"Order delivered -> {response.ResourceUri.AbsoluteUri}";

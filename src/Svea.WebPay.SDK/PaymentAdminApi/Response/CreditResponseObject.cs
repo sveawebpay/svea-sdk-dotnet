@@ -7,12 +7,16 @@
         public CreditResponseObject() { }
 
         [JsonConstructor]
-        public CreditResponseObject(string creditId)
+        public CreditResponseObject(string[] creditId)
         {
             CreditId = creditId;
         }
 
+
+        /// <summary>
+        /// ID to identify the credit.
+        /// </summary>
         [JsonInclude]
-        public string CreditId { get; }
+        public string[] CreditId { get; }
     }
 }

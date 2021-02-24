@@ -25,10 +25,9 @@
             OrderRows = deliveryResponse.OrderRows?.Select(x => new OrderRow(orderId, x, client)).ToList();
         }
 
-        public IList<string> AvailableActions { get; set; }
+        public IList<string> AvailableActions { get; }
+
         public DeliveryActions Actions { get; }
-
-
         public DateTime CreationDate { get; }
         public MinorUnit CreditedAmount { get; }
         public IList<Credit> Credits { get; }

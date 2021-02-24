@@ -21,7 +21,7 @@
             AvailableActions = orderRowResponse.Actions;
         }
 
-        public IList<string> AvailableActions { get; set; }
+        public IList<string> AvailableActions { get; }
 
         public OrderRowActions Actions { get; }
 

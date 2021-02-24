@@ -33,8 +33,8 @@
             Deliveries = orderResponseObject.Deliveries?.Select(x => new Delivery(orderResponseObject.Id, x, client)).ToList();
         }
 
-        public OrderActions Actions { get; set; }
-        public IList<string> AvailableActions { get; set; }
+        public OrderActions Actions { get; }
+        public IList<string> AvailableActions { get; }
         public Address BillingAddress { get; }
         public MinorUnit CancelledAmount { get; }
         public DateTime CreationDate { get; }

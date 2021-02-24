@@ -24,7 +24,7 @@ namespace Svea.WebPay.SDK.Tests.Json
             var result = JsonSerializer.Deserialize<MinorUnit>(jsonObject, JsonSerialization.Settings);
 
             //ASSERT
-            Assert.Equal(this.expectedAmount, result.Value);
+            Assert.Equal(this.expectedAmount, result.InLowestMonetaryUnit);
         }
 
 
@@ -32,7 +32,7 @@ namespace Svea.WebPay.SDK.Tests.Json
         public void CanSerialize_Amount()
         {
             //ARRANGE
-            var orderRow = new OrderRow("1", "Test", MinorUnit.FromDecimal(1), MinorUnit.FromDecimal(1), MinorUnit.FromDecimal(0), MinorUnit.FromDecimal(25),
+            var orderRow = new OrderRow("1", "Test", new MinorUnit(1), new MinorUnit(1), new MinorUnit(0), new MinorUnit(25),
                 "#", "", 1);
 
             //ACT

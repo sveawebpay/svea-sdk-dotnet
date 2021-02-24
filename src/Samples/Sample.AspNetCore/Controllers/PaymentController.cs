@@ -93,10 +93,10 @@ namespace Sample.AspNetCore.Controllers
                         new AddOrderRowRequest(
                             articleNumber: "1234567890",
                             name: "Slim Fit 512",
-                            quantity: MinorUnit.FromInt(2),
-                            unitPrice: MinorUnit.FromInt(100),
-                            discountAmount: MinorUnit.FromInt(0),
-                            vatPercent: MinorUnit.FromInt(12),
+                            quantity: new MinorUnit(2),
+                            unitPrice: new MinorUnit(100),
+                            discountAmount: new MinorUnit(0),
+                            vatPercent: new MinorUnit(12),
                             unit: "SEK",
                             TimeSpan.FromSeconds(15)
                         )
@@ -128,20 +128,20 @@ namespace Sample.AspNetCore.Controllers
                     {
                         new NewOrderRow(
                             name: "Slim Fit 512",
-                            quantity: MinorUnit.FromInt(2),
-                            unitPrice: MinorUnit.FromInt(100),
-                            vatPercent: MinorUnit.FromInt(12),
-                            discountAmount: MinorUnit.FromInt(0),
+                            quantity: new MinorUnit(2),
+                            unitPrice: new MinorUnit(100),
+                            vatPercent: new MinorUnit(12),
+                            discountAmount: new MinorUnit(0),
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"
                         ),
                         new NewOrderRow(
                             name: "Slim Fit 513",
-                            quantity: MinorUnit.FromInt(3),
-                            unitPrice: MinorUnit.FromInt(200),
-                            vatPercent: MinorUnit.FromInt(25),
-                            discountAmount: MinorUnit.FromInt(0),
+                            quantity: new MinorUnit(3),
+                            unitPrice: new MinorUnit(200),
+                            vatPercent: new MinorUnit(25),
+                            discountAmount: new MinorUnit(0),
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -172,7 +172,7 @@ namespace Sample.AspNetCore.Controllers
 
                 if (TempData["ErrorMessage"] == null)
                 {
-                    await paymentOrder.Actions.CancelAmount(new CancelAmountRequest(MinorUnit.FromDecimal(1)));
+                    await paymentOrder.Actions.CancelAmount(new CancelAmountRequest(new MinorUnit(1)));
                     TempData["CancelMessage"] = $"Cancelling parts of the total amount: {paymentId}";
                 }
             }
@@ -255,7 +255,7 @@ namespace Sample.AspNetCore.Controllers
                     {
                         newOrderRows.Add(new NewOrderRow(
                             orderRow.Name,
-                            MinorUnit.FromInt((orderRow.Quantity.Value + 1) % 4 + 1),
+                            new MinorUnit((orderRow.Quantity + 1) % 4 + 1),
                             orderRow.UnitPrice,
                             orderRow.VatPercent,
                             orderRow.DiscountAmount,
@@ -293,20 +293,20 @@ namespace Sample.AspNetCore.Controllers
                     {
                         new NewOrderRow(
                             name: "Slim Fit 512",
-                            quantity: MinorUnit.FromInt(2),
-                            unitPrice: MinorUnit.FromInt(100),
-                            vatPercent: MinorUnit.FromInt(12),
-                            discountAmount: MinorUnit.FromInt(0),
+                            quantity: new MinorUnit(2),
+                            unitPrice: new MinorUnit(100),
+                            vatPercent: new MinorUnit(12),
+                            discountAmount: new MinorUnit(0),
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"
                         ),
                         new NewOrderRow(
                             name: "Slim Fit 513",
-                            quantity: MinorUnit.FromInt(3),
-                            unitPrice: MinorUnit.FromInt(200),
-                            vatPercent: MinorUnit.FromInt(25),
-                            discountAmount: MinorUnit.FromInt(0),
+                            quantity: new MinorUnit(3),
+                            unitPrice: new MinorUnit(200),
+                            vatPercent: new MinorUnit(25),
+                            discountAmount: new MinorUnit(0),
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -407,7 +407,7 @@ namespace Sample.AspNetCore.Controllers
                 {
                     var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
 
-                    var response = await delivery.Actions.CreditAmount(new CreditAmountRequest(MinorUnit.FromInt(100)));
+                    var response = await delivery.Actions.CreditAmount(new CreditAmountRequest(new MinorUnit(100)));
 
                     TempData["CreditMessage"] = $"Delivery credited. Credit id: {response.CreditId}";
                 }
@@ -437,8 +437,8 @@ namespace Sample.AspNetCore.Controllers
                         new CreditNewOrderRowRequest(
                             new CreditOrderRow(
                                 name: "Slim Fit 512",
-                                MinorUnit.FromDecimal(100),
-                                MinorUnit.FromDecimal(12)
+                                new MinorUnit(100),
+                                new MinorUnit(12)
                             ),
                             pollingTimeout: TimeSpan.FromSeconds(15)
                         )

@@ -9,6 +9,7 @@
     <PackageTags>Svea Checkout SDK .NET</PackageTags>
     <PackageIcon>icon.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/sveawebpay/svea-sdk-dotnet</RepositoryUrl>
     <PackageReleaseNotes>Initital release.</PackageReleaseNotes>
     <AssemblyName>Svea.WebPay.SDK</AssemblyName>
     <RootNamespace>Svea.WebPay.SDK</RootNamespace>

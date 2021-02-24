@@ -16,8 +16,8 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ACT
             var ex = Record.Exception(() => new CreditOrderRow(name,
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(vatPercent)));
+                new MinorUnit(unitPrice),
+                new MinorUnit(vatPercent)));
 
             //ASSERT
             Assert.Null(ex);
@@ -32,8 +32,8 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ASSERT
             Assert.Throws<ArgumentOutOfRangeException>(() => new CreditOrderRow(name,
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(vatPercent)));
+                new MinorUnit(unitPrice),
+                new MinorUnit(vatPercent)));
         }
 
         [Theory]
@@ -43,10 +43,10 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
             //ASSERT
             Assert.Throws<ArgumentNullException>(() => new CreditOrderRow(name,
                 null,
-                MinorUnit.FromInt(vatPercent)));
+                new MinorUnit(vatPercent)));
 
             Assert.Throws<ArgumentNullException>(() => new CreditOrderRow(name,
-                MinorUnit.FromInt(unitPrice),
+                new MinorUnit(unitPrice),
                 null));
         }
 
@@ -56,8 +56,8 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         {
             //ASSERT
             Assert.Throws<ArgumentNullException>(() => new CreditOrderRow(null,
-                MinorUnit.FromInt(unitPrice),
-                MinorUnit.FromInt(vatPercent)));
+                new MinorUnit(unitPrice),
+                new MinorUnit(vatPercent)));
         }
     }
 }

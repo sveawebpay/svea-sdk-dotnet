@@ -19,7 +19,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 		{
 		}
 
-		[RetryWithException(3)]
+		[RetryWithException(2)]
 		[Test(Description = "4473: Köp som privatperson(kontokredit)-> makulera delbetalning, 4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
 		[TestCaseSource(nameof(TestData), new object[] { true, false })]
 		public async System.Threading.Tasks.Task CreateOrderWithAccountCreditAsPrivateAsync(Product[] products)
@@ -42,7 +42,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			Assert.That(response.Currency, Is.EqualTo("SEK"));
 			Assert.That(response.IsCompany, Is.False);
 			Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-			Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+			Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
 			Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.AccountCredit)));
 			Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
 
@@ -59,7 +59,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			Assert.That(response.Deliveries.Count, Is.EqualTo(0));
 		}
 
-		[RetryWithException(3)]
+		[RetryWithException(2)]
 		[Test(Description = "4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
 		[TestCaseSource(nameof(TestData), new object[] { true, false })]
 		public async System.Threading.Tasks.Task DeliverWithAccountCreditAsPrivateAsync(Product[] products)
@@ -88,7 +88,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			Assert.That(response.Currency, Is.EqualTo("SEK"));
 			Assert.That(response.IsCompany, Is.False);
 			Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-			Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+			Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
 			Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.AccountCredit)));
 			Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
@@ -96,8 +96,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			Assert.That(response.OrderRows, Is.Empty);
 
 			Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-			Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
-			Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(0));
+			Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+			Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(0));
 			Assert.That(response.Deliveries.First().Status, Is.Null);
 			CollectionAssert.AreEquivalent(
 				new string[] { DeliveryActionType.CanCreditNewRow, DeliveryActionType.CanCreditOrderRows },
@@ -105,7 +105,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			);
 		}
 
-		[RetryWithException(3)]
+		[RetryWithException(2)]
 		[Test(Description = "4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
 		[TestCaseSource(nameof(TestData), new object[] { true, false })]
 		public async System.Threading.Tasks.Task CreditWithAccountCreditAsPrivateAsync(Product[] products)
@@ -136,7 +136,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			Assert.That(response.Currency, Is.EqualTo("SEK"));
 			Assert.That(response.IsCompany, Is.False);
 			Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-			Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+			Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
 			Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.AccountCredit)));
 			Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -144,15 +144,15 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			Assert.That(response.OrderRows, Is.Empty);
 
 			Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-			Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
-			Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+			Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+			Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
 			Assert.That(response.Deliveries.First().Credits.Count, Is.EqualTo(1));
 			Assert.That(response.Deliveries.First().Status, Is.Null);
 
 			Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
 		}
 
-		[RetryWithException(3)]
+		[RetryWithException(2)]
 		[Test(Description = "4473: Köp som privatperson(kontokredit)-> makulera delbetalning")]
 		[TestCaseSource(nameof(TestData), new object[] { true, false })]
 		public async System.Threading.Tasks.Task CancelWithAccountCreditAsPrivateAsync(Product[] products)
@@ -182,8 +182,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			Assert.That(response.Currency, Is.EqualTo("SEK"));
 			Assert.That(response.IsCompany, Is.False);
 			Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-			Assert.That(response.CancelledAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
-			Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+			Assert.That(response.CancelledAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+			Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
 			Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.AccountCredit)));
 			Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -194,7 +194,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 			Assert.That(response.Deliveries.Count, Is.EqualTo(0));
 		}
 
-		[RetryWithException(3)]
+		[RetryWithException(2)]
 		[Test(Description = "5702: RequireElectronicIdAuthentication] As a user I want to have a setting that will trigger BankId to be required on orders in the checkout")]
 		[TestCaseSource(nameof(TestData), new object[] { true, false })]
 		public void EnsureRequireIdAuthenticationShowUpWithAccountCredit(Product[] products)

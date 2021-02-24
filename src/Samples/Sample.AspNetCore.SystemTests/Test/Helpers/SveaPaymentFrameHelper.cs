@@ -41,9 +41,45 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
         public static SveaPaymentFramePage Pay(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, string amount = null)
         {
+            switch (paymentMethod)
+            {
+                default:
+                case PaymentMethods.Option.Card:
+                    page.PaymentMethods.Card.IsVisible.WaitTo.BeTrue().PaymentMethods.Card.Click();
+                    break;
+
+                case PaymentMethods.Option.DirektBank:
+                    page.PaymentMethods.DirektBank.IsVisible.WaitTo.BeTrue().PaymentMethods.DirektBank.Click();
+                    break;
+
+                case PaymentMethods.Option.Invoice:
+                    page.PaymentMethods.Invoice.IsVisible.WaitTo.BeTrue().PaymentMethods.Invoice.Click();
+                    break;
+
+                case PaymentMethods.Option.Trustly:
+                    page.PaymentMethods.Trustly.IsVisible.WaitTo.BeTrue().PaymentMethods.Trustly.Click();
+                    break;
+
+                case PaymentMethods.Option.PaymentPlan:
+                    page.PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue().PaymentMethods.PaymentPlan.Click();
+                    break;
+
+                case PaymentMethods.Option.AccountCredit:
+                    page.PaymentMethods.Account.IsVisible.WaitTo.BeTrue().PaymentMethods.Account.Click();
+                    break;
+
+                case PaymentMethods.Option.BlackFriday:
+                    page.PaymentMethods.BlackFriday.IsVisible.WaitTo.BeTrue().PaymentMethods.BlackFriday.Click();
+                    break;
+
+                case PaymentMethods.Option.Swish:
+                    page.PaymentMethods.Swish.IsVisible.WaitTo.BeTrue().PaymentMethods.Swish.Click();
+                    break;
+            }
+
             page
-            .PaymentMethods.TotalAmount.IsVisible.WaitTo.BeTrue()
-            .PaymentMethods.TotalAmount.Should.ContainAmount(amount);
+                .PaymentMethods.TotalAmount.IsVisible.WaitTo.BeTrue()
+                .PaymentMethods.TotalAmount.Should.ContainAmount(amount);
 
             if (entity == Entity.Option.Company && checkout == Checkout.Option.Identification)
             {

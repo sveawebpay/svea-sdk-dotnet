@@ -331,7 +331,7 @@ namespace Sample.AspNetCore.Controllers
         #region OrderRow
 
         [HttpGet]
-        public async Task<ActionResult> CancelOrderRow(long paymentId, int orderRowId)
+        public async Task<ActionResult> CancelOrderRow(long paymentId, long orderRowId)
         {
             try
             {
@@ -356,7 +356,7 @@ namespace Sample.AspNetCore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> UpdateOrderRow(long paymentId, int orderRowId)
+        public async Task<ActionResult> UpdateOrderRow(long paymentId, long orderRowId)
         {
             try
             {
@@ -395,7 +395,7 @@ namespace Sample.AspNetCore.Controllers
         #region Delivery
 
         [HttpGet]
-        public async Task<ActionResult> CreditAmount(long paymentId, int deliveryId)
+        public async Task<ActionResult> CreditAmount(long paymentId, long deliveryId)
         {
             try
             {
@@ -421,7 +421,7 @@ namespace Sample.AspNetCore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> CreditNewRow(long paymentId, int deliveryId)
+        public async Task<ActionResult> CreditNewRow(long paymentId, long deliveryId)
         {
             try
             {

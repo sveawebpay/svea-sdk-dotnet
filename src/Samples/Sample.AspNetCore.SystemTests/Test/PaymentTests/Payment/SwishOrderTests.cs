@@ -15,7 +15,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
         }
 
-        [RetryWithException(3)]
+        [RetryWithException(2)]
         [Test(Description = "4780: Köp som privatperson(Swish, om vi kan få till det på en merchant) -> kreditera transaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true, false })]
         public async System.Threading.Tasks.Task CreditWithSwishAsPrivateAsync(Product[] products)
@@ -36,7 +36,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             Assert.That(response.Currency, Is.EqualTo("SEK"));
             Assert.That(response.IsCompany, Is.False);
             Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice)));
+            Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
             Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Swish)));
             Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
             Assert.That(response.AvailableActions.Count, Is.EqualTo(0));

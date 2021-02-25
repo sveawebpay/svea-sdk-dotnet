@@ -59,8 +59,8 @@ namespace Sample.AspNetCore.Controllers
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRow = paymentOrder.OrderRows.FirstOrDefault(x => x.AvailableActions.Contains(OrderRowActionType.CanCancelRow));
-                    
-                    if(orderRow == null)
+
+                    if (orderRow == null)
                     {
                         throw new Exception();
                     }
@@ -102,7 +102,7 @@ namespace Sample.AspNetCore.Controllers
                         )
                     );
 
-                    TempData["OrderRowMessage"] = $"Order row has been added -> {response. ResourceUri.AbsoluteUri}";
+                    TempData["OrderRowMessage"] = $"Order row has been added -> {response.ResourceUri.AbsoluteUri}";
                 }
             }
             catch (Exception e)
@@ -195,8 +195,10 @@ namespace Sample.AspNetCore.Controllers
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRowIds = paymentOrder.OrderRows.Select(row => (long)row.OrderRowId).ToList();
+                    var deliveryOptions = new RowDeliveryOptions(orderRowIds.First(), 1);
+
                     var response = await paymentOrder.Actions.DeliverOrder(
-                        new DeliveryRequest(orderRowIds,  pollingTimeout: TimeSpan.FromSeconds(15))
+                        new DeliveryRequest(orderRowIds, rowDeliveryOptions: deliveryOptions, pollingTimeout: TimeSpan.FromSeconds(15))
                     );
 
                     TempData["DeliverMessage"] = $"Order delivered -> {response.ResourceUri.AbsoluteUri}";
@@ -420,7 +422,7 @@ namespace Sample.AspNetCore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> CreditNewRow(long paymentId, int deliveryId)
+        public async Task<ActionResult> CreditNewRow(long paymentId, long deliveryId)
         {
             try
             {
@@ -467,11 +469,47 @@ namespace Sample.AspNetCore.Controllers
                 {
                     var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
                     var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
+                    var creditingOptions = new RowCreditingOptions(orderRowIds.First(), 1);
+
                     var response = await delivery.Actions.CreditOrderRows(
-                        new CreditOrderRowsRequest(orderRowIds, pollingTimeout: TimeSpan.FromSeconds(15))
+                        new CreditOrderRowsRequest(orderRowIds, creditingOptions, TimeSpan.FromSeconds(15))
                     );
 
                     TempData["CreditMessage"] = $"Delivery order rows credited. -> {response.ResourceUri.AbsoluteUri}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> CreditOrderRowsWithFee(long paymentId, long deliveryId)
+        {
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditOrderRows);
+
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
+                    var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
+                    var row = delivery.OrderRows.First();
+                    var feeAmount = new MinorUnit(200);
+                    var fee = new Fee(row.ArticleNumber, row.Name, feeAmount, new MinorUnit(25));
+
+                    var creditingOptions = new RowCreditingOptions(orderRowIds.First(), 1);
+
+                    var response = await delivery.Actions.CreditOrderRowsWithFee(
+                        new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions, TimeSpan.FromSeconds(15))
+                    );
+
+                    TempData["CreditMessage"] = $"Delivery order rows credited with fee ({feeAmount.InLowestMonetaryUnit}). -> {response.ResourceUri.AbsoluteUri}";
                 }
             }
             catch (Exception e)

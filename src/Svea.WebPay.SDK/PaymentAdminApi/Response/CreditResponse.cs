@@ -16,6 +16,6 @@
         /// ID to each identify the credit.
         /// </summary>
         [JsonInclude]
-        public string[] CreditId { get; }
+        public string CreditId { get; }
     }
 }

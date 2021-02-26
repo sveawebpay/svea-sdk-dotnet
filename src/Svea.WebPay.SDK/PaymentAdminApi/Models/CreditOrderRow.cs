@@ -27,8 +27,19 @@
             }
         }
 
+        /// <summary>
+        /// Credit row name. Credit row name.
+        /// </summary>
         public string Name { get; }
+
+        /// <summary>
+        /// Credit amount including VAT.
+        /// </summary>
         public MinorUnit UnitPrice { get; }
+
+        /// <summary>
+        /// The VAT percentage of the credit amount. Valid vat percentage for that country.
+        /// </summary>
         public MinorUnit VatPercent { get; }
     }
 }

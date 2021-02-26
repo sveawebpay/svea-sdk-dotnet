@@ -2,13 +2,15 @@
 {
     public class Address
     {
-        public Address(string fullName, string firstName, string lastName, string streetAddress, string coAddress,
+        public Address(string fullName, string firstName, string lastName, string streetAddress, string streetAddress2, string streetAddress3, string coAddress,
             string postalCode, string city, string countryCode, bool isGeneric, object addressLines)
         {
             FullName = fullName;
             FirstName = firstName;
             LastName = lastName;
             StreetAddress = streetAddress;
+            StreetAddress2 = streetAddress2;
+            StreetAddress3 = streetAddress3;
             CoAddress = coAddress;
             PostalCode = postalCode;
             City = city;
@@ -21,6 +23,8 @@
         public string FirstName { get; }
         public string LastName { get; }
         public string StreetAddress { get; }
+        public string StreetAddress2 { get; }
+        public string StreetAddress3 { get; }
         public string CoAddress { get; }
         public string PostalCode { get; }
         public string City { get; }

@@ -12,7 +12,7 @@
         /// <param name="unitPrice">Price of the product including VAT.</param>
         /// <param name="vatPercent">The VAT percentage of the credit amount. Valid vat percentage for that country.</param>
         /// <param name="discountAmount">The discount amount of the product.</param>
-        ///  <param name="rowId">Id of row to update</param>
+        /// <param name="rowId">Id of row to update</param>
         /// <param name="unit">The unit type, e.g., “st”, “pc”, “kg” etc. 0-4 characters.</param>
         /// <param name="articleNumber">Article number as a string. Can contain letters and numbers. Maximum 256 characters.</param>
         public NewOrderRow(string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit vatPercent, MinorUnit discountAmount = null, long? rowId = null, string unit = "", string articleNumber = "")

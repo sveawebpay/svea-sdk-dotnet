@@ -105,7 +105,7 @@ namespace Svea.WebPay.SDK.Tests
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
             var orderRow = new List<long> { order.OrderRows.First(x => x.AvailableActions.Contains(OrderRowActionType.CanDeliverRow)).OrderRowId };
-            var deliverRequest = new DeliveryRequest(orderRow, null, TimeSpan.FromSeconds(15));
+            var deliverRequest = new DeliveryRequest(orderRow, null, pollingTimeout: TimeSpan.FromSeconds(15));
             var resourceResponse = await order.Actions.DeliverOrder(deliverRequest);
 
             // Assert

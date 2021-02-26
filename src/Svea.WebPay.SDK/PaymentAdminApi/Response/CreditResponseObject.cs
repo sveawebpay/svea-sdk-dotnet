@@ -12,6 +12,10 @@
             CreditId = creditId;
         }
 
+
+        /// <summary>
+        /// ID to identify the credit.
+        /// </summary>
         [JsonInclude]
         public string CreditId { get; }
     }

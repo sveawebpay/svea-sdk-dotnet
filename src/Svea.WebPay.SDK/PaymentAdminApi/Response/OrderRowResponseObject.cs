@@ -22,12 +22,21 @@ namespace Svea.WebPay.SDK.PaymentAdminApi.Response
             Actions = actions;
         }
 
+        /// <summary>
+        /// The identifier of the order row
+        /// </summary>
         [JsonInclude]
         public int OrderRowId { get; }
 
+        /// <summary>
+        /// Determines if the row is cancelled.
+        /// </summary>
         [JsonInclude]
         public bool IsCancelled { get; }
 
+        /// <summary>
+        /// A list of actions possible on the order row. See list of OrderRow actions below.
+        /// </summary>
         [JsonInclude]
         public IList<string> Actions { get; }
     }

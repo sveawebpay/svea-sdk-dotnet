@@ -11,10 +11,19 @@
             Resource = delegateObj();
         }
 
+        /// <summary>
+        /// The Uri of the completed resource
+        /// </summary>
         public Uri ResourceUri { get; }
 
+        /// <summary>
+        /// The Uri of the Task
+        /// </summary>
         public Uri TaskUri { get; }
 
+        /// <summary>
+        /// The completed resource
+        /// </summary>
         public T Resource { get; }
     }
 }

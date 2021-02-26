@@ -12,6 +12,9 @@
             OrderRowId = responseObject.OrderRowId;
         }
 
+        /// <summary>
+        /// The row IDs of the newly created OrderRows.
+        /// </summary>
         [JsonInclude]
         public long[] OrderRowId { get; }
     }

@@ -2,7 +2,6 @@
 
 namespace Svea.WebPay.SDK.Tests.UnitTests
 {
-    using Svea.WebPay.SDK.PaymentAdminApi.Models;
     using Svea.WebPay.SDK.PaymentAdminApi.Request;
 
     using Xunit;

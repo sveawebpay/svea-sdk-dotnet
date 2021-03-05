@@ -156,16 +156,18 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         [RetryWithException(2)]
         [Test(Description = "4776: Köp som företag(faktura) -> leverera faktura -> kreditera faktura")]
         [TestCaseSource(nameof(TestData), new object[] { true, false })]
-        public async System.Threading.Tasks.Task CreditWithInvoiceAsCompanyAsync(Product[] products)
+        public async System.Threading.Tasks.Task CreditOrderRowWithFeeWithInvoiceAsCompanyAsync(Product[] products)
         {
+            var feeAmount = 200;
+
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Invoice)
 
-                // Deliver -> Credit
+                // Deliver -> Credit with fee
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().Order.Table.Toggle.Click()
                 .Orders.Last().Order.Table.DeliverOrder.ClickAndGo()
                 .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                .Orders.Last().Deliveries.First().Table.CreditOrderRows.ClickAndGo()
+                .Orders.Last().Deliveries.First().Table.CreditOrderRowWithFee.ClickAndGo()
 
                 // Validate order info
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
@@ -193,11 +195,22 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
             Assert.That(response.Deliveries.Count, Is.EqualTo(1));
             Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+            Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo( (products.Sum(x => x.Quantity * x.UnitPrice) * 100) - (feeAmount * 100)) );
             Assert.That(response.Deliveries.First().Credits.Count, Is.EqualTo(1));
             Assert.That(response.Deliveries.First().Status, Is.EqualTo("Sent"));
 
-            Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
+            CollectionAssert.AreEquivalent(
+                new string[] { DeliveryActionType.CanCreditNewRow, DeliveryActionType.CanCreditOrderRows },
+                response.Deliveries.First().AvailableActions
+            );
+        }
+
+        [RetryWithException(2)]
+        [Test(Description = "4776: Köp som företag(faktura) -> leverera faktura -> kreditera faktura")]
+        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        public async System.Threading.Tasks.Task CreditRowWithInvoiceAsCompanyAsync(Product[] products)
+        {
+            
         }
 
         [RetryWithException(2)]

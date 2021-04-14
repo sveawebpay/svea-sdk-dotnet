@@ -9,8 +9,6 @@ using Svea.WebPay.SDK.PaymentAdminApi;
 
 namespace Sample.AspNetCore.Controllers
 {
-    using Microsoft.AspNetCore.Mvc.Formatters;
-
     using Svea.WebPay.SDK.PaymentAdminApi.Models;
     using Svea.WebPay.SDK.PaymentAdminApi.Request;
 

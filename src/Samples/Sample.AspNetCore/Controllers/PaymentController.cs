@@ -9,6 +9,8 @@ using Svea.WebPay.SDK.PaymentAdminApi;
 
 namespace Sample.AspNetCore.Controllers
 {
+    using Microsoft.AspNetCore.Mvc.Formatters;
+
     using Svea.WebPay.SDK.PaymentAdminApi.Models;
     using Svea.WebPay.SDK.PaymentAdminApi.Request;
 
@@ -195,7 +197,7 @@ namespace Sample.AspNetCore.Controllers
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRowIds = paymentOrder.OrderRows.Select(row => (long)row.OrderRowId).ToList();
-                    var deliveryOptions = new RowDeliveryOptions(orderRowIds.First(), 1);
+                    var deliveryOptions = new List<RowDeliveryOptions> { new RowDeliveryOptions(orderRowIds.First(), 1) };
 
                     var response = await paymentOrder.Actions.DeliverOrder(
                         new DeliveryRequest(orderRowIds, rowDeliveryOptions: deliveryOptions, pollingTimeout: TimeSpan.FromSeconds(15))
@@ -469,7 +471,7 @@ namespace Sample.AspNetCore.Controllers
                 {
                     var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
                     var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
-                    var creditingOptions = new RowCreditingOptions(orderRowIds.First(), 1);
+                    var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
 
                     var response = await delivery.Actions.CreditOrderRows(
                         new CreditOrderRowsRequest(orderRowIds, creditingOptions, TimeSpan.FromSeconds(15))
@@ -498,16 +500,16 @@ namespace Sample.AspNetCore.Controllers
                 if (TempData["ErrorMessage"] == null)
                 {
                     var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
-                    var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
+                    var orderRowIds = delivery.OrderRows
+                        .Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow))
+                        .Select(row => (long)row.OrderRowId).ToList();
                     var row = delivery.OrderRows.First();
                     var feeAmount = new MinorUnit(200);
                     var fee = new Fee(row.ArticleNumber, row.Name, feeAmount, new MinorUnit(25));
 
-                    var creditingOptions = new RowCreditingOptions(orderRowIds.First(), 1);
-
-                    var response = await delivery.Actions.CreditOrderRowsWithFee(
-                        new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions, TimeSpan.FromSeconds(15))
-                    );
+                    var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
+                    
+                    var response = await delivery.Actions.CreditOrderRowsWithFee(new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions, TimeSpan.FromSeconds(15)));
 
                     TempData["CreditMessage"] = $"Delivery order rows credited with fee ({feeAmount.InLowestMonetaryUnit}). -> {response.ResourceUri.AbsoluteUri}";
                 }

@@ -10,8 +10,5 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 
         [FindByContent("Privatperson")]
         public Text<TOwner> IsPrivate { get; set; }
-
-        [FindByCss("button[data-testid='anonymous-toggle']")]
-        public Button<TOwner> ToggleIdentification { get; private set; }
     }
 }

@@ -128,7 +128,7 @@ namespace Sample.AspNetCore.Controllers
                     {
                         new NewOrderRow(
                             name: "Slim Fit 512",
-                            quantity: 2,
+                             quantity: 2,
                             unitPrice: 100,
                             vatPercent: 12,
                             discountAmount: 0,
@@ -256,7 +256,7 @@ namespace Sample.AspNetCore.Controllers
                     {
                         newOrderRows.Add(new NewOrderRow(
                             orderRow.Name,
-                            (orderRow.Quantity + 1) % 4 + 1,
+                          (orderRow.Quantity + 1) % 4 + 1,
                             orderRow.UnitPrice,
                             orderRow.VatPercent,
                             orderRow.DiscountAmount,
@@ -294,7 +294,7 @@ namespace Sample.AspNetCore.Controllers
                     {
                         new NewOrderRow(
                             name: "Slim Fit 512",
-                            quantity: 2,
+                                quantity: 2,
                             unitPrice: 100,
                             vatPercent: 12,
                             discountAmount: 0,
@@ -314,10 +314,10 @@ namespace Sample.AspNetCore.Controllers
                         )
                     };
 
-                await paymentOrder.Actions.ReplaceOrderRows(new ReplaceOrderRowsRequest(newOrderRows));
+                    await paymentOrder.Actions.ReplaceOrderRows(new ReplaceOrderRowsRequest(newOrderRows));
 
-                TempData["OrderRowMessage"] = "Order rows have been updated";
-            }
+                    TempData["OrderRowMessage"] = "Order rows have been updated";
+                }
             }
             catch (Exception e)
             {
@@ -325,198 +325,198 @@ namespace Sample.AspNetCore.Controllers
             }
 
             return RedirectToAction("Details", "Orders");
-}
-
-#endregion Order
-
-#region OrderRow
-
-[HttpGet]
-public async Task<ActionResult> CancelOrderRow(long paymentId, int orderRowId)
-{
-    try
-    {
-        var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
-
-        TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderRowAction(paymentOrder, orderRowId, OrderRowActionType.CanCancelRow);
-
-        if (TempData["ErrorMessage"] == null)
-        {
-            var orderRow = paymentOrder.OrderRows.FirstOrDefault(row => row.OrderRowId == orderRowId);
-            await orderRow.Actions.CancelOrderRow(new CancelRequest(true));
-
-            TempData["CancelMessage"] = $"Order row cancelled. Order row id: {orderRow.OrderRowId}";
         }
-    }
-    catch (Exception e)
-    {
-        TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
-    }
 
-    return RedirectToAction("Details", "Orders");
-}
+        #endregion Order
 
-[HttpGet]
-public async Task<ActionResult> UpdateOrderRow(long paymentId, int orderRowId)
-{
-    try
-    {
-        var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+        #region OrderRow
 
-        TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderRowAction(paymentOrder, orderRowId, OrderRowActionType.CanUpdateRow);
-
-        if (TempData["ErrorMessage"] == null)
+        [HttpGet]
+        public async Task<ActionResult> CancelOrderRow(long paymentId, long orderRowId)
         {
-            var orderRow = paymentOrder.OrderRows.FirstOrDefault(row => row.OrderRowId == orderRowId);
-            await orderRow.Actions.UpdateOrderRow(
-                new UpdateOrderRowRequest(
-                    orderRow.ArticleNumber,
-                    orderRow.Name + " Updated",
-                    orderRow.Quantity,
-                    orderRow.UnitPrice,
-                    orderRow.DiscountAmount,
-                    orderRow.VatPercent,
-                    orderRow.Unit
-                )
-            );
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
 
-            TempData["CancelMessage"] = $"Order row updated. Order row id: {orderRow.OrderRowId}";
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderRowAction(paymentOrder, orderRowId, OrderRowActionType.CanCancelRow);
+
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var orderRow = paymentOrder.OrderRows.FirstOrDefault(row => row.OrderRowId == orderRowId);
+                    await orderRow.Actions.CancelOrderRow(new CancelRequest(true));
+
+                    TempData["CancelMessage"] = $"Order row cancelled. Order row id: {orderRow.OrderRowId}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
         }
-    }
-    catch (Exception e)
-    {
-        TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
-    }
 
-    return RedirectToAction("Details", "Orders");
-}
-
-#endregion OrderRow
-
-#region Delivery
-
-[HttpGet]
-public async Task<ActionResult> CreditAmount(long paymentId, int deliveryId)
-{
-    try
-    {
-        var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
-
-        TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditAmount);
-
-        if (TempData["ErrorMessage"] == null)
+        [HttpGet]
+        public async Task<ActionResult> UpdateOrderRow(long paymentId, long orderRowId)
         {
-            var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
 
-            var response = await delivery.Actions.CreditAmount(new CreditAmountRequest(100));
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderRowAction(paymentOrder, orderRowId, OrderRowActionType.CanUpdateRow);
 
-            TempData["CreditMessage"] = $"Delivery credited. Credit id: {response.CreditId}";
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var orderRow = paymentOrder.OrderRows.FirstOrDefault(row => row.OrderRowId == orderRowId);
+                    await orderRow.Actions.UpdateOrderRow(
+                        new UpdateOrderRowRequest(
+                            orderRow.ArticleNumber,
+                            orderRow.Name + " Updated",
+                            orderRow.Quantity,
+                            orderRow.UnitPrice,
+                            orderRow.DiscountAmount,
+                            orderRow.VatPercent,
+                            orderRow.Unit
+                        )
+                    );
+
+                    TempData["CancelMessage"] = $"Order row updated. Order row id: {orderRow.OrderRowId}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
         }
-    }
-    catch (Exception e)
-    {
-        TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
-    }
 
-    return RedirectToAction("Details", "Orders");
-}
+        #endregion OrderRow
 
-[HttpGet]
-public async Task<ActionResult> CreditNewRow(long paymentId, long deliveryId)
-{
-    try
-    {
-        var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+        #region Delivery
 
-        TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditNewRow);
-
-        if (TempData["ErrorMessage"] == null)
+        [HttpGet]
+        public async Task<ActionResult> CreditAmount(long paymentId, long deliveryId)
         {
-            var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
 
-            var response = await delivery.Actions.CreditNewRow(
-                new CreditNewOrderRowRequest(
-                    new CreditOrderRow(
-                        name: "Slim Fit 512",
-                       100,12),
-                    pollingTimeout: TimeSpan.FromSeconds(15)
-                )
-            );
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditAmount);
 
-            TempData["CreditMessage"] = $"New credit row created. -> {response.ResourceUri.AbsoluteUri}";
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
+
+                    var response = await delivery.Actions.CreditAmount(new CreditAmountRequest(100));
+
+                    TempData["CreditMessage"] = $"Delivery credited. Credit id: {response.CreditId}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
         }
-    }
-    catch (Exception e)
-    {
-        TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
-    }
 
-    return RedirectToAction("Details", "Orders");
-}
-
-[HttpGet]
-public async Task<ActionResult> CreditOrderRows(long paymentId, long deliveryId)
-{
-    try
-    {
-        var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
-
-        TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditOrderRows);
-
-        if (TempData["ErrorMessage"] == null)
+        [HttpGet]
+        public async Task<ActionResult> CreditNewRow(long paymentId, long deliveryId)
         {
-            var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
-            var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
-            var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
 
-            var response = await delivery.Actions.CreditOrderRows(
-                new CreditOrderRowsRequest(orderRowIds, creditingOptions, TimeSpan.FromSeconds(15))
-            );
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditNewRow);
 
-            TempData["CreditMessage"] = $"Delivery order rows credited. -> {response.ResourceUri.AbsoluteUri}";
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
+
+                    var response = await delivery.Actions.CreditNewRow(
+                        new CreditNewOrderRowRequest(
+                            new CreditOrderRow(
+                                name: "Slim Fit 512",
+                                100, 12),
+                            pollingTimeout: TimeSpan.FromSeconds(15)
+                        )
+                    );
+
+                    TempData["CreditMessage"] = $"New credit row created. -> {response.ResourceUri.AbsoluteUri}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
         }
-    }
-    catch (Exception e)
-    {
-        TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
-    }
 
-    return RedirectToAction("Details", "Orders");
-}
-
-[HttpGet]
-public async Task<ActionResult> CreditOrderRowsWithFee(long paymentId, long deliveryId)
-{
-    try
-    {
-        var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
-
-        TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditOrderRows);
-
-        if (TempData["ErrorMessage"] == null)
+        [HttpGet]
+        public async Task<ActionResult> CreditOrderRows(long paymentId, long deliveryId)
         {
-            var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
-            var orderRowIds = delivery.OrderRows
-                .Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow))
-                .Select(row => (long)row.OrderRowId).ToList();
-            var row = delivery.OrderRows.First();
-            var feeAmount = new MinorUnit(200);
-            var fee = new Fee(row.ArticleNumber, row.Name, feeAmount, 25);
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
 
-            var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditOrderRows);
 
-            var response = await delivery.Actions.CreditOrderRowsWithFee(new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions, TimeSpan.FromSeconds(15)));
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
+                    var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
+                    var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
 
-            TempData["CreditMessage"] = $"Delivery order rows credited with fee ({feeAmount.InLowestMonetaryUnit}). -> {response.ResourceUri.AbsoluteUri}";
+                    var response = await delivery.Actions.CreditOrderRows(
+                        new CreditOrderRowsRequest(orderRowIds, creditingOptions, TimeSpan.FromSeconds(15))
+                    );
+
+                    TempData["CreditMessage"] = $"Delivery order rows credited. -> {response.ResourceUri.AbsoluteUri}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
         }
-    }
-    catch (Exception e)
-    {
-        TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
-    }
 
-    return RedirectToAction("Details", "Orders");
-}
+        [HttpGet]
+        public async Task<ActionResult> CreditOrderRowsWithFee(long paymentId, long deliveryId)
+        {
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditOrderRows);
+
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
+                    var orderRowIds = delivery.OrderRows
+                        .Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow))
+                        .Select(row => (long)row.OrderRowId).ToList();
+                    var row = delivery.OrderRows.First();
+                    var feeAmount = new MinorUnit(200);
+                    var fee = new Fee(row.ArticleNumber, row.Name, feeAmount, 25);
+
+                    var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
+
+                    var response = await delivery.Actions.CreditOrderRowsWithFee(new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions, TimeSpan.FromSeconds(15)));
+
+                    TempData["CreditMessage"] = $"Delivery order rows credited with fee ({feeAmount.InLowestMonetaryUnit}). -> {response.ResourceUri.AbsoluteUri}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
+        }
 
         #endregion Delivery
     }

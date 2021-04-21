@@ -27,7 +27,7 @@ namespace Sample.AspNetCore.Helpers
             return null;
         }
 
-        public static string ValidateOrderRowAction(Order order, int orderRowId, string orderRowAction)
+        public static string ValidateOrderRowAction(Order order, long orderRowId, string orderRowAction)
         {
             var orderError = ValidateOrderAction(order, null);
 

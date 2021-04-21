@@ -225,7 +225,7 @@ namespace Svea.WebPay.SDK.Tests
                 new CreditOrderRow(
                     name: "Slim Fit 512",
                     new MinorUnit(100),
-                    new MinorUnit(12)
+                    new MinorUnit(12), 1
                 )
             ));
 

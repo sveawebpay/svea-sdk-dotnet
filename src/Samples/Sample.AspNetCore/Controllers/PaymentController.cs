@@ -438,7 +438,7 @@ namespace Sample.AspNetCore.Controllers
                         new CreditNewOrderRowRequest(
                             new CreditOrderRow(
                                 name: "Slim Fit 512",
-                                100, 12),
+                                100, 12, 1),
                             pollingTimeout: TimeSpan.FromSeconds(15)
                         )
                     );

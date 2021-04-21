@@ -10,7 +10,7 @@
         /// <param name="quantity">Number of items to be delivered for specified row.
         /// <remarks>Quantity should not be below 0 or above the quantity of the row.</remarks>
         /// </param>
-        public RowCreditingOptions(long orderRowId, long quantity)
+        public RowCreditingOptions(long orderRowId, MinorUnit quantity)
         {
             OrderRowId = orderRowId;
             Quantity = quantity;
@@ -24,6 +24,6 @@
         /// <summary>
         /// Number of items to be delivered for specified row.
         /// </summary>
-        public long Quantity { get; }
+        public MinorUnit Quantity { get; }
     }
 }

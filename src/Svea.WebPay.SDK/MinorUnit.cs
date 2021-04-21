@@ -45,29 +45,29 @@
 			return value._decimalValue;
 		}
 
-		/// <summary>
-		/// Converts a <seealso cref="decimal"/> to a <seealso cref="MinorUnit"/>
-		/// </summary>
-		/// <param name="value">The <seealso cref="decimal"/> you want converted.</param>
-		public static implicit operator MinorUnit(decimal value)
-		{
-			return new MinorUnit(value);
-		}
+        /// <summary>
+        /// Converts a <seealso cref="decimal"/> to a <seealso cref="MinorUnit"/>
+        /// </summary>
+        /// <param name="value">The <seealso cref="decimal"/> you want converted.</param>
+        public static implicit operator MinorUnit(decimal value)
+        {
+            return new MinorUnit(value);
+        }
 
-		/// <summary>
-		/// Converts a <seealso cref="long"/> to a <seealso cref="MinorUnit"/>
-		/// </summary>
-		/// <param name="value">The <seealso cref="long"/> you want converted.</param>
-		public static implicit operator MinorUnit(long value)
-		{
-			return new MinorUnit(value);
-		}
+        /// <summary>
+        /// Converts a <seealso cref="long"/> to a <seealso cref="MinorUnit"/>
+        /// </summary>
+        /// <param name="value">The <seealso cref="long"/> you want converted.</param>
+        public static implicit operator MinorUnit(long value)
+        {
+            return new MinorUnit(value);
+        }
 
-		/// <summary>
-		/// Adds the amounts in two <seealso cref="MinorUnit"/> instances together.
-		/// </summary>
-		/// <returns>A new <seealso cref="MinorUnit"/> with the amounts added together.</returns>
-		public static MinorUnit operator +(MinorUnit a, MinorUnit b)
+        /// <summary>
+        /// Adds the amounts in two <seealso cref="MinorUnit"/> instances together.
+        /// </summary>
+        /// <returns>A new <seealso cref="MinorUnit"/> with the amounts added together.</returns>
+        public static MinorUnit operator +(MinorUnit a, MinorUnit b)
 		{
 			return new MinorUnit(a._decimalValue + b._decimalValue);
 		}

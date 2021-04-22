@@ -86,7 +86,7 @@ namespace Svea.WebPay.SDK.Tests
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
-            var resourceResponse = await order.Actions.DeliverOrder(new DeliveryRequest(new List<long> { 1, 2 }));
+            var resourceResponse = await order.Actions.DeliverOrder(new DeliveryRequest(new List<long> { 1, 2 }), new PollingTimeout(15));
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
@@ -105,8 +105,8 @@ namespace Svea.WebPay.SDK.Tests
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
             var orderRow = new List<long> { order.OrderRows.First(x => x.AvailableActions.Contains(OrderRowActionType.CanDeliverRow)).OrderRowId };
-            var deliverRequest = new DeliveryRequest(orderRow, null, pollingTimeout: TimeSpan.FromSeconds(15));
-            var resourceResponse = await order.Actions.DeliverOrder(deliverRequest);
+            var deliverRequest = new DeliveryRequest(orderRow);
+            var resourceResponse = await order.Actions.DeliverOrder(deliverRequest, new PollingTimeout(15));
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
@@ -180,7 +180,7 @@ namespace Svea.WebPay.SDK.Tests
                             articleNumber: "0987654321"
                         )
                     }
-                )
+                ), new PollingTimeout(15)
             );
 
             // Assert
@@ -201,7 +201,7 @@ namespace Svea.WebPay.SDK.Tests
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
             var delivery = order.Deliveries.FirstOrDefault(dlv => dlv.Id == 5588817);
             var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
-            var resourceResponse = await delivery.Actions.CreditOrderRows(new CreditOrderRowsRequest(orderRowIds));
+            var resourceResponse = await delivery.Actions.CreditOrderRows(new CreditOrderRowsRequest(orderRowIds), new PollingTimeout(15));
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
@@ -225,9 +225,9 @@ namespace Svea.WebPay.SDK.Tests
                 new CreditOrderRow(
                     name: "Slim Fit 512",
                     new MinorUnit(100),
-                    new MinorUnit(12)
+                    new MinorUnit(12), 1
                 )
-            ));
+            ), new PollingTimeout(15));
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);

@@ -19,7 +19,9 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Svea.WebPay.SDK
 {
-	public class SveaHttpClient : ISveaHttpClient
+    using Svea.WebPay.SDK.PaymentAdminApi;
+
+    public class SveaHttpClient : ISveaHttpClient
     {
         private readonly HttpClient client;
         private readonly Credentials credentials;
@@ -98,15 +100,13 @@ namespace Svea.WebPay.SDK
             return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage);
         }
 
-        internal async Task<TResponse> HttpPost<TResponse, TResourceResponse>(Uri url, object payload)
+        internal async Task<TResponse> HttpPost<TResponse, TResourceResponse>(Uri url, object payload, PollingTimeout pollingTimeout = null)
             where TResponse : ResourceResponseObject<TResourceResponse>, new()
             where TResourceResponse : new()
         {
             var httpRequestMessage = CreateHttpRequestMessage(HttpMethod.Post, url, payload);
-
-            var timeout = GetPollingTimeout(payload);
-
-            var resourceResponse = await ExecuteResourceRequest<TResponse, TResourceResponse>(httpRequestMessage, timeout);
+            
+            var resourceResponse = await ExecuteResourceRequest<TResponse, TResourceResponse>(httpRequestMessage, pollingTimeout);
 
             if (resourceResponse?.ResourceUri != null)
             {
@@ -116,17 +116,17 @@ namespace Svea.WebPay.SDK
             return resourceResponse;
         }
 
-        private async Task<TResponse> ExecuteResourceRequest<TResponse, TResourceResponse>(HttpRequestMessage httpRequestMessage, TimeSpan? timeout)
+        private async Task<TResponse> ExecuteResourceRequest<TResponse, TResourceResponse>(HttpRequestMessage httpRequestMessage, PollingTimeout timeout = null)
             where TResponse : ResourceResponseObject<TResourceResponse>, new()
         {
             var polling = true;
             if (timeout == null)
             {
-                timeout = TimeSpan.FromSeconds(10);
-                polling = false;
+                timeout = new PollingTimeout(10);
+                polling = false; 
             }
 
-            using (var cancellationToken = new CancellationTokenSource(timeout.Value))
+            using (var cancellationToken = new CancellationTokenSource(timeout.Timeout))
             {
                 try
                 {
@@ -240,17 +240,6 @@ namespace Svea.WebPay.SDK
                     innerException: ex);
             }
         }
-
-        private TimeSpan? GetPollingTimeout(object request)
-        {
-            if (request is IResourceRequest resourceRequest)
-            {
-                return resourceRequest.PollingTimeout;
-            }
-
-            return null;
-        }
-
 
         private void SetLocation<TResponse>(TResponse responseObject, HttpResponseMessage httpResponseMessage) where TResponse : new()
         {

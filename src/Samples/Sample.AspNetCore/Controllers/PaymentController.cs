@@ -148,7 +148,7 @@ namespace Sample.AspNetCore.Controllers
                         )
                     };
 
-                    var response = await paymentOrder.Actions.AddOrderRows(new AddOrderRowsRequest(newOrderRows, TimeSpan.FromSeconds(15)));
+                    var response = await paymentOrder.Actions.AddOrderRows(new AddOrderRowsRequest(newOrderRows), new PollingTimeout(15));
 
                     TempData["OrderRowMessage"] = $"Order row has been added -> {string.Join(", ", response.ResourceUri.AbsoluteUri) }";
                 }
@@ -198,8 +198,7 @@ namespace Sample.AspNetCore.Controllers
                     var deliveryOptions = new List<RowDeliveryOptions> { new RowDeliveryOptions(orderRowIds.First(), 1) };
 
                     var response = await paymentOrder.Actions.DeliverOrder(
-                        new DeliveryRequest(orderRowIds, rowDeliveryOptions: deliveryOptions, pollingTimeout: TimeSpan.FromSeconds(15))
-                    );
+                        new DeliveryRequest(orderRowIds, rowDeliveryOptions: deliveryOptions), new PollingTimeout(15));
 
                     TempData["DeliverMessage"] = $"Order delivered -> {response.ResourceUri.AbsoluteUri}";
                 }
@@ -224,8 +223,8 @@ namespace Sample.AspNetCore.Controllers
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRow = new List<long> { paymentOrder.OrderRows.First(x => x.AvailableActions.Contains(OrderRowActionType.CanDeliverRow)).OrderRowId };
-                    var deliverRequest = new DeliveryRequest(orderRow, pollingTimeout: TimeSpan.FromSeconds(15));
-                    var response = await paymentOrder.Actions.DeliverOrder(deliverRequest);
+                    var deliverRequest = new DeliveryRequest(orderRow);
+                    var response = await paymentOrder.Actions.DeliverOrder(deliverRequest, new PollingTimeout(15));
 
                     TempData["DeliverMessage"] = $"Order delivered partially -> {response.ResourceUri.AbsoluteUri}";
                 }
@@ -438,10 +437,8 @@ namespace Sample.AspNetCore.Controllers
                         new CreditNewOrderRowRequest(
                             new CreditOrderRow(
                                 name: "Slim Fit 512",
-                                100, 12, 1),
-                            pollingTimeout: TimeSpan.FromSeconds(15)
-                        )
-                    );
+                                100, 12, 1)
+                        ), new PollingTimeout(15));
 
                     TempData["CreditMessage"] = $"New credit row created. -> {response.ResourceUri.AbsoluteUri}";
                 }
@@ -470,8 +467,7 @@ namespace Sample.AspNetCore.Controllers
                     var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
 
                     var response = await delivery.Actions.CreditOrderRows(
-                        new CreditOrderRowsRequest(orderRowIds, creditingOptions, TimeSpan.FromSeconds(15))
-                    );
+                        new CreditOrderRowsRequest(orderRowIds, creditingOptions), new PollingTimeout(15));
 
                     TempData["CreditMessage"] = $"Delivery order rows credited. -> {response.ResourceUri.AbsoluteUri}";
                 }
@@ -505,7 +501,7 @@ namespace Sample.AspNetCore.Controllers
 
                     var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
 
-                    var response = await delivery.Actions.CreditOrderRowsWithFee(new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions, TimeSpan.FromSeconds(15)));
+                    var response = await delivery.Actions.CreditOrderRowsWithFee(new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions), new PollingTimeout(15));
 
                     TempData["CreditMessage"] = $"Delivery order rows credited with fee ({feeAmount.InLowestMonetaryUnit}). -> {response.ResourceUri.AbsoluteUri}";
                 }

@@ -45,7 +45,9 @@
         /// </summary>
         public MinorUnit VatPercent { get; }
 
+        /// <summary>
+        /// Quantity of the product. 1-9 digits. Minor unit. Only positive. Default value is 1.
+        /// </summary>
         public MinorUnit Quantity { get; }
-
     }
 }

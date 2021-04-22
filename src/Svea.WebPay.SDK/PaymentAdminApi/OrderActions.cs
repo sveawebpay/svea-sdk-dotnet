@@ -30,10 +30,10 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                         break;
                     case OrderActionType.CanDeliverOrder:
                     case OrderActionType.CanDeliverOrderPartially:
-                        DeliverOrder = async payload =>
+                        DeliverOrder = async (payload, pollingTimeout) =>
                         {
                             var response = await client.HttpPost<ResourceResponseObject<OrderResponseObject>, OrderResponseObject>(
-                                new Uri($"/api/v1/orders/{orderResponse.Id}/deliveries", UriKind.Relative), payload);
+                                new Uri($"/api/v1/orders/{orderResponse.Id}/deliveries", UriKind.Relative), payload, pollingTimeout);
 
                             var resource = new ResourceResponse<OrderResponseObject, Order>(response, () => new Order(response.Resource, client));
                        
@@ -51,10 +51,10 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                             return resource;
                         };
                         
-                        AddOrderRows = async payload =>
+                        AddOrderRows = async (payload, pollingTimeout) =>
                         {
                             var response = await client.HttpPost<ResourceResponseObject<AddOrderRowsResponseObject>, AddOrderRowsResponseObject>(
-                                new Uri($"/api/v1/orders/{orderResponse.Id}/rows/addOrderRows", UriKind.Relative), payload);
+                                new Uri($"/api/v1/orders/{orderResponse.Id}/rows/addOrderRows", UriKind.Relative), payload, pollingTimeout);
 
                             var resource = new ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>(response, () => new AddOrderRowsResponse(response.Resource));
 
@@ -100,7 +100,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
         /// InvoiceDistributionType parameter can only be used for orders with PaymentType Invoice. If not
         /// specified then default distribution type ‘Post’ will be used.
         /// </summary>
-        public Func<DeliveryRequest, Task<ResourceResponse<OrderResponseObject, Order>>> DeliverOrder { get; internal set; }
+        public Func<DeliveryRequest, PollingTimeout, Task<ResourceResponse<OrderResponseObject, Order>>> DeliverOrder { get; internal set; }
 
         /// <summary>
         /// This action changes the status of order rows to "Cancelled". This assuming that the order has the action "CanCancelOrderRow"
@@ -119,7 +119,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
         /// This method is used to add several order rows to an order, assuming that the order has the action "CanAddOrderRow".
         /// If the new order amount will exceed the current order amount, a credit check will be taken.
         /// </summary>
-        public Func<AddOrderRowsRequest, Task<ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>>> AddOrderRows { get; internal set; }
+        public Func<AddOrderRowsRequest, PollingTimeout, Task<ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>>> AddOrderRows { get; internal set; }
 
         /// <summary>
         /// This method is used to update several order rows, assuming that the order has the action "CanUpdateOrderRow", and the order rows have the action "CanUpdateRow".

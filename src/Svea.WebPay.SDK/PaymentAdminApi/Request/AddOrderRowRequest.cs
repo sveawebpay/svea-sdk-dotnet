@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class AddOrderRowRequest : OrderRowBase, IResourceRequest
+    public class AddOrderRowRequest : OrderRowBase
     {
         /// <summary>
         /// OrderRowRequest

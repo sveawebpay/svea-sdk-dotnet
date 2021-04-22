@@ -14,24 +14,24 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                 switch (action)
                 {
                     case DeliveryActionType.CanCreditOrderRows:
-                        CreditOrderRows = async payload =>
+                        CreditOrderRows = async (payload, pollingTimeout) =>
                         {
                             var response = await client
                                 .HttpPost<ResourceResponseObject<CreditResponseObject>, CreditResponseObject>(
                                     new Uri($"/api/v1/orders/{orderId}/deliveries/{deliveryResponse.Id}/credits",
-                                        UriKind.Relative), payload);
+                                        UriKind.Relative), payload, pollingTimeout);
 
                             var resource = new ResourceResponse<CreditResponseObject, CreditResponse>(response, () => new CreditResponse(response.Resource));
 
                             return resource;
                         };
 
-                        CreditOrderRowsWithFee = async payload =>
+                        CreditOrderRowsWithFee = async (payload, pollingTimeout) =>
                         {
                             var response = await client
                                 .HttpPost<ResourceResponseObject<CreditResponseObject>, CreditResponseObject>(
                                     new Uri($"/api/v1/orders/{orderId}/deliveries/{deliveryResponse.Id}/credits/CreditWithFee",
-                                        UriKind.Relative), payload);
+                                        UriKind.Relative), payload, pollingTimeout);
 
                             var resource = new ResourceResponse<CreditResponseObject, CreditResponse>(response, () => new CreditResponse(response.Resource));
 
@@ -39,14 +39,14 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                         };
                         break;
                     case DeliveryActionType.CanCreditNewRow:
-                        CreditNewRow = async payload =>
+                        CreditNewRow = async (payload, pollingTimeout) =>
                         {
                             var response = await client
                                 .HttpPost<ResourceResponseObject<CreditResponseObject>, CreditResponseObject>(
                                     new Uri($"/api/v1/orders/{orderId}/deliveries/{deliveryResponse.Id}/credits",
-                                        UriKind.Relative), payload);
+                                        UriKind.Relative), payload, pollingTimeout);
 
-                            var resource = new ResourceResponse<CreditResponseObject, CreditResponse>(response, () => new CreditResponse(response.Resource));
+                            var resource = new ResourceResponse<CreditResponseObject, CreditResponse>(response,  () => new CreditResponse(response.Resource));
                             
                             return resource;
                         };
@@ -70,20 +70,20 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
         /// Creates a new credit on the specified delivery with specified order rows. Assuming the delivery
         /// has action “CanCreditOrderRows” and the specified order rows also has action “CanCreditRow”
         /// </summary>
-        public Func<CreditOrderRowsRequest, System.Threading.Tasks.Task<ResourceResponse<CreditResponseObject, CreditResponse>>> CreditOrderRows { get; internal set; }
+        public Func<CreditOrderRowsRequest, PollingTimeout, System.Threading.Tasks.Task<ResourceResponse<CreditResponseObject, CreditResponse>>> CreditOrderRows { get; internal set; }
 
         /// <summary>
         /// By specifying a new credit row, a new credit row will be created on the delivery, assuming the
         /// delivery has action “CanCreditNewRow”.
         /// </summary>
-        public Func<CreditNewOrderRowRequest, System.Threading.Tasks.Task<ResourceResponse<CreditResponseObject, CreditResponse>>> CreditNewRow { get; internal set; }
+        public Func<CreditNewOrderRowRequest, PollingTimeout, System.Threading.Tasks.Task<ResourceResponse<CreditResponseObject, CreditResponse>>> CreditNewRow { get; internal set; }
 
         /// <summary>
         /// Use this action to create a new credit with fee on a delivery with specified order rows. This works only for Invoice orders.
         /// To use the Credit order rows action, the delivery needs to have the action "CanCreditOrderRows" and the order rows need to have the action "CanCreditRow".
         /// It is optional to add a fee on the credit.´It is also possible to partially credit an order row using the RowCreditingOptions.
         /// </summary>
-        public Func<CreditOrderRowWithFeeRequest, System.Threading.Tasks.Task<ResourceResponse<CreditResponseObject, CreditResponse>>> CreditOrderRowsWithFee { get; internal set; }
+        public Func<CreditOrderRowWithFeeRequest, PollingTimeout, System.Threading.Tasks.Task<ResourceResponse<CreditResponseObject, CreditResponse>>> CreditOrderRowsWithFee { get; internal set; }
 
         /// <summary>
         /// By specifying a credited amount larger than the current credited amount. A credit is being made

@@ -67,6 +67,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Entity.IsCompany.Click()
                 .AnonymousToggle.Click()
                 .B2BAnonymous.IsVisible.WaitTo.BeTrue()
+                .B2BAnonymous.Email.Set(TestDataService.Email)
                 .B2BAnonymous.PhoneNumber.Set(TestDataService.PhoneNumber)
                 .B2BAnonymous.OrganizationName.Set(TestDataService.CompanyName)
                 .B2BAnonymous.Street.Set(TestDataService.Street)

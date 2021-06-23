@@ -298,10 +298,12 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().OrderRows.Last().Table.Toggle.Click()
                 .Orders.Last().OrderRows.Last().Table.UpdateRow.ClickAndGo<OrdersPage>()
+                .RefreshPageUntil(x => x.Orders.Last().OrderRows.Last().Name.Value.Contains("Updated"), 10, 3)
                 .Orders.Last().OrderRows.Last().Table.Toggle.Click()
                 .Orders.Last().OrderRows.Last().Name.Should.Contain("Updated")
                 .Orders.Last().OrderRows.First().Table.Toggle.Click()
                 .Orders.Last().OrderRows.First().Table.UpdateRow.ClickAndGo<OrdersPage>()
+                .RefreshPageUntil(x => x.Orders.First().OrderRows.Last().Name.Value.Contains("Updated"), 10, 3)
                 .Orders.Last().OrderRows.First().Table.Toggle.Click()
                 .Orders.Last().OrderRows.First().Name.Should.Contain("Updated");
         }

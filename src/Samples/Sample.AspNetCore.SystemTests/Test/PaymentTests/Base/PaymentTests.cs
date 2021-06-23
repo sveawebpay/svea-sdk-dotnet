@@ -73,6 +73,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                         .Header.Products.ClickAndGo();
                     }
 
+                    foreach(var product in products)
+                    {
+                        product.Name = null;
+                    }
+
                     foreach (var product in products)
                     {
                         product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasDiscount == !string.IsNullOrEmpty(y.OriginalPrice.Value)].Name.Value;

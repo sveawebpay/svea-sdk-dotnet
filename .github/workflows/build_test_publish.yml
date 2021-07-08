@@ -171,13 +171,13 @@ jobs:
           MerchantSettings:CheckoutValidationCallbackUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/api/svea/validation/{checkout.order.uri}
         
 
-      - name: Run SDK UI tests
-        if: ${{ github.event_name != 'pull_request' && needs.variables.outputs.ENVIRONMENT != 'dev'}}
-        run: dotnet test --configuration ${{ env.Configuration }} src/Samples/Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.csproj
-        env:
-          Credentials:MerchantId: ${{ secrets.MERCHANT_ID }}
-          Credentials:Secret: ${{ secrets.MERCHANT_SECRET }}
-          SampleWebsite:Url: https://localhost:5001
+      #- name: Run SDK UI tests
+      #  if: ${{ github.event_name != 'pull_request' && needs.variables.outputs.ENVIRONMENT != 'dev'}}
+      #  run: dotnet test --configuration ${{ env.Configuration }} src/Samples/Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.csproj
+      #  env:
+      #    Credentials:MerchantId: ${{ secrets.MERCHANT_ID }}
+      #    Credentials:Secret: ${{ secrets.MERCHANT_SECRET }}
+      #    SampleWebsite:Url: https://localhost:5001
 
 
       - name: Archive Sample.AspNetCore

@@ -21,6 +21,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task CreditWithSwishAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Swish)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().Deliveries.First().Table.Toggle.Click()
                 .Orders.Last().Deliveries.First().Table.CreditAmount.ClickAndGo()

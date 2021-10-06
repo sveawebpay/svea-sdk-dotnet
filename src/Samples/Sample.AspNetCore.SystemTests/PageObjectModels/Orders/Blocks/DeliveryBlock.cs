@@ -12,6 +12,12 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         [FindByAutomation("text-deliverystatus")]
         public Text<TOwner> Status { get; private set; }
 
+        [FindByAutomation("text-deliveryamount")]
+        public Text<TOwner> DeliveryAmount { get; private set; }
+
+        [FindByAutomation("text-deliverycreditedamount")]
+        public Text<TOwner> CreditedAmount { get; private set; }
+
         public DeliveryTable<TOwner> Table { get; private set; }
     }
 }

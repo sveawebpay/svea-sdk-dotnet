@@ -21,6 +21,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task CreateOrderWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                 // Validate order info
@@ -64,6 +67,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task DeliverWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
                 // Deliver
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -111,6 +116,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
 
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 // Deliver -> Credit
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().Order.Table.Toggle.Click()
@@ -157,6 +164,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task CancelWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
                 // Cancel
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)

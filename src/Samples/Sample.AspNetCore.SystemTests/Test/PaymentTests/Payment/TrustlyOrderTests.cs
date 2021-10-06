@@ -21,6 +21,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task CreateOrderWithTrustlyAsPrivateAnonymousAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Trustly)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                 // Validate order info
@@ -63,6 +66,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task CreditWithTrustlyAsPrivateAnonymousAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Trustly)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
                 // Credit
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)

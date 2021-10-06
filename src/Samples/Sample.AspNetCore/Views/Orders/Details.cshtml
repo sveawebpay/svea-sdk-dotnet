@@ -54,19 +54,25 @@ else if (TempData["ErrorMessage"] != null)
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => order.Id)
                         </dt>
-                        <dd class="col-sm-10" automation="text-orderid">
+                        <dd class="col-sm-4" automation="text-orderid">
                             @Html.DisplayFor(model => order.Id)
+                        </dd>
+                        <dt class="col-sm-2">
+                            Order rows
+                        </dt>
+                        <dd class="col-sm-4" automation="text-orderrowscount">
+                            @(string.Join(",", order.OrderRows.Select(x => $"{(x.Quantity.InLowestMonetaryUnit / 100)} - {x.Name}")))
                         </dd>
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => order.OrderStatus)
                         </dt>
-                        <dd class="col-sm-10" automation="text-orderstatus">
+                        <dd class="col-sm-4" automation="text-orderstatus">
                             @Html.DisplayFor(model => order.OrderStatus)
                         </dd>
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => order.PaymentType)
                         </dt>
-                        <dd class="col-sm-10" automation="text-paymenttype">
+                        <dd class="col-sm-4" automation="text-paymenttype">
                             @Html.DisplayFor(model => order.PaymentType)
                         </dd>
                     </dl>
@@ -114,19 +120,31 @@ else if (TempData["ErrorMessage"] != null)
                                 <dt class="col-sm-2">
                                     Id
                                 </dt>
-                                <dd class="col-sm-10" automation="text-orderrowid">
+                                <dd class="col-sm-4" automation="text-orderrowid">
                                     @orderRow.OrderRowId
                                 </dd>
                                 <dt class="col-sm-2">
                                     Name
                                 </dt>
-                                <dd class="col-sm-10" automation="text-orderrowname">
+                                <dd class="col-sm-4" automation="text-orderrowname">
                                     @orderRow.Name
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Quantity
+                                </dt>
+                                <dd class="col-sm-4" automation="text-orderquantity">
+                                    @orderRow.Quantity
+                                </dd>
+                                <dt class="col-sm-2">
+                                    UnitPrice
+                                </dt>
+                                <dd class="col-sm-4" automation="text-orderrowunitprice">
+                                    @(orderRow.UnitPrice.InLowestMonetaryUnit / 100)
                                 </dd>
                                 <dt class="col-sm-2">
                                     Is Cancelled
                                 </dt>
-                                <dd class="col-sm-10" automation="text-orderrowcancelled">
+                                <dd class="col-sm-4" automation="text-orderrowcancelled">
                                     @orderRow.IsCancelled
                                 </dd>
                             </dl>
@@ -177,14 +195,32 @@ else if (TempData["ErrorMessage"] != null)
                                 <dt class="col-sm-2">
                                     Id
                                 </dt>
-                                <dd class="col-sm-10" automation="text-deliveryid">
+                                <dd class="col-sm-4" automation="text-deliveryid">
                                     @delivery.Id
                                 </dd>
                                 <dt class="col-sm-2">
                                     Status
                                 </dt>
-                                <dd class="col-sm-10" automation="text-deliverystatus">
+                                <dd class="col-sm-4" automation="text-deliverystatus">
                                     @delivery.Status
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Delivery order rows names
+                                </dt>
+                                <dd class="col-sm-4" automation="text-deliveryorderrowsname">
+                                    @(string.Join(",", delivery.OrderRows.Select(x => $"{(x.Quantity.InLowestMonetaryUnit / 100)} - {x.Name}")))
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Delivery Amount
+                                </dt>
+                                <dd class="col-sm-4" automation="text-deliveryamount">
+                                    @(delivery.DeliveryAmount.InLowestMonetaryUnit / 100)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Credited Amount
+                                </dt>
+                                <dd class="col-sm-4" automation="text-deliverycreditedamount">
+                                    @(delivery.CreditedAmount.InLowestMonetaryUnit / 100)
                                 </dd>
                             </dl>
 

@@ -12,6 +12,9 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         [FindByAutomation("text-orderrowname")]
         public Text<TOwner> Name { get; private set; }
 
+        [FindByAutomation("text-orderquantity")]
+        public Text<TOwner> Quantity { get; private set; }
+
         [FindByAutomation("text-orderrowcancelled")]
         public Text<TOwner> IsCancelled { get; private set; }
 

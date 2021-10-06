@@ -21,6 +21,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task CreateOrderWithCardAsCompanyAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Card)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                 // Validate order info
@@ -59,7 +62,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task DeliverWithCardAsCompanyAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Card)
-
+                
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                
                 // Deliver
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().Order.Table.Toggle.Click()
@@ -105,6 +110,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
             GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Card)
 
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 // Deliver -> Cancel
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().Order.Table.Toggle.Click()
@@ -146,6 +153,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
             GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Company, PaymentMethods.Option.Card)
 
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 // Deliver -> Cancel
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().Order.Table.Toggle.Click()
@@ -186,6 +195,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task CancelWithCardAsCompanyAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Card)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
                 // Deliver -> Cancel
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -229,6 +240,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Card)
 
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 // Deliver -> Cancel
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().Order.Table.Toggle.Click()
@@ -269,6 +282,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         public async System.Threading.Tasks.Task CreateOrderWithDiscountAmountWithCardAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Card)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                 // Validate order info

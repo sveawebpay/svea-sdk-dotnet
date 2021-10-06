@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
         public async System.Threading.Tasks.Task CreateOrderWithCardAsCompanyAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Card)
@@ -58,7 +58,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
         public async System.Threading.Tasks.Task DeliverWithCardAsCompanyAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Card)
@@ -105,7 +105,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4772: Köp som privatperson i anonyma flödet(kort) -> makulera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
         public async System.Threading.Tasks.Task CreditWithCardAsPrivateAnonymousAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Card)
@@ -148,7 +148,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4771: Köp som företag i anonyma flödet(kort) -> makulera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
         public async System.Threading.Tasks.Task CreditWithCardAsCompanyAnonymousAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Company, PaymentMethods.Option.Card)
@@ -191,7 +191,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
         public async System.Threading.Tasks.Task CancelWithCardAsCompanyAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Card)
@@ -235,7 +235,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4777: Köp som privatperson(kort)-> leverera korttransaktion -> makulera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
         public async System.Threading.Tasks.Task CancelWithCardAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Card)
@@ -278,7 +278,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4782: Köp som privat(kort) med DiscountAmount-> leverera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, true })]
+        [TestCaseSource(nameof(TestData), new object[] { true, true, false })]
         public async System.Threading.Tasks.Task CreateOrderWithDiscountAmountWithCardAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Card)

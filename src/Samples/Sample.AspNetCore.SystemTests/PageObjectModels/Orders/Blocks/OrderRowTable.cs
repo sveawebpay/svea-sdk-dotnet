@@ -1,5 +1,6 @@
 ﻿using Atata;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Base;
+using Sample.AspNetCore.SystemTests.PageObjectModels.Orders;
 
 namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 {
@@ -14,6 +15,12 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 
         [FindByAutomation("a-updateorderrow")]
         public Link<TOwner> UpdateRow { get; private set; }
+
+        [FindByAutomation("input-deliverorderrowquantity")]
+        public NumberInput<TOwner> DeliverOrderRowQuantity { get; private set; }
+
+        [FindByAutomation("a-deliverorderrow")]
+        public Button<OrdersPage, TOwner> DeliverOrderRow { get; private set; }
 
         [FindFirst]
         public ControlList<Link<TOwner>, TOwner> AvailableActions { get; private set; }

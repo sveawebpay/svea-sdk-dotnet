@@ -19,6 +19,9 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         [FindByAutomation("a-creditorderrows")]
         public Link<OrdersPage, TOwner> CreditOrderRows { get; private set; }
 
+        [FindByAutomation("a-creditorderrowswithfee")]
+        public Link<OrdersPage, TOwner> CreditOrderRowsWithFee { get; private set; }
+
         [FindFirst]
         public ControlList<Link<TOwner>, TOwner> AvailableActions { get; private set; }
 

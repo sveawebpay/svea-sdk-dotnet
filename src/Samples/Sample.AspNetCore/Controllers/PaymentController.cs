@@ -390,6 +390,36 @@ namespace Sample.AspNetCore.Controllers
             return RedirectToAction("Details", "Orders");
         }
 
+        [HttpPost]
+        public async Task<ActionResult> DeliverOrderRow(long paymentId, long orderRowId, int? quantity)
+        {
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanDeliverOrder);
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var orderRow = paymentOrder.OrderRows.First(x => x.OrderRowId == orderRowId);
+
+                    quantity = quantity != null ? quantity : int.Parse((orderRow.Quantity.InLowestMonetaryUnit / 100).ToString());
+
+                    var deliveryOptions = new List<RowDeliveryOptions> { new RowDeliveryOptions(orderRow.OrderRowId, quantity) };
+
+                    var response = await paymentOrder.Actions.DeliverOrder(
+                        new DeliveryRequest(new List<long> { orderRow.OrderRowId }, rowDeliveryOptions: deliveryOptions), new PollingTimeout(15));
+
+                    TempData["DeliverMessage"] = $"Order delivered -> {response.ResourceUri.AbsoluteUri}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
+        }
+
         #endregion OrderRow
 
         #region Delivery
@@ -499,7 +529,7 @@ namespace Sample.AspNetCore.Controllers
                     var feeAmount = new MinorUnit(200);
                     var fee = new Fee(row.ArticleNumber, row.Name, feeAmount, 25);
 
-                    var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
+                    var creditingOptions = orderRowIds.Select(x => new RowCreditingOptions(x, delivery.OrderRows.First(y => y.OrderRowId == x).Quantity)).ToList();
 
                     var response = await delivery.Actions.CreditOrderRowsWithFee(new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions), new PollingTimeout(15));
 

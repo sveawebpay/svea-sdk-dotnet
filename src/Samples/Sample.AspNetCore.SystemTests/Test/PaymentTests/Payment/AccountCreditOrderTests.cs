@@ -21,10 +21,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
 		[RetryWithException(2)]
 		[Test(Description = "4473: Köp som privatperson(kontokredit)-> makulera delbetalning, 4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
-		[TestCaseSource(nameof(TestData), new object[] { true, false })]
+		[TestCaseSource(nameof(TestData), new object[] { true, false, false })]
 		public async System.Threading.Tasks.Task CreateOrderWithAccountCreditAsPrivateAsync(Product[] products)
 		{
 			GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.AccountCredit)
+				
+				.RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
 				.Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
 				// Validate order info
@@ -61,10 +64,12 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
 		[RetryWithException(2)]
 		[Test(Description = "4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
-		[TestCaseSource(nameof(TestData), new object[] { true, false })]
+		[TestCaseSource(nameof(TestData), new object[] { true, false, false })]
 		public async System.Threading.Tasks.Task DeliverWithAccountCreditAsPrivateAsync(Product[] products)
 		{
 			GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.AccountCredit)
+				
+				.RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
 				// Deliver
 				.Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -107,10 +112,12 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
 		[RetryWithException(2)]
 		[Test(Description = "4474: Köp som privatperson(kontokredit) -> leverera delbetalning -> kreditera delbetalning")]
-		[TestCaseSource(nameof(TestData), new object[] { true, false })]
+		[TestCaseSource(nameof(TestData), new object[] { true, false, false })]
 		public async System.Threading.Tasks.Task CreditWithAccountCreditAsPrivateAsync(Product[] products)
 		{
 			GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.AccountCredit)
+
+				.RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
 				// Deliver
 				.Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -154,10 +161,12 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
 		[RetryWithException(2)]
 		[Test(Description = "4473: Köp som privatperson(kontokredit)-> makulera delbetalning")]
-		[TestCaseSource(nameof(TestData), new object[] { true, false })]
+		[TestCaseSource(nameof(TestData), new object[] { true, false, false })]
 		public async System.Threading.Tasks.Task CancelWithAccountCreditAsPrivateAsync(Product[] products)
 		{
 			GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.AccountCredit)
+
+				.RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
 				// Cancel
 				.Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -196,7 +205,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
 		[RetryWithException(2)]
 		[Test(Description = "5702: RequireElectronicIdAuthentication] As a user I want to have a setting that will trigger BankId to be required on orders in the checkout")]
-		[TestCaseSource(nameof(TestData), new object[] { true, false })]
+		[TestCaseSource(nameof(TestData), new object[] { true, false, false })]
 		public void EnsureRequireIdAuthenticationShowUpWithAccountCredit(Product[] products)
 		{
 			GoToBankId(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.AccountCredit);

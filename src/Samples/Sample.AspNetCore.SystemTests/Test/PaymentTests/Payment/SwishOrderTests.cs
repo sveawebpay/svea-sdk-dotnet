@@ -17,10 +17,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4780: Köp som privatperson(Swish, om vi kan få till det på en merchant) -> kreditera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
         public async System.Threading.Tasks.Task CreditWithSwishAsPrivateAsync(Product[] products)
         {
             GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Swish)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().Deliveries.First().Table.Toggle.Click()
                 .Orders.Last().Deliveries.First().Table.CreditAmount.ClickAndGo()

@@ -210,7 +210,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                 .Header.Orders.ClickAndGo();
         }
 
-        protected static IEnumerable TestData(bool singleProduct = true, bool hasDiscount = false)
+        protected static IEnumerable TestData(bool singleProduct = true, bool hasDiscount = false, bool manySameArticle = false)
         {
             var data = new List<object>();
 
@@ -221,7 +221,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     new Product { Quantity = 1, HasDiscount = hasDiscount }
                 });
             }
-                
+            else if(manySameArticle)
+            {
+                data.Add(new[]
+                   {
+                    new Product { Quantity = 4, HasDiscount = hasDiscount }
+                });
+            }    
             else
                 data.Add(new[]
                 {

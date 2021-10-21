@@ -199,7 +199,6 @@ jobs:
           MerchantSettings:CheckoutValidationCallbackUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/api/svea/validation/{checkout.order.uri}
         
       - name: Run SDK UI tests
-        if: ${{ needs.variables.outputs.ENVIRONMENT != 'dev'}}
         # if: ${{ github.event_name != 'pull_request' && needs.variables.outputs.ENVIRONMENT != 'dev'}}
         run: dotnet test --configuration ${{ env.Configuration }} src/Samples/Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.csproj
         env:

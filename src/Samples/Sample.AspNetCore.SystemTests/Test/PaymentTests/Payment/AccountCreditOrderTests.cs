@@ -40,7 +40,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 				.Orders.Last().Deliveries.Should.HaveCount(0);
 
 			// Assert sdk/api response
-			var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
+			var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
 			Assert.That(response.Currency, Is.EqualTo("SEK"));
 			Assert.That(response.IsCompany, Is.False);
@@ -88,7 +88,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 				.Orders.Last().Deliveries.First().Status.Should.BeNull();
 
 			// Assert sdk/api response
-			var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
+			var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
 			Assert.That(response.Currency, Is.EqualTo("SEK"));
 			Assert.That(response.IsCompany, Is.False);
@@ -138,7 +138,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 				.Orders.Last().Deliveries.First().Status.Should.BeNull();
 
 			// Assert sdk/api response
-			var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
+			var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
 			Assert.That(response.Currency, Is.EqualTo("SEK"));
 			Assert.That(response.IsCompany, Is.False);
@@ -186,7 +186,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 				.Orders.Last().Deliveries.Should.HaveCount(0);
 
 			// Assert sdk/api response
-			var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
+			var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
 			Assert.That(response.Currency, Is.EqualTo("SEK"));
 			Assert.That(response.IsCompany, Is.False);

@@ -23,15 +23,15 @@ namespace Svea.WebPay.SDK
 
     public class SveaHttpClient : ISveaHttpClient
     {
-        private readonly HttpClient client;
-        private readonly Credentials credentials;
-        private readonly ILogger logger;
+        private readonly HttpClient _client;
+        private readonly Credentials _credentials;
+        private readonly ILogger _logger;
 
         internal SveaHttpClient(HttpClient client, Credentials credentials, ILogger logger)
         {
-            this.client = client;
-            this.credentials = credentials;
-            this.logger = logger;
+            this._client = client;
+            this._credentials = credentials;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -39,14 +39,15 @@ namespace Svea.WebPay.SDK
         /// </summary>
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="url"></param>
+        /// <param name="configureAwait"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="HttpResponseException"></exception>
-        internal async Task<TResponse> HttpGet<TResponse>(Uri url) where TResponse : new()
+        internal async Task<TResponse> HttpGet<TResponse>(Uri url, bool configureAwait) where TResponse : new()
         {
             var httpRequestMessage = CreateHttpRequestMessage(HttpMethod.Get, url);
-            return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage);
+            return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage, configureAwait).ConfigureAwait(configureAwait);
         }
 
         /// <summary>
@@ -55,15 +56,16 @@ namespace Svea.WebPay.SDK
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="url"></param>
         /// <param name="payload"></param>
+        /// <param name="configureAwait"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="HttpResponseException"></exception>
         internal async Task<TResponse> HttpPut
-            <TResponse>(Uri url, object payload) where TResponse : new()
+            <TResponse>(Uri url, object payload, bool configureAwait) where TResponse : new()
         {
             var httpRequestMessage = CreateHttpRequestMessage(HttpMethod.Put, url, payload);
-            return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage);
+            return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage, configureAwait).ConfigureAwait(configureAwait);
         }
 
         /// <summary>
@@ -72,15 +74,16 @@ namespace Svea.WebPay.SDK
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="url"></param>
         /// <param name="payload"></param>
+        /// <param name="configureAwait"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="HttpResponseException"></exception>
         internal async Task<TResponse> HttpPatch
-            <TResponse>(Uri url, object payload) where TResponse : new()
+            <TResponse>(Uri url, object payload, bool configureAwait) where TResponse : new()
         {
             var httpRequestMessage = CreateHttpRequestMessage(new HttpMethod("PATCH"), url, payload);
-            return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage);
+            return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage, configureAwait).ConfigureAwait(configureAwait);
         }
 
         /// <summary>
@@ -89,34 +92,35 @@ namespace Svea.WebPay.SDK
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="url"></param>
         /// <param name="payload"></param>
+        /// <param name="configureAwait"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="HttpRequestException"></exception>
         /// <exception cref="HttpResponseException"></exception>
         internal async Task<TResponse> HttpPost
-            <TResponse>(Uri url, object payload) where TResponse : new()
+            <TResponse>(Uri url, object payload, bool configureAwait) where TResponse : new()
         {
             var httpRequestMessage = CreateHttpRequestMessage(HttpMethod.Post, url, payload);
-            return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage);
+            return await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage, configureAwait).ConfigureAwait(configureAwait);
         }
 
-        internal async Task<TResponse> HttpPost<TResponse, TResourceResponse>(Uri url, object payload, PollingTimeout pollingTimeout = null)
+        internal async Task<TResponse> HttpPost<TResponse, TResourceResponse>(Uri url, object payload, PollingTimeout pollingTimeout = null, bool configureAwait = false)
             where TResponse : ResourceResponseObject<TResourceResponse>, new()
             where TResourceResponse : new()
         {
             var httpRequestMessage = CreateHttpRequestMessage(HttpMethod.Post, url, payload);
             
-            var resourceResponse = await ExecuteResourceRequest<TResponse, TResourceResponse>(httpRequestMessage, pollingTimeout);
+            var resourceResponse = await ExecuteResourceRequest<TResponse, TResourceResponse>(httpRequestMessage, pollingTimeout, configureAwait).ConfigureAwait(configureAwait);
 
             if (resourceResponse?.ResourceUri != null)
             {
-                resourceResponse.Resource = await HttpGet<TResourceResponse>(resourceResponse.ResourceUri);
+                resourceResponse.Resource = await HttpGet<TResourceResponse>(resourceResponse.ResourceUri, configureAwait).ConfigureAwait(configureAwait);
             }
 
             return resourceResponse;
         }
 
-        private async Task<TResponse> ExecuteResourceRequest<TResponse, TResourceResponse>(HttpRequestMessage httpRequestMessage, PollingTimeout timeout = null)
+        private async Task<TResponse> ExecuteResourceRequest<TResponse, TResourceResponse>(HttpRequestMessage httpRequestMessage, PollingTimeout timeout = null, bool configureAwait = false)
             where TResponse : ResourceResponseObject<TResourceResponse>, new()
         {
             var polling = true;
@@ -132,11 +136,11 @@ namespace Svea.WebPay.SDK
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
-                        logger.LogError("ExecuteResourceRequest timeout");
+                        _logger.LogError("ExecuteResourceRequest timeout");
                         return default;
                     }
 
-                    var response = await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage);
+                    var response = await SendHttpRequestAndProcessHttpResponse<TResponse>(httpRequestMessage, configureAwait).ConfigureAwait(configureAwait);
 
                     response.TaskUri = response.ResourceUri;
 
@@ -145,7 +149,7 @@ namespace Svea.WebPay.SDK
                         PaymentAdminApi.Models.Task taskResponse;
                         do
                         {
-                            taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri);
+                            taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri, configureAwait).ConfigureAwait(configureAwait);
                         } while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
 
                         response.ResourceUri = taskResponse.ResourceUri;
@@ -153,7 +157,7 @@ namespace Svea.WebPay.SDK
                     catch (HttpRequestException e)
                     {
                         var ex = new HttpRequestException($"Resource object was not returned: {e.Message}");
-                        logger.LogError(ex, ex.Message);
+                        _logger.LogError(ex, ex.Message);
 
                         throw ex;
                     }
@@ -162,7 +166,7 @@ namespace Svea.WebPay.SDK
                 }
                 catch (TaskCanceledException e)
                 {
-                    logger.LogError("ExecuteResourceRequest timeout", e);
+                    _logger.LogError("ExecuteResourceRequest timeout", e);
                     throw;
                 }
             }
@@ -174,23 +178,24 @@ namespace Svea.WebPay.SDK
         /// </summary>
         /// <typeparam name="TResponse"></typeparam>
         /// <param name="httpRequest"></param>
+        /// <param name="configureAwait"></param>
         /// <exception cref="ArgumentNullException"></exception>
         /// <exception cref="InvalidOperationException"></exception>
         /// <exception cref="HttpRequestException"></exception> 
         /// <exception cref="HttpResponseException"></exception>
         /// <returns></returns>
-        internal async Task<TResponse> SendHttpRequestAndProcessHttpResponse<TResponse>(HttpRequestMessage httpRequest) where TResponse : new()
+        internal async Task<TResponse> SendHttpRequestAndProcessHttpResponse<TResponse>(HttpRequestMessage httpRequest, bool configureAwait) where TResponse : new()
         {
-            await SetRequestHeaders(httpRequest);
+            await SetRequestHeaders(httpRequest, configureAwait);
 
             var requestBody = string.Empty;
             if (httpRequest.Content != null)
             {
-                requestBody = await httpRequest.Content.ReadAsStringAsync();
+                requestBody = await httpRequest.Content.ReadAsStringAsync().ConfigureAwait(configureAwait);
             }
 
 
-            var httpResponse = await client.SendAsync(httpRequest);
+            var httpResponse = await _client.SendAsync(httpRequest).ConfigureAwait(configureAwait);
 
             string BuildErrorMessage(string httpResponseBody)
             {
@@ -200,7 +205,7 @@ namespace Svea.WebPay.SDK
 
             try
             {
-                var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                var httpResponseBody = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(configureAwait);
                 if (!httpResponse.IsSuccessStatusCode && httpResponse.StatusCode != HttpStatusCode.SeeOther)
                 {
                     throw new HttpResponseException(
@@ -227,13 +232,13 @@ namespace Svea.WebPay.SDK
             }
             catch (HttpResponseException ex)
             {
-                logger.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
                 throw;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, ex.Message);
-                var httpResponseBody = await httpResponse.Content.ReadAsStringAsync();
+                _logger.LogError(ex, ex.Message);
+                var httpResponseBody = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(configureAwait);
                 throw new HttpResponseException(
                     httpResponse,
                     message: BuildErrorMessage(httpResponseBody),
@@ -249,11 +254,11 @@ namespace Svea.WebPay.SDK
             }
         }
 
-        private async Task SetRequestHeaders(HttpRequestMessage httpRequest)
+        private async Task SetRequestHeaders(HttpRequestMessage httpRequest, bool configureAwait)
         {
             var timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
-            var token = CreateAuthenticationToken(httpRequest.Content != null ? await httpRequest.Content.ReadAsStringAsync() : string.Empty, timestamp);
+            var token = CreateAuthenticationToken(httpRequest.Content != null ? await httpRequest.Content.ReadAsStringAsync().ConfigureAwait(configureAwait) : string.Empty, timestamp);
             httpRequest.Headers.Add("Authorization", "Svea" + " " + token);
             httpRequest.Headers.Add("Timestamp", timestamp);
         }
@@ -262,9 +267,9 @@ namespace Svea.WebPay.SDK
         {
             using (var sha512 = SHA512.Create())
             {
-                var hashBytes = sha512.ComputeHash(Encoding.UTF8.GetBytes(string.Concat(requestBody, credentials.Secret, timestamp)));
+                var hashBytes = sha512.ComputeHash(Encoding.UTF8.GetBytes(string.Concat(requestBody, _credentials.Secret, timestamp)));
                 var hashString = BitConverter.ToString(hashBytes).Replace("-", string.Empty).ToLower();
-                return Convert.ToBase64String(Encoding.UTF8.GetBytes(credentials.MerchantId + ":" + hashString));
+                return Convert.ToBase64String(Encoding.UTF8.GetBytes(_credentials.MerchantId + ":" + hashString));
             }
         }
 

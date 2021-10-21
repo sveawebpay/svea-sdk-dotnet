@@ -24,11 +24,11 @@ namespace Sample.AspNetCore.SystemTests.Services
             if (paymentOrderId == null || expand == null)
                 throw new Exception($"paymentOrderId [{paymentOrderId}] or expand [{expand}] parameters cannot be null");
 
-            var response = await httpClient.GetAsync($"https://api.test.svea.com{paymentOrderId}?$expand={expand}");
+            var response = await httpClient.GetAsync($"https://api.test.svea.com{paymentOrderId}?$expand={expand}").ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
-                var result = await response.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 return result;
             }
 

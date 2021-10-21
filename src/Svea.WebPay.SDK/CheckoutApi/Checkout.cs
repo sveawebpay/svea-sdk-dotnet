@@ -17,11 +17,12 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// You can add preset values to the call, as well.These values will prefill the identification in the checkout.If a preset value has IsReadOnly, the customer will not be able to modify the value.
         /// </summary>
         /// <param name="createOrderModel"></param>
+        /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
         /// <returns></returns>
-        public async Task<Data> CreateOrder(CreateOrderModel createOrderModel)
+        public async Task<Data> CreateOrder(CreateOrderModel createOrderModel, bool configureAwait = false)
         {
             var url = new Uri("/api/orders", UriKind.Relative);
-            var data = await _sveaHttpClient.HttpPost<Data>(url, createOrderModel);
+            var data = await _sveaHttpClient.HttpPost<Data>(url, createOrderModel, configureAwait);
             return data;
         }
 
@@ -29,11 +30,12 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// This request returns a data structure that contains all information about the order and what is needed for the GUI.
         /// </summary>
         /// <param name="orderId">Checkout orderId of the specified order.</param>
+        /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
         /// <returns></returns>
-        public async Task<Data> GetOrder(long orderId)
+        public async Task<Data> GetOrder(long orderId, bool configureAwait = false)
         {
             var url = new Uri($"/api/orders/{orderId}", UriKind.Relative);
-            var data = await _sveaHttpClient.HttpGet<Data>(url);
+            var data = await _sveaHttpClient.HttpGet<Data>(url, configureAwait);
             return data;
         }
 
@@ -42,12 +44,13 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </summary>
         /// <param name="orderId">Checkoutorderid of the specified order.</param>
         /// <param name="updateOrderModel">Contains the order rows that will be set to the specified order, as well as MerchantData.</param>
+        /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
         /// <remarks>Quantity, UnitPrice, DiscountPercent and VatPercent for each order row is expected to be given in minor currency.</remarks>
         /// <returns></returns>
-        public async Task<Data> UpdateOrder(long orderId, UpdateOrderModel updateOrderModel)
+        public async Task<Data> UpdateOrder(long orderId, UpdateOrderModel updateOrderModel, bool configureAwait = false)
         {
             var url = new Uri($"/api/orders/{orderId}", UriKind.Relative);
-            var data = await _sveaHttpClient.HttpPut<Data>(url, updateOrderModel);
+            var data = await _sveaHttpClient.HttpPut<Data>(url, updateOrderModel, configureAwait);
             return data;
         }
     }

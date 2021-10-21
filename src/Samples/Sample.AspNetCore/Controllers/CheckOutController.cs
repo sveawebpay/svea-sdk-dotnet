@@ -62,7 +62,7 @@ namespace Sample.AspNetCore.Controllers
                     new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(_merchantSettings.PushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, _merchantSettings.CheckoutValidationCallbackUri),
                     new Svea.WebPay.SDK.CheckoutApi.Cart(orderItems), requireBanKId);
 
-                var data = await _sveaClient.Checkout.CreateOrder(paymentOrderRequest);
+                var data = await _sveaClient.Checkout.CreateOrder(paymentOrderRequest).ConfigureAwait(false);
 
                 return data;
             }

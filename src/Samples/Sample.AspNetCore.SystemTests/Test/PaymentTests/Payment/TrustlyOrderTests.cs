@@ -18,15 +18,18 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         [RetryWithException(2)]
         [Test(Description = "4781: Köp som privatperson i anonyma flödet(Trustly) -> kreditera transaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
-        public async System.Threading.Tasks.Task CreateOrderWithTrustlyAsPrivateAnonymousAsync(Product[] products)
+        public void CreateOrderWithTrustlyAsPrivateAnonymousAsync(Product[] products)
         {
-            GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Trustly)
+            Assert.DoesNotThrowAsync(async () => 
+            {
+                GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Trustly)
 
                 .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                 // Validate order info
+                .RefreshPageUntil(x => x.Orders.Last().Order.OrderStatus.Value == nameof(OrderStatus.Delivered), 10, 3)
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.DirectBank))
 
@@ -40,32 +43,35 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             // Assert sdk/api response
             var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
-            Assert.That(response.Currency, Is.EqualTo("SEK"));
-            Assert.That(response.IsCompany, Is.False);
-            Assert.That(response.EmailAddress.ToString(), Is.EqualTo("aaa@bbb.ccc"));
-            Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.DirectBank)));
-            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
+                Assert.That(response.Currency, Is.EqualTo("SEK"));
+                Assert.That(response.IsCompany, Is.False);
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo("aaa@bbb.ccc"));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.DirectBank)));
+                Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
-            Assert.That(response.AvailableActions, Is.Empty);
-            Assert.That(response.OrderRows, Is.Null);
+                Assert.That(response.AvailableActions, Is.Empty);
+                Assert.That(response.OrderRows, Is.Null);
 
-            Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-            Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(0));
-            Assert.That(response.Deliveries.First().Status, Is.Null);
-            CollectionAssert.AreEquivalent(
-                new string[] { DeliveryActionType.CanCreditAmount },
-                response.Deliveries.First().AvailableActions
-            );
+                Assert.That(response.Deliveries.Count, Is.EqualTo(1));
+                Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(0));
+                Assert.That(response.Deliveries.First().Status, Is.Null);
+                CollectionAssert.AreEquivalent(
+                    new string[] { DeliveryActionType.CanCreditAmount },
+                    response.Deliveries.First().AvailableActions
+                );
+            });
         }
 
         [RetryWithException(2)]
         [Test(Description = "4781: Köp som privatperson i anonyma flödet(Trustly) -> kreditera transaktion")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
-        public async System.Threading.Tasks.Task CreditWithTrustlyAsPrivateAnonymousAsync(Product[] products)
+        public void CreditWithTrustlyAsPrivateAnonymousAsync(Product[] products)
         {
-            GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Trustly)
+            Assert.DoesNotThrowAsync(async () => 
+            {
+                GoToOrdersPage(products, Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Trustly)
 
                 .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
@@ -75,6 +81,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Deliveries.First().Table.CreditAmount.ClickAndGo()
 
                 // Validate order info
+                .RefreshPageUntil(x => x.Orders.Last().Order.OrderStatus.Value == nameof(OrderStatus.Delivered), 10, 3)
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.DirectBank))
 
@@ -88,21 +95,22 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             // Assert sdk/api response
             var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
-            Assert.That(response.Currency, Is.EqualTo("SEK"));
-            Assert.That(response.IsCompany, Is.False);
-            Assert.That(response.EmailAddress.ToString(), Is.EqualTo("aaa@bbb.ccc"));
-            Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.DirectBank)));
-            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
+                Assert.That(response.Currency, Is.EqualTo("SEK"));
+                Assert.That(response.IsCompany, Is.False);
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo("aaa@bbb.ccc"));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.DirectBank)));
+                Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
-            Assert.That(response.AvailableActions, Is.Empty);
-            Assert.That(response.OrderRows, Is.Null);
+                Assert.That(response.AvailableActions, Is.Empty);
+                Assert.That(response.OrderRows, Is.Null);
 
-            Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-            Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(0));
-            Assert.That(response.Deliveries.First().Status, Is.Null);
-            Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
+                Assert.That(response.Deliveries.Count, Is.EqualTo(1));
+                Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(0));
+                Assert.That(response.Deliveries.First().Status, Is.Null);
+                Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
+            });
         }
     }
 }

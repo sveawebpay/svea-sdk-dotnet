@@ -18,18 +18,21 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
         public void CreateOrderWithCardAsCompanyAsync(Product[] products)
         {
-            SelectProducts(products)
-                .InternationalCheckout.ClickAndGo()
-                .SveaFrame.SwitchTo<SveaPaymentFramePage>()
-                .International.Should.Within(20).BeVisible()
-                .International.Country.Should.Contain("United States of America")
-                .Entity.Should.Not.BeVisible()
-                .SwitchToRoot<ProductsPage>()
-                .Header.Products.ClickAndGo<ProductsPage>()
-                .AnonymousCheckout.ClickAndGo()
-                .SveaFrame.SwitchTo<SveaPaymentFramePage>()
-                .Entity.Should.Within(20).BeVisible()
-                .International.Should.Not.BeVisible();
+            Assert.DoesNotThrow(() => 
+            {
+                SelectProducts(products)
+                    .InternationalCheckout.ClickAndGo()
+                    .SveaFrame.SwitchTo<SveaPaymentFramePage>()
+                    .International.Should.Within(20).BeVisible()
+                    .International.Country.Should.Contain("United States of America")
+                    .Entity.Should.Not.BeVisible()
+                    .SwitchToRoot<ProductsPage>()
+                    .Header.Products.ClickAndGo<ProductsPage>()
+                    .AnonymousCheckout.ClickAndGo()
+                    .SveaFrame.SwitchTo<SveaPaymentFramePage>()
+                    .Entity.Should.Within(20).BeVisible()
+                    .International.Should.Not.BeVisible();
+            });
         }
     }
 }

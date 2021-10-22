@@ -16,12 +16,12 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                     case OrderRowActionType.CanCancelRow:
                         CancelOrderRow = async payload => await client.HttpPatch<object>(
                             new Uri($"/api/v1/orders/{orderId}/rows/{orderRowResponse.OrderRowId}",
-                                UriKind.Relative), payload);
+                                UriKind.Relative), payload, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
                         break;
                     case OrderRowActionType.CanUpdateRow:
                         UpdateOrderRow = async payload => await client.HttpPatch<object>(
                             new Uri($"/api/v1/orders/{orderId}/rows/{orderRowResponse.OrderRowId}",
-                                UriKind.Relative), payload);
+                                UriKind.Relative), payload, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
                         break;
                 }
             }

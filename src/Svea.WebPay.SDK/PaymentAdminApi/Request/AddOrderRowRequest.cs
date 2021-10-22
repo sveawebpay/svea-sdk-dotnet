@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class AddOrderRowRequest : OrderRowBase
+    public class AddOrderRowRequest : OrderRowBase, IConfigurableAwait
     {
         /// <summary>
         /// OrderRowRequest
@@ -15,12 +15,14 @@
         /// <param name="vatPercent">The VAT percentage of the credit amount. Valid vat percentage for that country.</param>
         /// <param name="unit">The unit type, e.g., “st”, “pc”, “kg” etc. 0-4 characters.</param>
         /// <param name="pollingTimeout">If set the task will be polled until the resource is complete or the timeout has passed. If null the resource will be returned if complete, otherwise the task is returned. </param>
-        public AddOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount, MinorUnit vatPercent, string unit, TimeSpan? pollingTimeout = null)
+        /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
+        public AddOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount, MinorUnit vatPercent, string unit, TimeSpan? pollingTimeout = null, bool configureAwait = false)
         {
             ArticleNumber = articleNumber;
             DiscountAmount = discountAmount;
             Unit = unit;
             PollingTimeout = pollingTimeout;
+            ConfigureAwait = configureAwait;
 
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
@@ -68,5 +70,6 @@
         }
 
         public TimeSpan? PollingTimeout { get; }
+        public bool ConfigureAwait { get; }
     }
 }

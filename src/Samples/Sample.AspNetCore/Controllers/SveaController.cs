@@ -45,7 +45,7 @@ namespace Sample.AspNetCore.Controllers
             {
                 if (orderId.HasValue)
                 {
-                    var order = await _sveaClient.Checkout.GetOrder(orderId.Value);
+                    var order = await _sveaClient.Checkout.GetOrder(orderId.Value).ConfigureAwait(false);
                     if (order != null && order.Status == CheckoutOrderStatus.Final)
                     {
                         _cartService.SveaOrderId = order.OrderId.ToString();

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class UpdateOrderRowRequest : OrderRowBase
+    public class UpdateOrderRowRequest : OrderRowBase, IConfigurableAwait
     {
         /// <summary>
         /// UpdateOrderRowRequest
@@ -14,8 +14,10 @@
         /// <param name="discountAmount">The discount amount of the product.</param>
         /// <param name="vatPercent">The VAT percentage of the credit amount. Valid vat percentage for that country.</param>
         /// <param name="unit">The unit type, e.g., “st”, “pc”, “kg” etc. 0-4 characters.</param>
-        public UpdateOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount, MinorUnit vatPercent, string unit)
+        /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
+        public UpdateOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount, MinorUnit vatPercent, string unit, bool configureAwait = false)
         {
+            ConfigureAwait = configureAwait;
             ArticleNumber = articleNumber;
             DiscountAmount = discountAmount;
             Unit = unit;
@@ -63,5 +65,7 @@
                 throw new ArgumentOutOfRangeException(nameof(unit), "Can only be 0-4 characters.");
             }
         }
+
+        public bool ConfigureAwait { get; }
     }
 }

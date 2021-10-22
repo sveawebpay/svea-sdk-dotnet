@@ -94,7 +94,7 @@ namespace Sample.AspNetCore.Controllers
             {
                 if (!string.IsNullOrWhiteSpace(order.SveaOrderId))
                 {
-                    paymentOrderResponses.Add(await this._sveaClient.PaymentAdmin.GetOrder(long.Parse(order.SveaOrderId)));
+                    paymentOrderResponses.Add(await this._sveaClient.PaymentAdmin.GetOrder(long.Parse(order.SveaOrderId)).ConfigureAwait(false));
                 }
             }
           

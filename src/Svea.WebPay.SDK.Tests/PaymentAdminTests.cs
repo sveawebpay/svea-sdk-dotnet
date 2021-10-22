@@ -25,7 +25,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.AdminGetOrder));
 
             // Act
-            var actualOrder = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var actualOrder = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
 
             // Assert
             Assert.True(DataComparison.OrdersAreEqual(expectedOrder, actualOrder));
@@ -40,7 +40,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.AdminGetOrder));
 
             // Act
-            var actualOrder = await sveaClient.PaymentAdmin.GetOrder(new Uri("http://www.test.com"));
+            var actualOrder = await sveaClient.PaymentAdmin.GetOrder(new Uri("http://www.test.com")).ConfigureAwait(false);
 
             // Assert
             Assert.True(DataComparison.OrdersAreEqual(expectedOrder, actualOrder));
@@ -54,7 +54,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.TaskResponse, expectedTask.ResourceUri.OriginalString));
 
             // Act
-            var actualTask = await sveaClient.PaymentAdmin.GetTask(1);
+            var actualTask = await sveaClient.PaymentAdmin.GetTask(1).ConfigureAwait(false);
 
             // Assert
             Assert.True(DataComparison.TasksAreEqual(expectedTask, actualTask));
@@ -68,7 +68,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.TaskResponse, expectedTask.ResourceUri.OriginalString));
 
             // Act
-            var actualTask = await sveaClient.PaymentAdmin.GetTask(new Uri("http://www.test.com"));
+            var actualTask = await sveaClient.PaymentAdmin.GetTask(new Uri("http://www.test.com")).ConfigureAwait(false);
 
             // Assert
             Mock.Verify();
@@ -85,8 +85,8 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AdminDeliveredOrder));
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
-            var resourceResponse = await order.Actions.DeliverOrder(new DeliveryRequest(new List<long> { 1, 2 }), new PollingTimeout(15));
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
+            var resourceResponse = await order.Actions.DeliverOrder(new DeliveryRequest(new List<long> { 1, 2 }), new PollingTimeout(15)).ConfigureAwait(false);
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
@@ -103,10 +103,10 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AdminPartiallyDeliveredOrder));
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var orderRow = new List<long> { order.OrderRows.First(x => x.AvailableActions.Contains(OrderRowActionType.CanDeliverRow)).OrderRowId };
             var deliverRequest = new DeliveryRequest(orderRow);
-            var resourceResponse = await order.Actions.DeliverOrder(deliverRequest, new PollingTimeout(15));
+            var resourceResponse = await order.Actions.DeliverOrder(deliverRequest, new PollingTimeout(15)).ConfigureAwait(false);
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
@@ -125,7 +125,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowResponse));
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var resourceResponse = await order.Actions.AddOrderRow(
                 new AddOrderRowRequest(
                     articleNumber: "1234567890",
@@ -137,7 +137,7 @@ namespace Svea.WebPay.SDK.Tests
                     unit: "SEK",
                     TimeSpan.FromSeconds(15)
                 )
-            );
+            ).ConfigureAwait(false);
 
             // Assert
             Assert.Equal(expectedOrderRow.OrderRowId, resourceResponse.Resource.OrderRowId);
@@ -155,7 +155,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowsResponse));
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var resourceResponse = await order.Actions.AddOrderRows(
                 new AddOrderRowsRequest(
                     new List<NewOrderRow> { 
@@ -181,7 +181,7 @@ namespace Svea.WebPay.SDK.Tests
                         )
                     }
                 ), new PollingTimeout(15)
-            );
+            ).ConfigureAwait(false);
 
             // Assert
             // List of OrderRowId
@@ -198,10 +198,10 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.CreditResponse));
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var delivery = order.Deliveries.FirstOrDefault(dlv => dlv.Id == 5588817);
             var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
-            var resourceResponse = await delivery.Actions.CreditOrderRows(new CreditOrderRowsRequest(orderRowIds), new PollingTimeout(15));
+            var resourceResponse = await delivery.Actions.CreditOrderRows(new CreditOrderRowsRequest(orderRowIds), new PollingTimeout(15)).ConfigureAwait(false);
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
@@ -218,7 +218,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.CreditResponse));
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var delivery = order.Deliveries.FirstOrDefault(dlv => dlv.Id == 5588817);
             var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
             var resourceResponse = await delivery.Actions.CreditNewRow(new CreditNewOrderRowRequest(
@@ -227,7 +227,7 @@ namespace Svea.WebPay.SDK.Tests
                     new MinorUnit(100),
                     new MinorUnit(12), 1
                 )
-            ), new PollingTimeout(15));
+            ), new PollingTimeout(15)).ConfigureAwait(false);
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
@@ -242,7 +242,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(handlerMock);
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var orderRow = order.OrderRows.FirstOrDefault(row => row.OrderRowId == 1);
             await orderRow.Actions.UpdateOrderRow(
                 new UpdateOrderRowRequest(
@@ -254,11 +254,10 @@ namespace Svea.WebPay.SDK.Tests
                     orderRow.VatPercent,
                     orderRow.Unit
                 )
-            );
+            ).ConfigureAwait(false);
 
             // Assert
             // No exeception thrown
-
         }
 
         [Fact]
@@ -269,7 +268,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(handlerMock);
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             await order.Actions.UpdateOrderRows(
                 new UpdateOrderRowsRequest(
                     new List<NewOrderRow> {
@@ -295,11 +294,10 @@ namespace Svea.WebPay.SDK.Tests
                         )
                     }
                 )
-            );
+            ).ConfigureAwait(false);
 
             // Assert
             // No exeception thrown
-
         }
 
         [Fact]
@@ -310,8 +308,8 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(handlerMock);
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
-            await order.Actions.Cancel(new CancelRequest(true));
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
+            await order.Actions.Cancel(new CancelRequest(true)).ConfigureAwait(false);
 
             // Assert
             // No exeception thrown
@@ -325,9 +323,9 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(handlerMock);
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var orderRow = order.OrderRows.FirstOrDefault(row => row.OrderRowId == 1);
-            await orderRow.Actions.CancelOrderRow(new CancelRequest(true));
+            await orderRow.Actions.CancelOrderRow(new CancelRequest(true)).ConfigureAwait(false);
 
             // Assert
             // No exeception thrown
@@ -341,9 +339,9 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(handlerMock);
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var orderRow = order.OrderRows.FirstOrDefault(row => row.OrderRowId == 1);
-            await order.Actions.CancelOrderRows(new CancelOrderRowsRequest(new long[] { 1, 2 }));
+            await order.Actions.CancelOrderRows(new CancelOrderRowsRequest(new long[] { 1, 2 })).ConfigureAwait(false);
 
             // Assert
             // No exeception thrown
@@ -357,7 +355,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(handlerMock);
 
             // Act
-            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             await order.Actions.ReplaceOrderRows(
                 new ReplaceOrderRowsRequest(
                     new List<NewOrderRow> {
@@ -383,7 +381,7 @@ namespace Svea.WebPay.SDK.Tests
                         )
                     }
                 )
-            );
+            ).ConfigureAwait(false);
 
             // Assert
             // No exeception thrown

@@ -19,7 +19,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                             var response = await client
                                 .HttpPost<ResourceResponseObject<CreditResponseObject>, CreditResponseObject>(
                                     new Uri($"/api/v1/orders/{orderId}/deliveries/{deliveryResponse.Id}/credits",
-                                        UriKind.Relative), payload, pollingTimeout);
+                                        UriKind.Relative), payload, pollingTimeout, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
 
                             var resource = new ResourceResponse<CreditResponseObject, CreditResponse>(response, () => new CreditResponse(response.Resource));
 
@@ -31,7 +31,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                             var response = await client
                                 .HttpPost<ResourceResponseObject<CreditResponseObject>, CreditResponseObject>(
                                     new Uri($"/api/v1/orders/{orderId}/deliveries/{deliveryResponse.Id}/credits/CreditWithFee",
-                                        UriKind.Relative), payload, pollingTimeout);
+                                        UriKind.Relative), payload, pollingTimeout, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
 
                             var resource = new ResourceResponse<CreditResponseObject, CreditResponse>(response, () => new CreditResponse(response.Resource));
 
@@ -44,7 +44,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                             var response = await client
                                 .HttpPost<ResourceResponseObject<CreditResponseObject>, CreditResponseObject>(
                                     new Uri($"/api/v1/orders/{orderId}/deliveries/{deliveryResponse.Id}/credits",
-                                        UriKind.Relative), payload, pollingTimeout);
+                                        UriKind.Relative), payload, pollingTimeout, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
 
                             var resource = new ResourceResponse<CreditResponseObject, CreditResponse>(response,  () => new CreditResponse(response.Resource));
                             
@@ -55,8 +55,8 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                         CreditAmount = async payload =>
                         {
                             var response = await client.HttpPatch<CreditResponseObject>(
-                                new Uri($"/api/v1/orders/{orderId}/deliveries/{deliveryResponse.Id}", UriKind.Relative),
-                                payload);
+                                new Uri($"/api/v1/orders/{orderId}/deliveries/{deliveryResponse.Id}", 
+                                    UriKind.Relative), payload, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
 
                             return new CreditResponse(response);
                         };

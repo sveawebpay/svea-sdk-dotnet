@@ -112,6 +112,7 @@ Important to note is that AllowAutoRedirect needs to be set to false in your Htt
         -   Update order row       
     -   **Delivery actions**
         -   Credit order rows
+        -   Credit order rows with fee
         -   Credit new row 
         -   Credit amount
 

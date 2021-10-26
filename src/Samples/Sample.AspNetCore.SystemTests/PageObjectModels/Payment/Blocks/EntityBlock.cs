@@ -1,7 +1,4 @@
 ﻿using Atata;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 {
@@ -13,8 +10,5 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 
         [FindByContent("Privatperson")]
         public Text<TOwner> IsPrivate { get; set; }
-
-        [FindByCss("button[data-testid='anonymous-toggle']")]
-        public Button<TOwner> ToggleIdentification { get; private set; }
     }
 }

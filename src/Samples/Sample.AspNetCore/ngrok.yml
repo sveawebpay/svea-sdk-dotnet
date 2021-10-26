@@ -4,7 +4,7 @@ tunnels:
   uitestdev:
     proto: http
     addr: https://localhost:5001
-    subdomain: uitest-uat-svea-webpay-sdk
+    subdomain: uitest-dev-svea-webpay-sdk
   uitestuat:
     proto: http
     addr: https://localhost:5001

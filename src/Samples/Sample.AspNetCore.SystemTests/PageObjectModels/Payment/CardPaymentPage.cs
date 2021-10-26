@@ -15,7 +15,7 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         [FindById("CardNumber")]
         public TextInput<_> CardNumber { get; set; }
 
-        [FindById("Expiry")]
+        [FindById("expdate")]
         public TextInput<_> Expiry { get; set; }
 
         [FindById("CVV")]

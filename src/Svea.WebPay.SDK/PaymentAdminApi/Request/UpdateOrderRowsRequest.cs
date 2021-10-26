@@ -6,22 +6,26 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class UpdateOrderRowsRequest
+    public class UpdateOrderRowsRequest : IConfigurableAwait
     {
         /// <summary>
         /// UpdateOrderRowsRequest
         /// </summary>
         /// <param name="orderRows">To update several order rows with RowId specified.</param>
-        public UpdateOrderRowsRequest(List<NewOrderRow> orderRows)
+        /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
+        public UpdateOrderRowsRequest(List<NewOrderRow> orderRows, bool configureAwait = false) 
         {
             if (orderRows == null)
             {
                 throw new ArgumentNullException(nameof(orderRows));
             }
 
+            ConfigureAwait = configureAwait;
+
             OrderRows = orderRows.Select(x => new NewRow(x.OrderRowId ?? 0, x)).ToList();
         }
 
         public List<NewRow> OrderRows { get; }
+        public bool ConfigureAwait { get; }
     }
 }

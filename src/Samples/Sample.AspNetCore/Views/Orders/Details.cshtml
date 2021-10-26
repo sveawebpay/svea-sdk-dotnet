@@ -54,26 +54,32 @@ else if (TempData["ErrorMessage"] != null)
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => order.Id)
                         </dt>
-                        <dd class="col-sm-10" automation="text-orderid">
+                        <dd class="col-sm-4" automation="text-orderid">
                             @Html.DisplayFor(model => order.Id)
+                        </dd>
+                        <dt class="col-sm-2">
+                            Order rows
+                        </dt>
+                        <dd class="col-sm-4" automation="text-orderrowscount">
+                            @(order.OrderRows != null ? string.Join(",", order.OrderRows.Select(x => $"{(x.Quantity.InLowestMonetaryUnit / 100)} - {x.Name}")) : null)
                         </dd>
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => order.OrderStatus)
                         </dt>
-                        <dd class="col-sm-10" automation="text-orderstatus">
+                        <dd class="col-sm-4" automation="text-orderstatus">
                             @Html.DisplayFor(model => order.OrderStatus)
                         </dd>
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => order.PaymentType)
                         </dt>
-                        <dd class="col-sm-10" automation="text-paymenttype">
+                        <dd class="col-sm-4" automation="text-paymenttype">
                             @Html.DisplayFor(model => order.PaymentType)
                         </dd>
                     </dl>
                 </div>
 
                 <table class="table" automation="table-order">
-                    <thead class="collapsible" automation="toggle-actions" >
+                    <thead class="collapsible" automation="toggle-actions">
                         <tr>
                             <th>Actions</th>
                             <th><div automation="toggle-actions">Expand</div><div automation="toggle-actions">Collapse</div></th>
@@ -101,7 +107,7 @@ else if (TempData["ErrorMessage"] != null)
                     </tbody>
                 </table>
             </div>
-        
+
             @if (order.OrderRows != null && order.OrderRows.Count > 0)
             {
                 <div>
@@ -114,19 +120,31 @@ else if (TempData["ErrorMessage"] != null)
                                 <dt class="col-sm-2">
                                     Id
                                 </dt>
-                                <dd class="col-sm-10" automation="text-orderrowid">
+                                <dd class="col-sm-4" automation="text-orderrowid">
                                     @orderRow.OrderRowId
                                 </dd>
                                 <dt class="col-sm-2">
                                     Name
                                 </dt>
-                                <dd class="col-sm-10" automation="text-orderrowname">
+                                <dd class="col-sm-4" automation="text-orderrowname">
                                     @orderRow.Name
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Quantity
+                                </dt>
+                                <dd class="col-sm-4" automation="text-orderquantity">
+                                    @orderRow.Quantity
+                                </dd>
+                                <dt class="col-sm-2">
+                                    UnitPrice
+                                </dt>
+                                <dd class="col-sm-4" automation="text-orderrowunitprice">
+                                    @(orderRow.UnitPrice.InLowestMonetaryUnit / 100)
                                 </dd>
                                 <dt class="col-sm-2">
                                     Is Cancelled
                                 </dt>
-                                <dd class="col-sm-10" automation="text-orderrowcancelled">
+                                <dd class="col-sm-4" automation="text-orderrowcancelled">
                                     @orderRow.IsCancelled
                                 </dd>
                             </dl>
@@ -156,8 +174,22 @@ else if (TempData["ErrorMessage"] != null)
                                                 </td>
                                             </tr>
                                         }
+
+                                        if (order.AvailableActions.Contains(OrderActions.CanDeliverOrder.ToString()))
+                                        {
+                                            <tr>
+                                                <td>DeliverOrderRow</td>
+                                                <td>
+                                                    <form asp-action="DeliverOrderRow" asp-controller="Payment" asp-route-paymentId="@order.Id" asp-route-orderRowId="@orderRow.OrderRowId" method="post">
+                                                        <input type="hidden" name="paymentId" value="@order.Id" />
+                                                        <input type="hidden" name="orderRowId" value="@orderRow.OrderRowId" />
+                                                        <input type="number" min="1" name="quantity" value="" automation="input-deliverorderrowquantity" />
+                                                        <button type="submit" class="btn btn-sm btn-danger mx-2 mb-1" automation="a-deliverorderrow">Execute</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        }
                                     }
-                                    
                                 </tbody>
                             </table>
                         </div>
@@ -177,14 +209,32 @@ else if (TempData["ErrorMessage"] != null)
                                 <dt class="col-sm-2">
                                     Id
                                 </dt>
-                                <dd class="col-sm-10" automation="text-deliveryid">
+                                <dd class="col-sm-4" automation="text-deliveryid">
                                     @delivery.Id
                                 </dd>
                                 <dt class="col-sm-2">
                                     Status
                                 </dt>
-                                <dd class="col-sm-10" automation="text-deliverystatus">
+                                <dd class="col-sm-4" automation="text-deliverystatus">
                                     @delivery.Status
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Delivery order rows names
+                                </dt>
+                                <dd class="col-sm-4" automation="text-deliveryorderrowsname">
+                                    @(delivery.OrderRows != null ? string.Join(",", delivery.OrderRows.Select(x => $"{(x.Quantity.InLowestMonetaryUnit / 100)} - {x.Name}")) : null)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Delivery Amount
+                                </dt>
+                                <dd class="col-sm-4" automation="text-deliveryamount">
+                                    @(delivery.DeliveryAmount.InLowestMonetaryUnit / 100)
+                                </dd>
+                                <dt class="col-sm-2">
+                                    Credited Amount
+                                </dt>
+                                <dd class="col-sm-4" automation="text-deliverycreditedamount">
+                                    @(delivery.CreditedAmount.InLowestMonetaryUnit / 100)
                                 </dd>
                             </dl>
 
@@ -204,7 +254,7 @@ else if (TempData["ErrorMessage"] != null)
                                           .Select(prop => prop.Name);
 
                                         foreach (var action in actions)
-                                        {                                            
+                                        {
                                             var automationTagName = $"a-{action.ToLower()}";
                                             <tr>
                                                 <td>@action</td>
@@ -222,7 +272,7 @@ else if (TempData["ErrorMessage"] != null)
                 </div>
             }
         </div>
-        
+
         count++;
     }
 

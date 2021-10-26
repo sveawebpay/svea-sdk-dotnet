@@ -3,7 +3,6 @@ using Svea.WebPay.SDK.CheckoutApi;
 using Xunit;
 using Svea.WebPay.SDK.Extensions;
 using Svea.WebPay.SDK.Tests.Builders;
-using Newtonsoft.Json;
 using Svea.WebPay.SDK.Tests.Helpers;
 using Svea.WebPay.SDK.Json;
 using System.Linq;
@@ -11,7 +10,8 @@ using OrderRow = Svea.WebPay.SDK.CheckoutApi.OrderRow;
 
 namespace Svea.WebPay.SDK.Tests
 {
-    
+    using System.Text.Json;
+
     public class CheckoutTests : TestBase
     {
         private readonly CheckoutOrderBuilder checkoutOrderBuilder = new CheckoutOrderBuilder();
@@ -20,12 +20,12 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task CreateOrder_Should_Serialize_AsExpected()
         {
             // Arrange
-            var expectedOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
+            var expectedOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutCreateOrderResponse));
             var request = checkoutOrderBuilder.UseTestValues().Build();
 
             // Act
-            var actualOrder = await sveaClient.Checkout.CreateOrder(request);
+            var actualOrder = await sveaClient.Checkout.CreateOrder(request).ConfigureAwait(false);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
@@ -35,12 +35,12 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task GetOrder_Should_Serialize_AsExpected()
         {
             // Arrange
-            var createdOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
-            var expectedOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutGetOrderResponse, JsonSerialization.Settings);
+            var createdOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
+            var expectedOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutGetOrderResponse, JsonSerialization.Settings);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutGetOrderResponse));
 
             // Act
-            var actualOrder = await sveaClient.Checkout.GetOrder(createdOrder.OrderId);
+            var actualOrder = await sveaClient.Checkout.GetOrder(createdOrder.OrderId).ConfigureAwait(false);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
@@ -50,28 +50,28 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task UpdateOrder_Should_Serialize_AsExpected()
         {
             // Arrange
-            var createdOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutUpdateOrderResponse, JsonSerialization.Settings);
-            var expectedOrder = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutUpdateOrderResponse, JsonSerialization.Settings);
+            var createdOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutUpdateOrderResponse, JsonSerialization.Settings);
+            var expectedOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutUpdateOrderResponse, JsonSerialization.Settings);
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutUpdateOrderResponse));
 
             // Act
             var update = CreateUpdateOrderRequest("");
-            var actualOrder = await sveaClient.Checkout.UpdateOrder(createdOrder.OrderId, update);
+            var actualOrder = await sveaClient.Checkout.UpdateOrder(createdOrder.OrderId, update).ConfigureAwait(false);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
 
-            Assert.Equal(4, actualOrder.Cart.Items[0].Quantity.ToInt());
-            Assert.Equal(2000, actualOrder.Cart.Items[0].UnitPrice.ToInt());
-            Assert.Equal(0, actualOrder.Cart.Items[0].DiscountPercent.ToInt());
-            Assert.Equal(6, actualOrder.Cart.Items[0].VatPercent.ToInt());
+            Assert.Equal(4, actualOrder.Cart.Items[0].Quantity);
+            Assert.Equal(2000, actualOrder.Cart.Items[0].UnitPrice);
+            Assert.Equal(0, actualOrder.Cart.Items[0].DiscountAmount);
+            Assert.Equal(6, actualOrder.Cart.Items[0].VatPercent);
         }
 
         [Fact]
         public void Order_Should_Serialize_AsExpected()
         {
             // Act
-            var order = JsonConvert.DeserializeObject<Data>(DataSample.CheckoutGetOrderResponse, JsonSerialization.Settings);
+            var order = JsonSerializer.Deserialize<Data>(DataSample.CheckoutGetOrderResponse, JsonSerialization.Settings);
 
             // Assert
             Assert.Null(order.MerchantSettings.CheckoutValidationCallBackUri);
@@ -86,10 +86,10 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(1, order.Cart.Items.Count);
             Assert.Equal("ABC80", item.ArticleNumber);
             Assert.Equal("Computer", item.Name);
-            Assert.Equal(1000, item.Quantity.Value);
-            Assert.Equal(500000, item.UnitPrice.Value);
-            Assert.Equal(1000, item.DiscountPercent.Value);
-            Assert.Equal(2500, item.VatPercent.Value);
+            Assert.Equal(10, item.Quantity);
+            Assert.Equal(5000, item.UnitPrice);
+            Assert.Equal(10, item.DiscountAmount);
+            Assert.Equal(25, item.VatPercent);
             Assert.Equal("SEK", item.Unit);
             Assert.Null(item.TemporaryReference);
             Assert.Equal(1, item.RowNumber);
@@ -126,10 +126,10 @@ namespace Svea.WebPay.SDK.Tests
                 new OrderRow(
                     "ABC80",
                     "Computer",
-                    MinorUnit.FromInt(4),
-                    MinorUnit.FromDecimal(2000),
-                    MinorUnit.FromDecimal(0),
-                    MinorUnit.FromDecimal(6),
+                    new MinorUnit(4),
+                    new MinorUnit(2000),
+                    new MinorUnit(0),
+                    new MinorUnit(6),
                     null,
                     null,
                     2)

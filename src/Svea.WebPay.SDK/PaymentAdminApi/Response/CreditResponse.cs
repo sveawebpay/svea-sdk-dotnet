@@ -1,6 +1,6 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-    using Newtonsoft.Json;
+    using System.Text.Json.Serialization;
 
     public class CreditResponse
     {
@@ -12,6 +12,10 @@
             CreditId = creditResponseObject.CreditId;
         }
 
+        /// <summary>
+        /// ID to each identify the credit.
+        /// </summary>
+        [JsonInclude]
         public string CreditId { get; }
     }
 }

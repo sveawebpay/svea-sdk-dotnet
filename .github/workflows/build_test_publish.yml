@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.6
+        uses: gittools/actions/gitversion/setup@v0.9.9
         with:
           versionSpec: '5.x.x'
  
@@ -105,6 +105,34 @@ jobs:
       - name: Build Solution
         run: dotnet build ${{ env.SlnPath }} -p:Version=${{ needs.variables.outputs.NUGETVERSIONV2 }}  --configuration ${{ env.Configuration }} --no-restore
   
+  publish_test_nuget:
+    if: ${{ github.event_name != 'pull_request' && needs.variables.outputs.ENVIRONMENT == 'dev'}}
+    name: Build and publish alpha nuget
+    needs: [variables, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.dotnetCoreVersion }}
+          source-url: https://nuget.pkg.github.com/sveawebpay/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      
+      - name: Install dependencies
+        run: dotnet restore ${{ env.SlnPath }}
+
+      - name: Build Solution
+        run: dotnet build ${{ env.SlnPath }} -p:Version=${{ needs.variables.outputs.NUGETVERSIONV2 }}  --configuration ${{ env.Configuration }} --no-restore
+      
+      - name: Nuget pack
+        run: dotnet pack ${{ env.CsprojPath }} -p:PackageVersion=${{ needs.variables.outputs.NUGETVERSIONV2 }} -p:Version=${{ needs.variables.outputs.NUGETVERSIONV2 }} --configuration=${{ env.Configuration }} --output=artifacts
+
+      - name: Publish test package to GitHub Package Registry
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key ${{secrets.GITHUB_TOKEN}} --source  https://nuget.pkg.github.com/sveawebpay/index.json --skip-duplicate
+
   test:
     name: Run Unit and UI tests
     needs: [variables, build]
@@ -131,7 +159,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ env.dotnetCoreVersion }}
+          dotnet-version: ${{ env.dotnetCoreVersion }}       
 
       - name: Install dependencies
         run: dotnet restore ${{ env.SlnPath }}
@@ -170,7 +198,6 @@ jobs:
           MerchantSettings:ConfirmationUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/checkout/thankyou
           MerchantSettings:CheckoutValidationCallbackUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/api/svea/validation/{checkout.order.uri}
         
-
       #- name: Run SDK UI tests
       #  if: ${{ github.event_name != 'pull_request' && needs.variables.outputs.ENVIRONMENT != 'dev'}}
       #  run: dotnet test --configuration ${{ env.Configuration }} src/Samples/Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.csproj
@@ -196,11 +223,11 @@ jobs:
           name: packages
           # A file, directory or wildcard pattern that describes what to upload
           path: artifacts/*.nupkg
-          
+                
       - name: Publish to nuget
         if: ${{ github.event_name == 'release' }}
         run: dotnet nuget push artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate      
-        
+         
   publish:
     if: ${{ github.event_name != 'pull_request' }}
     name: Publish

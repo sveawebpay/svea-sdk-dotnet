@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class NewOrderRow
+    public class NewOrderRow : OrderRowBase
     {
         /// <summary>
         /// OrderRowRequest
@@ -11,14 +11,14 @@
         /// <param name="quantity">Quantity of the product.</param>
         /// <param name="unitPrice">Price of the product including VAT.</param>
         /// <param name="vatPercent">The VAT percentage of the credit amount. Valid vat percentage for that country.</param>
-        /// <param name="discountPercent">The discount percentage of the product.</param>
-        ///  <param name="rowId">Id of row to update</param>
+        /// <param name="discountAmount">The discount amount of the product.</param>
+        /// <param name="rowId">Id of row to update</param>
         /// <param name="unit">The unit type, e.g., “st”, “pc”, “kg” etc. 0-4 characters.</param>
         /// <param name="articleNumber">Article number as a string. Can contain letters and numbers. Maximum 256 characters.</param>
-        public NewOrderRow(string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit vatPercent, MinorUnit discountPercent = null, long? rowId = null, string unit = "", string articleNumber = "")
+        public NewOrderRow(string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit vatPercent, MinorUnit discountAmount = null, long? rowId = null, string unit = "", string articleNumber = "")
         {
             ArticleNumber = articleNumber;
-            DiscountPercent = discountPercent;
+            DiscountAmount = discountAmount;
             Unit = unit;
             OrderRowId = rowId;
 
@@ -31,20 +31,28 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(articleNumber), "Maximum 256 characters.");
             }
-
-            if (DiscountPercent?.Value.ToString().Length > 10000)
-            {
-                throw new ArgumentOutOfRangeException(nameof(discountPercent), "Value cannot be more than 100.");
-            }
-
-            if (Quantity.Value.ToString().Length > 9)
+            
+            if (Quantity.InLowestMonetaryUnit.ToString().Length > 9)
             {
                 throw new ArgumentOutOfRangeException(nameof(quantity), "Value cannot be longer than 7 digits.");
             }
 
-            if (UnitPrice.Value.ToString().Length > 13)
+            if (UnitPrice.InLowestMonetaryUnit.ToString().Length > 13)
             {
                 throw new ArgumentOutOfRangeException(nameof(unitPrice), "Value cannot be longer than 11 digits.");
+            }
+
+            if (DiscountAmount != null && DiscountAmount != 0)
+            {
+	            if (DiscountAmount < 0)
+	            {
+		            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be less than zero.");
+	            }
+
+	            if (DiscountAmount > unitPrice * quantity)
+	            {
+		            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be greater than unit price  * quantity.");
+	            }
             }
 
             if (Name.Length < 1 || Name.Length > 40)
@@ -59,14 +67,5 @@
         }
 
         public long? OrderRowId { get; }
-        public string ArticleNumber { get; }
-        public string Name { get; }
-        public MinorUnit Quantity { get; }
-        public MinorUnit UnitPrice { get; }
-        public MinorUnit DiscountPercent { get; }
-        public MinorUnit VatPercent { get; }
-        public string Unit { get; }
     }
-
-
 }

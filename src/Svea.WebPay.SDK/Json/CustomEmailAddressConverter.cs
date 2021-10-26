@@ -1,60 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Svea.WebPay.SDK.Json
 {
-    public class CustomEmailAddressConverter : JsonConverter
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+
+    public class CustomEmailAddressConverter : JsonConverter<EmailAddress>
 
     {
-        private readonly Type[] types;
-
-
-        public CustomEmailAddressConverter(params Type[] types)
+        public override EmailAddress Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            this.types = types;
-        }
-
-
-        public CustomEmailAddressConverter()
-        {
-        }
-
-
-        public override bool CanRead => true;
-
-
-        public override bool CanConvert(Type objectType)
-        {
-            return this.types.Any(t => t == objectType);
-        }
-
-
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.StartObject)
+            if (reader.TokenType == JsonTokenType.String)
             {
-                var jo = JObject.Load(reader);
-                var addressString = jo.Values().FirstOrDefault()?.ToString();
-                return new EmailAddress(addressString);
+                return new EmailAddress(reader.GetString());
             }
 
-            return new EmailAddress(reader.Value.ToString());
+            if (reader.TokenType != JsonTokenType.StartObject)
+            {
+                throw new JsonException();
+            }
+
+            var email = "";
+            while (reader.Read())
+            {
+                if (reader.TokenType == JsonTokenType.PropertyName)
+                {
+                    reader.Read();
+                    email = reader.GetString();
+                }
+
+                if (reader.TokenType == JsonTokenType.EndObject)
+                {
+                    return new EmailAddress(email);
+                }
+            }
+
+            return new EmailAddress(reader.GetString());
         }
 
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, EmailAddress value, JsonSerializerOptions options)
         {
-            var t = JToken.FromObject(value);
-
-            if (t.Type != JTokenType.Object)
-                t.WriteTo(writer);
-            else
-                writer.WriteValue(value.ToString());
+            writer.WriteStringValue(value.ToString());
         }
     }
 }

@@ -25,14 +25,13 @@
             OrderRows = deliveryResponse.OrderRows?.Select(x => new OrderRow(orderId, x, client)).ToList();
         }
 
-        public IList<string> AvailableActions { get; set; }
+        public IList<string> AvailableActions { get; }
+
         public DeliveryActions Actions { get; }
-
-
         public DateTime CreationDate { get; }
-        public long CreditedAmount { get; }
+        public MinorUnit CreditedAmount { get; }
         public IList<Credit> Credits { get; }
-        public long DeliveryAmount { get; }
+        public MinorUnit DeliveryAmount { get; }
         public DateTime? DueDate { get; }
         public long Id { get; }
         public long? InvoiceId { get; }

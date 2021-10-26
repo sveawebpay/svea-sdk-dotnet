@@ -1,12 +1,14 @@
 ﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Svea.WebPay.SDK.Json;
 using Xunit;
 using OrderRow = Svea.WebPay.SDK.CheckoutApi.OrderRow;
 
 namespace Svea.WebPay.SDK.Tests.Json
 {
+    using System.Text.Json;
+
+    using JsonSerializer = System.Text.Json.JsonSerializer;
+
     public class CustomMinorUnitConverterTests
     {
         private readonly long expectedAmount = 100;
@@ -16,13 +18,13 @@ namespace Svea.WebPay.SDK.Tests.Json
         public void CanDeserialize_Amount()
         {
             //ARRANGE
-            var jsonObject = new JObject { { "x", this.expectedAmount } };
+            var jsonObject = $"{{ \"x\": \"{this.expectedAmount}\" }}";
 
             //ACT
-            var result = JsonConvert.DeserializeObject<MinorUnit>(jsonObject.ToString(), JsonSerialization.Settings);
+            var result = JsonSerializer.Deserialize<MinorUnit>(jsonObject, JsonSerialization.Settings);
 
             //ASSERT
-            Assert.Equal(this.expectedAmount, result.Value);
+            Assert.Equal(this.expectedAmount, result.InLowestMonetaryUnit);
         }
 
 
@@ -30,16 +32,16 @@ namespace Svea.WebPay.SDK.Tests.Json
         public void CanSerialize_Amount()
         {
             //ARRANGE
-            var orderRow = new OrderRow("1", "Test", MinorUnit.FromDecimal(1), MinorUnit.FromDecimal(1), MinorUnit.FromDecimal(0), MinorUnit.FromDecimal(25),
+            var orderRow = new OrderRow("1", "Test", new MinorUnit(1), new MinorUnit(1), new MinorUnit(0), new MinorUnit(25),
                 "#", "", 1);
 
             //ACT
-            var result = JsonConvert.SerializeObject(orderRow, JsonSerialization.Settings);
-            var obj = JObject.Parse(result);
-            obj.TryGetValue("UnitPrice", StringComparison.InvariantCultureIgnoreCase, out var amount);
+            var result = JsonSerializer.Serialize(orderRow, JsonSerialization.Settings);
+            var obj = JsonDocument.Parse(result);
+            obj.RootElement.TryGetProperty("unitPrice", out var amount);
 
             //ASSERT
-            Assert.Equal(this.expectedAmount, amount);
+            Assert.Equal(this.expectedAmount, amount.GetInt32());
         }
     }
 }

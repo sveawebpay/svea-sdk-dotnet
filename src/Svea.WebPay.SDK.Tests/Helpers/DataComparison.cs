@@ -72,7 +72,7 @@ namespace Svea.WebPay.SDK.Tests.Helpers
             Assert.Equal(expectedRow.Name, actualRow.Name);
             Assert.Equal(expectedRow.Quantity.ToString(), actualRow.Quantity.ToString());
             Assert.Equal(expectedRow.UnitPrice.ToString(), actualRow.UnitPrice.ToString());
-            Assert.Equal(expectedRow.DiscountPercent.ToString(), actualRow.DiscountPercent.ToString());
+            Assert.Equal(expectedRow.DiscountAmount.ToString(), actualRow.DiscountAmount.ToString());
             Assert.Equal(expectedRow.VatPercent.ToString(), actualRow.VatPercent.ToString());
             Assert.Equal(expectedRow.Unit, actualRow.Unit);
             Assert.Equal(expectedRow.IsCancelled, actualRow.IsCancelled);
@@ -248,7 +248,7 @@ namespace Svea.WebPay.SDK.Tests.Helpers
             Assert.Equal(expectedRow.Name, actualRow.Name);
             Assert.Equal(expectedRow.Quantity.ToString(), actualRow.Quantity.ToString());
             Assert.Equal(expectedRow.UnitPrice.ToString(), actualRow.UnitPrice.ToString());
-            Assert.Equal(expectedRow.DiscountPercent.ToString(), actualRow.DiscountPercent.ToString());
+            Assert.Equal(expectedRow.DiscountAmount.ToString(), actualRow.DiscountAmount.ToString());
             Assert.Equal(expectedRow.VatPercent.ToString(), actualRow.VatPercent.ToString());
             Assert.Equal(expectedRow.Unit, actualRow.Unit);
             Assert.Equal(expectedRow.MerchantData, actualRow.MerchantData);

@@ -29,13 +29,14 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanCancelOrder);
 
                 if (TempData["ErrorMessage"] == null)
                 {
-                    await paymentOrder.Actions.Cancel(new CancelRequest(true));
+                    await paymentOrder.Actions.Cancel(new CancelRequest(true)).ConfigureAwait(false);
+
                     TempData["CancelMessage"] = $"Payment has been cancelled: {paymentId}";
                 }
             }
@@ -52,20 +53,20 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanCancelOrderRow);
 
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRow = paymentOrder.OrderRows.FirstOrDefault(x => x.AvailableActions.Contains(OrderRowActionType.CanCancelRow));
-                    
-                    if(orderRow == null)
+
+                    if (orderRow == null)
                     {
                         throw new Exception();
                     }
 
-                    await paymentOrder.Actions.CancelOrderRows(new CancelOrderRowsRequest(new long[] { orderRow.OrderRowId }));
+                    await paymentOrder.Actions.CancelOrderRows(new CancelOrderRowsRequest(new long[] { orderRow.OrderRowId })).ConfigureAwait(false);
 
                     TempData["CancelMessage"] = $"Order row with id : {orderRow.OrderRowId} has been cancelled.";
                 }
@@ -83,7 +84,7 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -93,16 +94,16 @@ namespace Sample.AspNetCore.Controllers
                         new AddOrderRowRequest(
                             articleNumber: "1234567890",
                             name: "Slim Fit 512",
-                            quantity: MinorUnit.FromInt(2),
-                            unitPrice: MinorUnit.FromInt(100),
-                            discountPercent: MinorUnit.FromInt(0),
-                            vatPercent: MinorUnit.FromInt(12),
+                            quantity: 2,
+                            unitPrice: 100,
+                            discountAmount: 0,
+                            vatPercent: 12,
                             unit: "SEK",
                             TimeSpan.FromSeconds(15)
                         )
-                    );
+                    ).ConfigureAwait(false);
 
-                    TempData["OrderRowMessage"] = $"Order row has been added -> {response. ResourceUri.AbsoluteUri}";
+                    TempData["OrderRowMessage"] = $"Order row has been added -> {response.ResourceUri.AbsoluteUri}";
                 }
             }
             catch (Exception e)
@@ -118,7 +119,7 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -128,29 +129,29 @@ namespace Sample.AspNetCore.Controllers
                     {
                         new NewOrderRow(
                             name: "Slim Fit 512",
-                            quantity: MinorUnit.FromInt(2),
-                            unitPrice: MinorUnit.FromInt(100),
-                            vatPercent: MinorUnit.FromInt(12),
-                            discountPercent: MinorUnit.FromInt(0),
+                             quantity: 2,
+                            unitPrice: 100,
+                            vatPercent: 12,
+                            discountAmount: 0,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"
                         ),
                         new NewOrderRow(
                             name: "Slim Fit 513",
-                            quantity: MinorUnit.FromInt(3),
-                            unitPrice: MinorUnit.FromInt(200),
-                            vatPercent: MinorUnit.FromInt(25),
-                            discountPercent: MinorUnit.FromInt(0),
+                            quantity: 3,
+                            unitPrice: 200,
+                            vatPercent: 25,
+                            discountAmount: 0,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "0987654321"
                         )
                     };
 
-                    var response = await paymentOrder.Actions.AddOrderRows(new AddOrderRowsRequest(newOrderRows));
+                    var response = await paymentOrder.Actions.AddOrderRows(new AddOrderRowsRequest(newOrderRows), new PollingTimeout(15)).ConfigureAwait(false);
 
-                    TempData["OrderRowMessage"] = $"Order row has been added -> {string.Join(", ", response.OrderRowId) }";
+                    TempData["OrderRowMessage"] = $"Order row has been added -> {string.Join(", ", response.ResourceUri.AbsoluteUri) }";
                 }
             }
             catch (Exception e)
@@ -166,13 +167,13 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanCancelAmount);
 
                 if (TempData["ErrorMessage"] == null)
                 {
-                    await paymentOrder.Actions.CancelAmount(new CancelAmountRequest(MinorUnit.FromDecimal(1)));
+                    await paymentOrder.Actions.CancelAmount(new CancelAmountRequest(1)).ConfigureAwait(false);
                     TempData["CancelMessage"] = $"Cancelling parts of the total amount: {paymentId}";
                 }
             }
@@ -189,16 +190,15 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanDeliverOrder);
-
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRowIds = paymentOrder.OrderRows.Select(row => (long)row.OrderRowId).ToList();
+
                     var response = await paymentOrder.Actions.DeliverOrder(
-                        new DeliveryRequest(orderRowIds, pollingTimeout: TimeSpan.FromSeconds(15))
-                    );
+                        new DeliveryRequest(orderRowIds), new PollingTimeout(15)).ConfigureAwait(false);
 
                     TempData["DeliverMessage"] = $"Order delivered -> {response.ResourceUri.AbsoluteUri}";
                 }
@@ -216,15 +216,15 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanDeliverOrderPartially);
 
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRow = new List<long> { paymentOrder.OrderRows.First(x => x.AvailableActions.Contains(OrderRowActionType.CanDeliverRow)).OrderRowId };
-                    var deliverRequest = new DeliveryRequest(orderRow, pollingTimeout: TimeSpan.FromSeconds(15));
-                    var response = await paymentOrder.Actions.DeliverOrder(deliverRequest);
+                    var deliverRequest = new DeliveryRequest(orderRow);
+                    var response = await paymentOrder.Actions.DeliverOrder(deliverRequest, new PollingTimeout(15)).ConfigureAwait(false);
 
                     TempData["DeliverMessage"] = $"Order delivered partially -> {response.ResourceUri.AbsoluteUri}";
                 }
@@ -242,7 +242,7 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -251,22 +251,21 @@ namespace Sample.AspNetCore.Controllers
                     var existingOrderRows = paymentOrder.OrderRows;
 
                     var newOrderRows = new List<NewOrderRow>();
-
                     foreach (var orderRow in existingOrderRows)
                     {
                         newOrderRows.Add(new NewOrderRow(
                             orderRow.Name,
-                            MinorUnit.FromInt((orderRow.Quantity.Value + 1) % 4 + 1),
+                          (orderRow.Quantity + 1) % 4 + 1,
                             orderRow.UnitPrice,
                             orderRow.VatPercent,
-                            orderRow.DiscountPercent,
+                            orderRow.DiscountAmount,
                             orderRow.OrderRowId,
                             orderRow.Unit,
                             orderRow.ArticleNumber
                         ));
                     }
 
-                    await paymentOrder.Actions.UpdateOrderRows(new UpdateOrderRowsRequest(newOrderRows));
+                    await paymentOrder.Actions.UpdateOrderRows(new UpdateOrderRowsRequest(newOrderRows)).ConfigureAwait(false);
 
                     TempData["OrderRowMessage"] = "Order rows have been updated";
                 }
@@ -284,7 +283,7 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -294,27 +293,27 @@ namespace Sample.AspNetCore.Controllers
                     {
                         new NewOrderRow(
                             name: "Slim Fit 512",
-                            quantity: MinorUnit.FromInt(2),
-                            unitPrice: MinorUnit.FromInt(100),
-                            vatPercent: MinorUnit.FromInt(12),
-                            discountPercent: MinorUnit.FromInt(0),
+                                quantity: 2,
+                            unitPrice: 100,
+                            vatPercent: 12,
+                            discountAmount: 0,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"
                         ),
                         new NewOrderRow(
                             name: "Slim Fit 513",
-                            quantity: MinorUnit.FromInt(3),
-                            unitPrice: MinorUnit.FromInt(200),
-                            vatPercent: MinorUnit.FromInt(25),
-                            discountPercent: MinorUnit.FromInt(0),
+                            quantity:3,
+                            unitPrice: 200,
+                            vatPercent: 25,
+                            0,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "0987654321"
                         )
                     };
 
-                    await paymentOrder.Actions.ReplaceOrderRows(new ReplaceOrderRowsRequest(newOrderRows));
+                    await paymentOrder.Actions.ReplaceOrderRows(new ReplaceOrderRowsRequest(newOrderRows)).ConfigureAwait(false);
 
                     TempData["OrderRowMessage"] = "Order rows have been updated";
                 }
@@ -332,18 +331,18 @@ namespace Sample.AspNetCore.Controllers
         #region OrderRow
 
         [HttpGet]
-        public async Task<ActionResult> CancelRow(long paymentId, int orderRowId)
+        public async Task<ActionResult> CancelOrderRow(long paymentId, long orderRowId)
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderRowAction(paymentOrder, orderRowId, OrderRowActionType.CanCancelRow);
 
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRow = paymentOrder.OrderRows.FirstOrDefault(row => row.OrderRowId == orderRowId);
-                    await orderRow.Actions.CancelOrderRow(new CancelRequest(true));
+                    await orderRow.Actions.CancelOrderRow(new CancelRequest(true)).ConfigureAwait(false);
 
                     TempData["CancelMessage"] = $"Order row cancelled. Order row id: {orderRow.OrderRowId}";
                 }
@@ -357,11 +356,11 @@ namespace Sample.AspNetCore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> UpdateRow(long paymentId, int orderRowId)
+        public async Task<ActionResult> UpdateOrderRow(long paymentId, long orderRowId)
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderRowAction(paymentOrder, orderRowId, OrderRowActionType.CanUpdateRow);
 
@@ -371,16 +370,46 @@ namespace Sample.AspNetCore.Controllers
                     await orderRow.Actions.UpdateOrderRow(
                         new UpdateOrderRowRequest(
                             orderRow.ArticleNumber,
-                            orderRow.Name,
+                            orderRow.Name + " Updated",
                             orderRow.Quantity,
                             orderRow.UnitPrice,
-                            orderRow.DiscountPercent,
+                            orderRow.DiscountAmount,
                             orderRow.VatPercent,
                             orderRow.Unit
                         )
-                    );
+                    ).ConfigureAwait(false);
 
                     TempData["CancelMessage"] = $"Order row updated. Order row id: {orderRow.OrderRowId}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeliverOrderRow(long paymentId, long orderRowId, int? quantity)
+        {
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
+
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanDeliverOrder);
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var orderRow = paymentOrder.OrderRows.First(x => x.OrderRowId == orderRowId);
+
+                    quantity = quantity != null ? quantity : int.Parse((orderRow.Quantity.InLowestMonetaryUnit / 100).ToString());
+
+                    var deliveryOptions = new List<RowDeliveryOptions> { new RowDeliveryOptions(orderRow.OrderRowId, quantity) };
+
+                    var response = await paymentOrder.Actions.DeliverOrder(
+                        new DeliveryRequest(new List<long> { orderRow.OrderRowId }, rowDeliveryOptions: deliveryOptions), new PollingTimeout(15)).ConfigureAwait(false);
+
+                    TempData["DeliverMessage"] = $"Order delivered -> {response.ResourceUri.AbsoluteUri}";
                 }
             }
             catch (Exception e)
@@ -396,11 +425,11 @@ namespace Sample.AspNetCore.Controllers
         #region Delivery
 
         [HttpGet]
-        public async Task<ActionResult> CreditAmount(long paymentId, int deliveryId)
+        public async Task<ActionResult> CreditAmount(long paymentId, long deliveryId)
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditAmount);
 
@@ -408,7 +437,7 @@ namespace Sample.AspNetCore.Controllers
                 {
                     var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
 
-                    var response = await delivery.Actions.CreditAmount(new CreditAmountRequest(MinorUnit.FromInt(100)));
+                    var response = await delivery.Actions.CreditAmount(new CreditAmountRequest(100)).ConfigureAwait(false);
 
                     TempData["CreditMessage"] = $"Delivery credited. Credit id: {response.CreditId}";
                 }
@@ -422,11 +451,11 @@ namespace Sample.AspNetCore.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> CreditNewRow(long paymentId, int deliveryId)
+        public async Task<ActionResult> CreditNewRow(long paymentId, long deliveryId)
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditNewRow);
 
@@ -438,12 +467,8 @@ namespace Sample.AspNetCore.Controllers
                         new CreditNewOrderRowRequest(
                             new CreditOrderRow(
                                 name: "Slim Fit 512",
-                                MinorUnit.FromDecimal(100),
-                                MinorUnit.FromDecimal(12)
-                            ),
-                            pollingTimeout: TimeSpan.FromSeconds(15)
-                        )
-                    );
+                                100, 12, 1)
+                        ), new PollingTimeout(15)).ConfigureAwait(false);
 
                     TempData["CreditMessage"] = $"New credit row created. -> {response.ResourceUri.AbsoluteUri}";
                 }
@@ -461,7 +486,7 @@ namespace Sample.AspNetCore.Controllers
         {
             try
             {
-                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId);
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditOrderRows);
 
@@ -469,11 +494,46 @@ namespace Sample.AspNetCore.Controllers
                 {
                     var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
                     var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
+                    var creditingOptions = new List<RowCreditingOptions> { new RowCreditingOptions(orderRowIds.First(), 1) };
+
                     var response = await delivery.Actions.CreditOrderRows(
-                        new CreditOrderRowsRequest(orderRowIds, pollingTimeout: TimeSpan.FromSeconds(15))
-                    );
+                        new CreditOrderRowsRequest(orderRowIds, creditingOptions), new PollingTimeout(15)).ConfigureAwait(false);
 
                     TempData["CreditMessage"] = $"Delivery order rows credited. -> {response.ResourceUri.AbsoluteUri}";
+                }
+            }
+            catch (Exception e)
+            {
+                TempData["ErrorMessage"] = $"Something unexpected happened. {e.Message}";
+            }
+
+            return RedirectToAction("Details", "Orders");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> CreditOrderRowsWithFee(long paymentId, long deliveryId)
+        {
+            try
+            {
+                var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
+
+                TempData["ErrorMessage"] = ActionsValidationHelper.ValidateDeliveryAction(paymentOrder, deliveryId, DeliveryActionType.CanCreditOrderRows);
+
+                if (TempData["ErrorMessage"] == null)
+                {
+                    var delivery = paymentOrder.Deliveries.FirstOrDefault(dlv => dlv.Id == deliveryId);
+                    var orderRowIds = delivery.OrderRows
+                        .Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow))
+                        .Select(row => (long)row.OrderRowId).ToList();
+                    var row = delivery.OrderRows.First();
+                    var feeAmount = new MinorUnit(200);
+                    var fee = new Fee(row.ArticleNumber, row.Name, feeAmount, 25);
+
+                    var creditingOptions = orderRowIds.Select(x => new RowCreditingOptions(x, delivery.OrderRows.First(y => y.OrderRowId == x).Quantity)).ToList();
+
+                    var response = await delivery.Actions.CreditOrderRowsWithFee(new CreditOrderRowWithFeeRequest(orderRowIds, fee, creditingOptions), new PollingTimeout(15)).ConfigureAwait(false);
+
+                    TempData["CreditMessage"] = $"Delivery order rows credited with fee ({feeAmount.InLowestMonetaryUnit}). -> {response.ResourceUri.AbsoluteUri}";
                 }
             }
             catch (Exception e)

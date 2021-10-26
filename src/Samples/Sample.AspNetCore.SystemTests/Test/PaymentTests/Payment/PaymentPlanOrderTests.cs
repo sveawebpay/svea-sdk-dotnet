@@ -15,12 +15,17 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
         }
 
-        [RetryWithException(3)]
+        [RetryWithException(2)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
-        public async System.Threading.Tasks.Task CreateOrderWithPaymentPlanAsPrivateAsync(Product[] products)
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        public void CreateOrderWithPaymentPlanAsPrivateAsync(Product[] products)
         {
-            GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+            Assert.DoesNotThrowAsync(async () => 
+            {
+                GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                 // Validate order info
@@ -36,34 +41,39 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Deliveries.Should.HaveCount(0);
 
             // Assert sdk/api response
-            var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
+            var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
-            Assert.That(response.Currency, Is.EqualTo("SEK"));
-            Assert.That(response.IsCompany, Is.False);
-            Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount.Value, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.PaymentPlan)));
-            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
+                Assert.That(response.Currency, Is.EqualTo("SEK"));
+                Assert.That(response.IsCompany, Is.False);
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.PaymentPlan)));
+                Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
 
-            CollectionAssert.AreEquivalent(
-                new string[] { OrderActionType.CanDeliverOrder, OrderActionType.CanCancelOrder, OrderActionType.CanAddOrderRow, OrderActionType.CanCancelOrderRow, OrderActionType.CanUpdateOrderRow },
-                response.AvailableActions
-            );
-            Assert.That(response.OrderRows.Count, Is.EqualTo(1));
-            CollectionAssert.AreEquivalent(
-                new string[] { OrderRowActionType.CanCancelRow, OrderRowActionType.CanUpdateRow },
-                response.OrderRows.First().AvailableActions
-            );
+                CollectionAssert.AreEquivalent(
+                    new string[] { OrderActionType.CanDeliverOrder, OrderActionType.CanCancelOrder, OrderActionType.CanAddOrderRow, OrderActionType.CanCancelOrderRow, OrderActionType.CanUpdateOrderRow },
+                    response.AvailableActions
+                );
+                Assert.That(response.OrderRows.Count, Is.EqualTo(1));
+                CollectionAssert.AreEquivalent(
+                    new string[] { OrderRowActionType.CanCancelRow, OrderRowActionType.CanUpdateRow },
+                    response.OrderRows.First().AvailableActions
+                );
 
-            Assert.That(response.Deliveries, Is.Null);
+                Assert.That(response.Deliveries, Is.Null);
+            });
         }
 
-        [RetryWithException(3)]
+        [RetryWithException(2)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
-        public async System.Threading.Tasks.Task DeliverWithPaymentPlanAsPrivateAsync(Product[] products)
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        public void DeliverWithPaymentPlanAsPrivateAsync(Product[] products)
         {
-            GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+            Assert.DoesNotThrowAsync(async () => 
+            {
+                GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
                 // Deliver
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -71,6 +81,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Order.Table.DeliverOrder.ClickAndGo()
 
                 // Validate order info
+                .RefreshPageUntil(x => x.Orders.Last().Order.OrderStatus.Value == nameof(OrderStatus.Delivered), 10, 3)
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.PaymentPlan))
 
@@ -82,34 +93,39 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Deliveries.First().Status.Should.BeNull();
 
             // Assert sdk/api response
-            var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
+            var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
-            Assert.That(response.Currency, Is.EqualTo("SEK"));
-            Assert.That(response.IsCompany, Is.False);
-            Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount.Value, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.PaymentPlan)));
-            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
+                Assert.That(response.Currency, Is.EqualTo("SEK"));
+                Assert.That(response.IsCompany, Is.False);
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.PaymentPlan)));
+                Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
-            Assert.That(response.AvailableActions, Is.Empty);
-            Assert.That(response.OrderRows, Is.Empty);
+                Assert.That(response.AvailableActions, Is.Empty);
+                Assert.That(response.OrderRows, Is.Empty);
 
-            Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-            Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(0));
-            Assert.That(response.Deliveries.First().Status, Is.Null);
-            CollectionAssert.AreEquivalent(
-                new string[] { DeliveryActionType.CanCreditNewRow, DeliveryActionType.CanCreditOrderRows },
-                response.Deliveries.First().AvailableActions
-            );
+                Assert.That(response.Deliveries.Count, Is.EqualTo(1));
+                Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(0));
+                Assert.That(response.Deliveries.First().Status, Is.Null);
+                CollectionAssert.AreEquivalent(
+                    new string[] { DeliveryActionType.CanCreditNewRow, DeliveryActionType.CanCreditOrderRows },
+                    response.Deliveries.First().AvailableActions
+                );
+            });
         }
 
-        [RetryWithException(3)]
+        [RetryWithException(2)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
-        public async System.Threading.Tasks.Task CreditWithPaymentPlanAsPrivateAsync(Product[] products)
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        public void CreditWithPaymentPlanAsPrivateAsync(Product[] products)
         {
-            GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+            Assert.DoesNotThrowAsync(async () => 
+            {
+                GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
                 // Deliver -> Credit
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -119,6 +135,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Deliveries.First().Table.CreditOrderRows.ClickAndGo()
 
                 // Validate order info
+                .RefreshPageUntil(x => x.Orders.Last().Order.OrderStatus.Value == nameof(OrderStatus.Cancelled), 10, 3)
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Cancelled))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.PaymentPlan))
 
@@ -130,33 +147,38 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Deliveries.First().Status.Should.BeNull();
 
             // Assert sdk/api response
-            var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
+            var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
-            Assert.That(response.Currency, Is.EqualTo("SEK"));
-            Assert.That(response.IsCompany, Is.False);
-            Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.OrderAmount.Value, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.PaymentPlan)));
-            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
+                Assert.That(response.Currency, Is.EqualTo("SEK"));
+                Assert.That(response.IsCompany, Is.False);
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.PaymentPlan)));
+                Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
-            Assert.That(response.AvailableActions, Is.Empty);
-            Assert.That(response.OrderRows, Is.Empty);
+                Assert.That(response.AvailableActions, Is.Empty);
+                Assert.That(response.OrderRows, Is.Empty);
 
-            Assert.That(response.Deliveries.Count, Is.EqualTo(1));
-            Assert.That(response.Deliveries.First().DeliveryAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.Deliveries.First().CreditedAmount, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.Deliveries.First().Credits.Count, Is.EqualTo(1));
-            Assert.That(response.Deliveries.First().Status, Is.Null);
+                Assert.That(response.Deliveries.Count, Is.EqualTo(1));
+                Assert.That(response.Deliveries.First().DeliveryAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.Deliveries.First().CreditedAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.Deliveries.First().Credits.Count, Is.EqualTo(1));
+                Assert.That(response.Deliveries.First().Status, Is.Null);
 
-            Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
+                Assert.That(response.Deliveries.First().AvailableActions, Is.Empty);
+            });
         }
 
-        [RetryWithException(3)]
+        [RetryWithException(2)]
         [Test(Description = "4778: Köp som privatperson(delbetala) -> makulera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true })]
-        public async System.Threading.Tasks.Task CancelWithPaymentPlanAsPrivateAsync(Product[] products)
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        public void CancelWithPaymentPlanAsPrivateAsync(Product[] products)
         {
-            GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+            Assert.DoesNotThrowAsync(async () => 
+            {
+                GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan)
+
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
 
                 // Cancel
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -164,6 +186,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Order.Table.CancelOrder.ClickAndGo()
 
                 // Validate order info
+                .RefreshPageUntil(x => x.Orders.Last().Order.OrderStatus.Value == nameof(OrderStatus.Cancelled), 10, 3)
                 .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Cancelled))
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.PaymentPlan))
 
@@ -176,22 +199,35 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Deliveries.Should.HaveCount(0);
 
             // Assert sdk/api response
-            var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId));
+            var response = await _sveaClient.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
-            Assert.That(response.Currency, Is.EqualTo("SEK"));
-            Assert.That(response.IsCompany, Is.False);
-            Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-            Assert.That(response.CancelledAmount.Value, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.OrderAmount.Value, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-            Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.PaymentPlan)));
-            Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
+                Assert.That(response.Currency, Is.EqualTo("SEK"));
+                Assert.That(response.IsCompany, Is.False);
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.CancelledAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.PaymentPlan)));
+                Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
-            Assert.That(response.AvailableActions, Is.Empty);
-            Assert.That(response.OrderRows.Count, Is.EqualTo(1));
-            Assert.That(response.OrderRows.First().AvailableActions, Is.Empty);
-            Assert.That(response.OrderRows.First().IsCancelled, Is.True);
-            Assert.That(response.Deliveries, Is.Null);
+                Assert.That(response.AvailableActions, Is.Empty);
+                Assert.That(response.OrderRows.Count, Is.EqualTo(1));
+                Assert.That(response.OrderRows.First().AvailableActions, Is.Empty);
+                Assert.That(response.OrderRows.First().IsCancelled, Is.True);
+                Assert.That(response.Deliveries, Is.Null);
+            });
+            
         }
 
+        [RetryWithException(2)]
+        [Test(Description = "5702: RequireElectronicIdAuthentication] As a user I want to have a setting that will trigger BankId to be required on orders in the checkout")]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        public void EnsureRequireIdAuthenticationShowUpWithPaymentPlan(Product[] products)
+        {
+            Assert.DoesNotThrow(() => 
+            { 
+                GoToBankId(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.PaymentPlan); 
+            });
+           
+        }
     }
 }

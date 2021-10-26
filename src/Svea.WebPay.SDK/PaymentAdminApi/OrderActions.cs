@@ -16,24 +16,27 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                 switch (action)
                 {
                     case OrderActionType.CanCancelOrder:
-                        Cancel = async payload => await client.HttpPatch<object>(
-                            new Uri($"/api/v1/orders/{orderResponse.Id}/", UriKind.Relative), payload);
+                        Cancel = async (payload) => await client.HttpPatch<object>(
+                            new Uri($"/api/v1/orders/{orderResponse.Id}/", 
+                                UriKind.Relative), payload, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
                         break;
                     case OrderActionType.CanCancelOrderRow:
                         CancelOrderRows = async payload => await client.HttpPatch<object>(
                             new Uri($"/api/v1/orders/{orderResponse.Id}/rows/cancelOrderRows",
-                                UriKind.Relative), payload);
+                                UriKind.Relative), payload, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
                         break;
                     case OrderActionType.CanCancelAmount:
                         CancelAmount = async payload => await client.HttpPatch<object>(
-                            new Uri($"/api/v1/orders/{orderResponse.Id}/", UriKind.Relative), payload);
+                            new Uri($"/api/v1/orders/{orderResponse.Id}/", 
+                                UriKind.Relative), payload, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
                         break;
                     case OrderActionType.CanDeliverOrder:
                     case OrderActionType.CanDeliverOrderPartially:
-                        DeliverOrder = async payload =>
+                        DeliverOrder = async (payload, pollingTimeout) =>
                         {
                             var response = await client.HttpPost<ResourceResponseObject<OrderResponseObject>, OrderResponseObject>(
-                                new Uri($"/api/v1/orders/{orderResponse.Id}/deliveries", UriKind.Relative), payload);
+                                new Uri($"/api/v1/orders/{orderResponse.Id}/deliveries", 
+                                    UriKind.Relative), payload, pollingTimeout, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
 
                             var resource = new ResourceResponse<OrderResponseObject, Order>(response, () => new Order(response.Resource, client));
                        
@@ -43,24 +46,35 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
                     case OrderActionType.CanAddOrderRow:
                         AddOrderRow = async payload =>
                         {
-                            var response = await client.HttpPost<ResourceResponseObject<AddOrderRowResponseObject>, AddOrderRowResponseObject>(
-                                new Uri($"/api/v1/orders/{orderResponse.Id}/rows", UriKind.Relative), payload);
+                            var response = await client.HttpPost<ResourceResponseObject<AddOrderRowsResponseObject>, AddOrderRowsResponseObject>(
+                                new Uri($"/api/v1/orders/{orderResponse.Id}/rows", 
+                                    UriKind.Relative), payload, null, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
 
-                            var resource = new ResourceResponse<AddOrderRowResponseObject, AddOrderRowResponse>(response, () => new AddOrderRowResponse(response.Resource));
+                            var resource = new ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>(response, () => new AddOrderRowsResponse(response.Resource));
 
                             return resource;
                         };
                         
-                        AddOrderRows = async payload => await client.HttpPost<AddOrderRowsResponse>(
-                            new Uri($"/api/v1/orders/{orderResponse.Id}/rows/addOrderRows", UriKind.Relative), payload);
+                        AddOrderRows = async (payload, pollingTimeout) =>
+                        {
+                            var response = await client.HttpPost<ResourceResponseObject<AddOrderRowsResponseObject>, AddOrderRowsResponseObject>(
+                                new Uri($"/api/v1/orders/{orderResponse.Id}/rows/addOrderRows", 
+                                    UriKind.Relative), payload, pollingTimeout, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
+
+                            var resource = new ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>(response, () => new AddOrderRowsResponse(response.Resource));
+
+                            return resource;
+                        };
+
+
                         break;
                     case OrderActionType.CanUpdateOrderRow:
                         UpdateOrderRows = async payload => await client.HttpPost<object>(
                             new Uri($"/api/v1/orders/{orderResponse.Id}/rows/updateOrderRows",
-                                UriKind.Relative), payload);
+                                UriKind.Relative), payload, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
                         ReplaceOrderRows = async payload => await client.HttpPut<object>(
                             new Uri($"/api/v1/orders/{orderResponse.Id}/rows/replaceOrderRows",
-                                UriKind.Relative), payload);
+                                UriKind.Relative), payload, payload.ConfigureAwait).ConfigureAwait(payload.ConfigureAwait);
                         break;
                 }
             }
@@ -70,6 +84,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
         /// By setting the IsCancelled parameter to true the order is cancelled, assuming the order has the action “CanCancelOrder”.
         /// </summary>
         public Func<CancelRequest, System.Threading.Tasks.Task> Cancel { get; internal set; }
+
 
         /// <summary>
         /// By specifying a higher amount than the current order cancelled amount then the order cancelled
@@ -91,7 +106,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
         /// InvoiceDistributionType parameter can only be used for orders with PaymentType Invoice. If not
         /// specified then default distribution type ‘Post’ will be used.
         /// </summary>
-        public Func<DeliveryRequest, Task<ResourceResponse<OrderResponseObject, Order>>> DeliverOrder { get; internal set; }
+        public Func<DeliveryRequest, PollingTimeout, Task<ResourceResponse<OrderResponseObject, Order>>> DeliverOrder { get; internal set; }
 
         /// <summary>
         /// This action changes the status of order rows to "Cancelled". This assuming that the order has the action "CanCancelOrderRow"
@@ -104,13 +119,13 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
         /// “CanAddOrderRow”.
         /// If the new order amount will exceed the current order amount, a credit check will be taken.
         /// </summary>
-        public Func<AddOrderRowRequest, Task<ResourceResponse<AddOrderRowResponseObject, AddOrderRowResponse>>> AddOrderRow { get; internal set; }
+        public Func<AddOrderRowRequest, Task<ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>>> AddOrderRow { get; internal set; }
 
         /// <summary>
         /// This method is used to add several order rows to an order, assuming that the order has the action "CanAddOrderRow".
         /// If the new order amount will exceed the current order amount, a credit check will be taken.
         /// </summary>
-        public Func<AddOrderRowsRequest, Task<AddOrderRowsResponse>> AddOrderRows { get; internal set; }
+        public Func<AddOrderRowsRequest, PollingTimeout, Task<ResourceResponse<AddOrderRowsResponseObject, AddOrderRowsResponse>>> AddOrderRows { get; internal set; }
 
         /// <summary>
         /// This method is used to update several order rows, assuming that the order has the action "CanUpdateOrderRow", and the order rows have the action "CanUpdateRow".

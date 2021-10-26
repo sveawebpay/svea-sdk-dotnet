@@ -23,6 +23,12 @@ namespace Sample.AspNetCore.SystemTests.Services
         public static TOwner StoreNumericalValue<TOwner>(this UIComponent<TOwner> component, out double value, string characterToRemove = null)
             where TOwner : PageObject<TOwner>
         {
+            if (string.IsNullOrEmpty(component.Content.Value))
+            {
+                value = 0;
+                return component.Owner;
+            }
+
             var content = characterToRemove != null ? component.Content.Value.Replace(characterToRemove, "") : component.Content.Value;
 
             var extractedDecimalNumber = RegexNumericalValue.Match(content).Value.Replace(",", ".");

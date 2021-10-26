@@ -48,17 +48,16 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
         {
             return page
                 .Entity.IsPrivate.Click()
-                .Entity.ToggleIdentification.Click()
+                .B2CIdentification.Email.Set("aaa@bbb.ccc")
+                .B2CIdentification.ZipCode.Set(TestDataService.ZipCode)
+                .Submit.Click()
+                .AnonymousToggle.Click()
                 .B2CAnonymous.IsVisible.WaitTo.BeTrue()
+                .B2CAnonymous.PhoneNumber.Set(TestDataService.PhoneNumber)
                 .B2CAnonymous.FirstName.Set(TestDataService.FirstName)
                 .B2CAnonymous.LastName.Set(TestDataService.LastName)
                 .B2CAnonymous.Street.Set(TestDataService.Street)
-                .B2CAnonymous.CareOfToggle.Click()
-                .B2CAnonymous.CareOf.Set(TestDataService.CareOf)
-                .B2CAnonymous.ZipCode.Set(TestDataService.ZipCode)
                 .B2CAnonymous.City.Set(TestDataService.City)
-                .B2CAnonymous.Email.Set(TestDataService.Email)
-                .B2CAnonymous.PhoneNumber.Set(TestDataService.PhoneNumber)
                 .Submit.Click();
         }
 
@@ -66,14 +65,14 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
         {
             return page
                 .Entity.IsCompany.Click()
-                .Entity.ToggleIdentification.Click()
+                .AnonymousToggle.Click()
                 .B2BAnonymous.IsVisible.WaitTo.BeTrue()
+                .B2BAnonymous.Email.Set(TestDataService.Email)
+                .B2BAnonymous.PhoneNumber.Set(TestDataService.PhoneNumber)
                 .B2BAnonymous.OrganizationName.Set(TestDataService.CompanyName)
                 .B2BAnonymous.Street.Set(TestDataService.Street)
                 .B2BAnonymous.ZipCode.Set(TestDataService.ZipCode)
                 .B2BAnonymous.City.Set(TestDataService.City)
-                .B2BAnonymous.Email.Set(TestDataService.Email)
-                .B2BAnonymous.PhoneNumber.Set(TestDataService.PhoneNumber)
                 .Submit.Click();
         }
     }

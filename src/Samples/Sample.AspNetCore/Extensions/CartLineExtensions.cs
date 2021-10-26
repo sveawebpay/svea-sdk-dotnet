@@ -15,10 +15,10 @@ namespace Sample.AspNetCore.Extensions
                 yield return new OrderRow(
                     line.Product.Reference,
                     line.Product.Name,
-                    MinorUnit.FromDecimal(line.Quantity),
-                    MinorUnit.FromDecimal(line.Product.Price),
-                    MinorUnit.FromDecimal(0),
-                    MinorUnit.FromDecimal(line.Product.VatPercentage),
+                    line.Quantity,
+                    line.Product.Price,
+                    line.Product.DiscountAmount,
+                    line.Product.VatPercentage,
                     null,
                     null,
                     rowNumber++);

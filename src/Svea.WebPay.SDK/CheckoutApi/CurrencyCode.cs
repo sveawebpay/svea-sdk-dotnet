@@ -1,10 +1,10 @@
 ﻿namespace Svea.WebPay.SDK.CheckoutApi
 {
-    using Newtonsoft.Json;
 
     using System;
     using System.Globalization;
     using System.Linq;
+    using System.Text.Json.Serialization;
 
     public class CurrencyCode
     {

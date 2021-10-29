@@ -10,7 +10,7 @@
 
 ## 1. Introduction
 
-The CheckoutApi class methods are used to Create, Get and Update orders through Svea Checkout. (Link to official Svea documentation) [Svea Checkout API](https://checkoutapi.svea.com/docs/html/)
+The CheckoutApi class methods are used to Create, Get and Update orders through Svea Checkout. (Link to official Svea documentation) [Svea Checkout API](https://checkoutapi.svea.com/docs)
 
 The PaymentAdminApi class methods are used to administrate orders after they have been accepted by Svea. It includes functions to update, deliver, cancel and credit orders et.al. Note! This entrypoint is under construction and all functions not yet implemented. (Link to official Svea documentation) [Svea PaymentAdmin API](https://paymentadminapi.svea.com/documentation)
 

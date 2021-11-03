@@ -15,6 +15,7 @@
             Quantity = orderRowResponse.Quantity;
             UnitPrice = orderRowResponse.UnitPrice;
             DiscountAmount = orderRowResponse.DiscountAmount;
+            DiscountPercent = orderRowResponse.DiscountPercent;
             VatPercent = orderRowResponse.VatPercent;
             Unit = orderRowResponse.Unit;
             IsCancelled = orderRowResponse.IsCancelled;

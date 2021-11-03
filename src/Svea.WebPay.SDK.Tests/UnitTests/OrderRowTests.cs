@@ -38,8 +38,9 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         [InlineData("ref1", "", 20, 1000, 100, 0, "st", "ref2", 1, "data")]
         [InlineData("ref1", "adsfasdfasdfffffffffffffffasdfasdsdfsdfsd", 20, 1000, 100, 0, "st", "ref2", 1, "data")]
         [InlineData("ref1", "Name", 20, 1000, 100, 0, "st", "ref2", 1, "adsfasdfasdfffffffffffffffasdfasdfasdfasdfasdfaasdfoiuashdfiuasdhbbffiasydbfuaysdfvbvbuyasdfgvgvuaysdfgasudyfgasudyfgasuydfgasuyidfgasiuydffgasudyfgasuydfgasuiydfgasuydfgasoydfgaosydfgasddfsuygasdfyuagagysdfdfausyduaysdfguasdyfgausydfguyasdfggasudyfgusdyfdysdsd")]
+        [InlineData("ref1", "Name", 20, 1000, 101, 0, "st", "ref2", 1, "data", true)]
         public void ThrowsArgumentException_WhenGivenInvalidOrderRow(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
-            int vatPercent, string unit, string temporaryReference, int rowNumber, string merchantData = null)
+            int vatPercent, string unit, string temporaryReference, int rowNumber, string merchantData = null, bool useDiscountPercent = false)
         {
             //ASSERT
             Assert.Throws<ArgumentOutOfRangeException>(() => new OrderRow(articleNumber, name,
@@ -47,7 +48,7 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
                 new MinorUnit(unitPrice),
                 new MinorUnit(discountAmount),
                 new MinorUnit(vatPercent),
-                unit, temporaryReference, rowNumber, merchantData));
+                unit, temporaryReference, rowNumber, merchantData, useDiscountPercent));
         }
 
         [Theory]

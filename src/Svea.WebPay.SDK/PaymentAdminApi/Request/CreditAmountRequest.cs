@@ -1,6 +1,7 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Request
 {
     using System;
+    using System.Text.Json.Serialization;
 
     public class CreditAmountRequest : IConfigurableAwait
     {
@@ -16,6 +17,8 @@
         }
 
         public MinorUnit CreditedAmount { get; }
+
+        [JsonIgnore]
         public bool ConfigureAwait { get; }
     }
 }

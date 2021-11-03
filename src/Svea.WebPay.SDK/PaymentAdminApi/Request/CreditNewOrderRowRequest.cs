@@ -4,6 +4,7 @@
 
     using System;
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
     public class CreditNewOrderRowRequest : IConfigurableAwait
     {
@@ -22,6 +23,8 @@
 
         public CreditOrderRow NewCreditOrderRow { get; }
         public IList<CreditOrderRow> NewCreditOrderRows { get; }
+
+        [JsonIgnore]
         public bool ConfigureAwait { get; }
     }
 }

@@ -96,9 +96,10 @@ namespace Sample.AspNetCore.Controllers
                             name: "Slim Fit 512",
                             quantity: 2,
                             unitPrice: 100,
-                            discountAmount: 0,
+                            discount: 0,
                             vatPercent: 12,
                             unit: "SEK",
+                            false,
                             TimeSpan.FromSeconds(15)
                         )
                     ).ConfigureAwait(false);
@@ -132,7 +133,7 @@ namespace Sample.AspNetCore.Controllers
                              quantity: 2,
                             unitPrice: 100,
                             vatPercent: 12,
-                            discountAmount: 0,
+                            discount: 0,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"
@@ -142,7 +143,7 @@ namespace Sample.AspNetCore.Controllers
                             quantity: 3,
                             unitPrice: 200,
                             vatPercent: 25,
-                            discountAmount: 0,
+                            discount: 0,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -296,7 +297,7 @@ namespace Sample.AspNetCore.Controllers
                                 quantity: 2,
                             unitPrice: 100,
                             vatPercent: 12,
-                            discountAmount: 0,
+                            discount: 0,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"

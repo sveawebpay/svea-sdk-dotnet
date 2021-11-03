@@ -1,6 +1,7 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Request
 {
     using System;
+    using System.Text.Json.Serialization;
 
     public class AddOrderRowRequest : OrderRowBase, IConfigurableAwait
     {
@@ -11,18 +12,20 @@
         /// <param name="name">Article name. 1-40 characters.</param>
         /// <param name="quantity">Quantity of the product.</param>
         /// <param name="unitPrice">Price of the product including VAT.</param>
-        /// <param name="discountAmount">The discount amount of the product.</param>
+        /// <param name="discount">The discount amount of the product. Can be both amount or percent based on the use of useDiscountPercent.</param>
         /// <param name="vatPercent">The VAT percentage of the credit amount. Valid vat percentage for that country.</param>
         /// <param name="unit">The unit type, e.g., “st”, “pc”, “kg” etc. 0-4 characters.</param>
+        /// <param name="useDiscountPercent">Set to true if using percent in discount</param>
         /// <param name="pollingTimeout">If set the task will be polled until the resource is complete or the timeout has passed. If null the resource will be returned if complete, otherwise the task is returned. </param>
         /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
-        public AddOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount, MinorUnit vatPercent, string unit, TimeSpan? pollingTimeout = null, bool configureAwait = false)
+        public AddOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discount, MinorUnit vatPercent, string unit, bool useDiscountPercent = false, TimeSpan ? pollingTimeout = null, bool configureAwait = false)
         {
             ArticleNumber = articleNumber;
-            DiscountAmount = discountAmount;
             Unit = unit;
             PollingTimeout = pollingTimeout;
             ConfigureAwait = configureAwait;
+            DiscountPercent = useDiscountPercent ? discount : null;
+            DiscountAmount = !useDiscountPercent ? discount : null;
 
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Quantity = quantity ?? throw new ArgumentNullException(nameof(quantity));
@@ -34,7 +37,6 @@
                 throw new ArgumentOutOfRangeException(nameof(articleNumber), "Maximum 256 characters.");
             }
 
-            
             if (Quantity.InLowestMonetaryUnit.ToString().Length > 9)
             {
                 throw new ArgumentOutOfRangeException(nameof(quantity), "Value cannot be longer than 7 digits.");
@@ -45,17 +47,22 @@
                 throw new ArgumentOutOfRangeException(nameof(unitPrice), "Value cannot be longer than 11 digits.");
             }
 
-            if (DiscountAmount != null && DiscountAmount != 0)
+            if (!useDiscountPercent && DiscountAmount != null && DiscountAmount != 0)
             {
-	            if (DiscountAmount < 0)
-	            {
-		            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be less than zero.");
-	            }
+                if (DiscountAmount < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(discount), "Value cannot be less than zero.");
+                }
 
-	            if (DiscountAmount > unitPrice * Quantity)
-	            {
-		            throw new ArgumentOutOfRangeException(nameof(discountAmount), "Value cannot be greater than unit price * quantity.");
-	            }
+                if (DiscountAmount > unitPrice * quantity)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(discount), "Value cannot be greater than unit price * quantity.");
+                }
+            }
+
+            if (useDiscountPercent && DiscountPercent != null && DiscountPercent.InLowestMonetaryUnit > 10000)
+            {
+                throw new ArgumentOutOfRangeException(nameof(discount), "Value cannot be more than 100%.");
             }
 
             if (Name.Length < 1 || Name.Length > 40)
@@ -69,7 +76,10 @@
             }
         }
 
+        [JsonIgnore]
         public TimeSpan? PollingTimeout { get; }
+
+        [JsonIgnore]
         public bool ConfigureAwait { get; }
     }
 }

@@ -14,14 +14,14 @@ namespace Sample.AspNetCore.Extensions
             {
                 yield return new OrderRow(
                     line.Product.Reference,
-                    line.Product.Name,
-                    line.Quantity,
-                    line.Product.Price,
-                    line.Product.DiscountAmount,
-                    line.Product.VatPercentage,
-                    null,
-                    null,
-                    rowNumber++);
+                       line.Product.Name,
+                       line.Quantity,
+                       line.Product.Price,
+                       line.Product.DiscountAmount,
+                       line.Product.VatPercentage,
+                       null,
+                       null,
+                       rowNumber++);
             }
         }
     }

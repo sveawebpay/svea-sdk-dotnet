@@ -4,6 +4,7 @@
 
     using System;
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
     public class DeliveryRequest : IConfigurableAwait
     {
@@ -25,6 +26,8 @@
         public IList<long> OrderRowIds { get; }
         public InvoiceDistributionType? InvoiceDistributionType { get; }
         public IList<RowDeliveryOptions> RowDeliveryOptions { get; }
+
+        [JsonIgnore]
         public bool ConfigureAwait { get; }
     }
 }

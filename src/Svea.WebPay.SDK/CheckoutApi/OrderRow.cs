@@ -32,7 +32,7 @@
         /// </param>
         /// <param name="discount">
         /// <summary>
-        /// The discount amount of the product. Can be both amount or percent based on the use of useDiscountPercent.
+        /// The discount of the product. Can be amount or percent based on the use of useDiscountPercent.
         /// </summary>
         /// </param>
         /// <param name="vatPercent">

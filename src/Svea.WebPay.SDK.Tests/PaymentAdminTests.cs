@@ -30,7 +30,7 @@ namespace Svea.WebPay.SDK.Tests
             // Assert
             Assert.True(DataComparison.OrdersAreEqual(expectedOrder, actualOrder));
         }
-        
+
         [Fact]
         public async System.Threading.Tasks.Task GetOrderWithUri_Should_Serialize_AsExpected()
         {
@@ -120,7 +120,7 @@ namespace Svea.WebPay.SDK.Tests
             var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var orderRowResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
-            var expectedOrderRow = new AddOrderRowsResponse(orderRowResponseObject);
+            var expectedOrderRowId = orderRowResponseObject.OrderRowId.FirstOrDefault(); //new AddOrderRowsResponse(orderRowResponseObject);
 
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowResponse));
 
@@ -135,13 +135,12 @@ namespace Svea.WebPay.SDK.Tests
                     discount: new MinorUnit(0),
                     vatPercent: new MinorUnit(12),
                     unit: "SEK",
-                    false,
-                    TimeSpan.FromSeconds(15)
-                )
+                    false
+                ), new PollingTimeout(15)
             ).ConfigureAwait(false);
 
             // Assert
-            Assert.Equal(expectedOrderRow.OrderRowId, resourceResponse.Resource.OrderRowId);
+            Assert.Contains(resourceResponse.Resource.OrderRows, x => x.OrderRowId == expectedOrderRowId);
         }
 
         [Fact]
@@ -159,7 +158,7 @@ namespace Svea.WebPay.SDK.Tests
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var resourceResponse = await order.Actions.AddOrderRows(
                 new AddOrderRowsRequest(
-                    new List<NewOrderRow> { 
+                    new List<NewOrderRow> {
                         new NewOrderRow(
                             name: "Slim Fit 512",
                             quantity: new MinorUnit(2),
@@ -185,8 +184,10 @@ namespace Svea.WebPay.SDK.Tests
             ).ConfigureAwait(false);
 
             // Assert
-            // List of OrderRowId
-            Assert.Equal(expectedResponse.OrderRowId, resourceResponse.Resource.OrderRowId);
+            foreach (var id in resourceResponse.Resource.OrderRows.Select(x => x.OrderRowId))
+            {
+                Assert.Contains(resourceResponse.Resource.OrderRows, x => x.OrderRowId == id);
+            }
         }
 
         [Fact]
@@ -366,7 +367,7 @@ namespace Svea.WebPay.SDK.Tests
                             unitPrice: new MinorUnit(1000),
                             vatPercent: new MinorUnit(12),
                             discount: new MinorUnit(0),
-                            rowId: 1,                            
+                            rowId: 1,
                             unit: "SEK",
                             articleNumber: "1234567890"
                         ),
@@ -484,7 +485,7 @@ namespace Svea.WebPay.SDK.Tests
         public void DeliveredOrder_Should_Serialize_AsExpected()
         {
             // Act
-            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject > (DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
             var order = new Order(orderResponseObject, null);
 
             // Assert
@@ -532,7 +533,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(5588817, delivery.Id);
             Assert.Equal(1111272, delivery.InvoiceId);
             Assert.Equal("Sent", delivery.Status);
-            
+
             Assert.Equal(2, delivery.OrderRows.Count);
 
             var orderRow1 = delivery.OrderRows.ElementAt(0);

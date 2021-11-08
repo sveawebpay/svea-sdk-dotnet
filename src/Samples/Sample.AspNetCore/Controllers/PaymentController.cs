@@ -102,9 +102,9 @@ namespace Sample.AspNetCore.Controllers
                             discount: discount.Value,
                             vatPercent: 12,
                             unit: "SEK",
-                            useDiscountPercent,
-                            TimeSpan.FromSeconds(15)
-                        )
+                            useDiscountPercent
+                        ),
+                        new PollingTimeout(15)
                     ).ConfigureAwait(false);
 
                     TempData["OrderRowMessage"] = $"Order row has been added -> {response.ResourceUri.AbsoluteUri}";

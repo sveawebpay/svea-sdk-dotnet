@@ -26,7 +26,7 @@
 
         public OrderRowActions Actions { get; }
 
-        public int OrderRowId { get; }
+        public long OrderRowId { get; }
 
         /// <summary>
         /// Determines if the row is cancelled.

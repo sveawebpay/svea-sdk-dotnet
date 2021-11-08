@@ -16,13 +16,11 @@
         /// <param name="vatPercent">The VAT percentage of the credit amount. Valid vat percentage for that country.</param>
         /// <param name="unit">The unit type, e.g., “st”, “pc”, “kg” etc. 0-4 characters.</param>
         /// <param name="useDiscountPercent">Set to true if using percent in discount</param>
-        /// <param name="pollingTimeout">If set the task will be polled until the resource is complete or the timeout has passed. If null the resource will be returned if complete, otherwise the task is returned. </param>
         /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
-        public AddOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discount, MinorUnit vatPercent, string unit, bool useDiscountPercent = false, TimeSpan ? pollingTimeout = null, bool configureAwait = false)
+        public AddOrderRowRequest(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discount, MinorUnit vatPercent, string unit, bool useDiscountPercent = false, bool configureAwait = false)
         {
             ArticleNumber = articleNumber;
             Unit = unit;
-            PollingTimeout = pollingTimeout;
             ConfigureAwait = configureAwait;
             DiscountPercent = useDiscountPercent ? discount : null;
             DiscountAmount = !useDiscountPercent ? discount : null;
@@ -75,9 +73,6 @@
                 throw new ArgumentOutOfRangeException(nameof(unit), "Can only be 0-4 characters.");
             }
         }
-
-        [JsonIgnore]
-        public TimeSpan? PollingTimeout { get; }
 
         [JsonIgnore]
         public bool ConfigureAwait { get; }

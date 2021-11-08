@@ -46,6 +46,16 @@ namespace Sample.AspNetCore.Models
                     Reference = "Ref3",
                     Price = 1000,
                     DiscountAmount = 100
+                },
+                new Product
+                {
+                    ProductId = 4,
+                    Class = "Identifier1",
+                    Type = "PRODUCT",
+                    Name = "Levis 520 Jeans",
+                    Reference = "Ref4",
+                    Price = 1000,
+                    DiscountPercent = 20
                 });
 
             context.SaveChanges();

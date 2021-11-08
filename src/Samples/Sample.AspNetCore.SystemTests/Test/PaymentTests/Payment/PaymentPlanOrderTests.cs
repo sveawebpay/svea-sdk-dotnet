@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreateOrderWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -66,7 +66,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void DeliverWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -118,7 +118,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4779: Köp som privatperson(delbetala) -> leverera delbetalning -> kreditera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -171,7 +171,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4778: Köp som privatperson(delbetala) -> makulera delbetalning")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CancelWithPaymentPlanAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -220,7 +220,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "5702: RequireElectronicIdAuthentication] As a user I want to have a setting that will trigger BankId to be required on orders in the checkout")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void EnsureRequireIdAuthenticationShowUpWithPaymentPlan(Product[] products)
         {
             Assert.DoesNotThrow(() => 

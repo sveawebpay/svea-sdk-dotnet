@@ -38,7 +38,23 @@ namespace Sample.AspNetCore.Models
 
         public virtual decimal CalculateTotal()
         {
-            return CartLineCollection.Sum(e => e.Quantity * (e.Product.Price - e.Product.DiscountAmount));
+            return CartLineCollection.Sum(e =>
+            {
+                var subTotalBeforeDiscount = (e.Product.Price * e.Quantity);
+
+                if (e.Product.DiscountAmount != 0)
+                {
+                    return subTotalBeforeDiscount - e.Product.DiscountAmount;
+                }
+                else if (e.Product.DiscountPercent != 0)
+                {
+                    return subTotalBeforeDiscount - (subTotalBeforeDiscount * e.Product.DiscountPercent / 100);
+                }
+                else
+                {
+                    return subTotalBeforeDiscount;
+                }
+            });
         }
 
 

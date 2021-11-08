@@ -26,16 +26,28 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         public Link<OrdersPage, TOwner> CancelOrderAmount { get; private set; }
 
         [FindByAutomation("a-addorderrow")]
-        public Link<OrdersPage, TOwner> AddOrderRow { get; private set; }
+        public Button<OrdersPage, TOwner> AddOrderRow { get; private set; }
 
         [FindByAutomation("a-addorderrows")]
-        public Link<OrdersPage, TOwner> AddOrderRows { get; private set; }
+        public Button<OrdersPage, TOwner> AddOrderRows { get; private set; }
 
         [FindByAutomation("a-updateorderrows")]
         public Link<OrdersPage, TOwner> UpdateOrderRows { get; private set; }
 
         [FindByAutomation("a-replaceorderrows")]
         public Link<OrdersPage, TOwner> ReplaceOrderRows { get; private set; }
+
+        [FindByAutomation("input-addorderrowpercentdiscount")]
+        public NumberInput<TOwner> AddOrderRowPercentDiscount { get; private set; }
+
+        [FindByAutomation("input-addorderrowpercentamount")]
+        public NumberInput<TOwner> AddOrderRowAmountDiscount { get; private set; }
+
+        [FindByAutomation("input-addorderrowspercentdiscount")]
+        public NumberInput<TOwner> AddOrderRowsPercentDiscount { get; private set; }
+
+        [FindByAutomation("input-addorderrowspercentamount")]
+        public NumberInput<TOwner> AddOrderRowsPercentAmount { get; private set; }
 
         [FindFirst]
         public ControlList<Link<TOwner>, TOwner> AvailableActions { get; private set; }

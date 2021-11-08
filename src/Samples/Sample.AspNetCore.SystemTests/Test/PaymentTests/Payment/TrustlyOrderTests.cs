@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4781: Köp som privatperson i anonyma flödet(Trustly) -> kreditera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreateOrderWithTrustlyAsPrivateAnonymousAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -66,7 +66,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4781: Köp som privatperson i anonyma flödet(Trustly) -> kreditera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithTrustlyAsPrivateAnonymousAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 

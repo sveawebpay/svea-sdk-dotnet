@@ -17,11 +17,14 @@ namespace Sample.AspNetCore.Extensions
                        line.Product.Name,
                        line.Quantity,
                        line.Product.Price,
-                       line.Product.DiscountAmount,
+                       line.Product.DiscountAmount != 0 ? line.Product.DiscountAmount : 
+                       line.Product.DiscountPercent != 0 ? line.Product.DiscountPercent : 0,
                        line.Product.VatPercentage,
                        null,
                        null,
-                       rowNumber++);
+                       rowNumber++,
+                       null,
+                       line.Product.DiscountPercent != 0);
             }
         }
     }

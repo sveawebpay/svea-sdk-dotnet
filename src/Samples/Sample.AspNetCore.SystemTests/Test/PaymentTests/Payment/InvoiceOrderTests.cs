@@ -18,7 +18,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4784: Köp som privatperson(faktura) -> leverera faktura -> kreditera faktura, 4783: Köp som privatperson(faktura) -> makulera faktura")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreateOrderWithInvoiceAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -68,7 +68,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4784: Köp som privatperson(faktura) -> leverera faktura -> kreditera faktura")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void DeliverWithInvoiceAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -119,7 +119,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4784: Köp som privatperson(faktura) -> leverera faktura -> kreditera faktura")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithInvoiceAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -171,7 +171,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4776: Köp som företag(faktura) -> leverera faktura -> kreditera faktura")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithInvoiceAsCompanyAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -223,7 +223,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4783: Köp som privatperson(faktura) -> makulera faktura")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CancelWithInvoiceAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -269,7 +269,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4775: Köp som företag(faktura) -> makulera faktura")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CancelWithInvoiceAsCompanyAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -314,7 +314,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "5702: RequireElectronicIdAuthentication] As a user I want to have a setting that will trigger BankId to be required on orders in the checkout")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void EnsureRequireIdAuthenticationShowUpWithInvoice(Product[] products)
         {
             Assert.DoesNotThrow(() => 
@@ -325,7 +325,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "5738")]
-        [TestCaseSource(nameof(TestData), new object[] { false, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { false, false, false, false })]
         public void UpdateOrderWithInvoiceAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrow(() => 
@@ -350,7 +350,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "?")]
-        [TestCaseSource(nameof(TestData), new object[] { false, false, true})]
+        [TestCaseSource(nameof(TestData), new object[] { false, false, false, true })]
         public void CreditOrderRowWithFeeWithInvoiceAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -404,5 +404,40 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Deliveries.First().Credits.First().OrderRows.Count, Is.EqualTo(2));
             });
         }
+
+        [RetryWithException(2)]
+        [Test(Description = "?")]
+        [TestCaseSource(nameof(TestData), new object[] { false, true, true, false })]
+        public void AddOrderRowWithDiscountWithInvoiceAsPrivateAsync(Product[] products)
+        {
+            Assert.DoesNotThrowAsync(async () =>
+            {
+                GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
+
+                    .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                    .Orders.Last().Order.OrderId.StoreValue(out var orderId)
+
+                    // Add order row 1
+                    .Orders.Last().Order.Table.Toggle.Click()
+                    .Orders.Last().Order.Table.AddOrderRowPercentDiscount.Set(20)
+                    .Orders.Last().Order.Table.AddOrderRow.ClickAndGo()
+
+                    // Add order row 2
+                    .Orders.Last().Order.Table.Toggle.Click()
+                    .Orders.Last().Order.Table.AddOrderRowAmountDiscount.Set(100)
+                    .Orders.Last().Order.Table.AddOrderRow.ClickAndGo()
+
+                    // Validate order rows info
+                    .Orders.Last().OrderRows.Should.HaveCount(3);
+                    //.Orders.Last().OrderRows.First().Quantity.Should.Equal("2.00")
+
+                    ////// Validate deliveries info
+                    //.Orders.Last().Deliveries.Count.Should.Equal(1)
+                    //.Orders.Last().Deliveries.First().Status.Should.Equal("Sent")
+                    //.Orders.Last().Deliveries.First().DeliveryAmount.Should.Equal(int.Parse((products.First().UnitPrice * 2).ToString()).ToString())
+                    //.Orders.Last().Deliveries.First().CreditedAmount.Should.Equal((int.Parse((products.First().UnitPrice * 2).ToString()) - 200).ToString());
+            });
+        }
+
     }
 }

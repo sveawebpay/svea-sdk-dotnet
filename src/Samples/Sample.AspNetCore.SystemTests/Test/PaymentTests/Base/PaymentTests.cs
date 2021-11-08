@@ -80,13 +80,24 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
                     foreach (var product in products)
                     {
-                        product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasDiscount == !string.IsNullOrEmpty(y.OriginalPrice.Value)].Name.Value;
-
+                        if (product.HasAmountDiscount)
+                        {
+                            product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasAmountDiscount == !string.IsNullOrEmpty(y.AmountDiscount.Value)].Name.Value;
+                        }
+                        else if(product.HasPercentDiscount)
+                        {
+                            product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasPercentDiscount == !string.IsNullOrEmpty(y.PercentDiscount.Value)].Name.Value;
+                        }
+                        else
+                        {
+                            product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasPercentDiscount == string.IsNullOrEmpty(y.PercentDiscount.Value) && product.HasPercentDiscount == string.IsNullOrEmpty(y.PercentDiscount.Value)].Name.Value;
+                        }
+                        
                         x
                         .Products.Rows[y => y.Name.Value == product.Name].AddToCart.ClickAndGo<ProductsPage>()
                         .Products.Rows[y => y.Name.Value == product.Name].Price.StoreNumericalValue(out var price, characterToRemove: " ")
                         .Products.Rows[y => y.Name.Value == product.Name].Price.StoreCurrency(out var currency, characterToRemove: " ")
-                        .Products.Rows[y => y.Name.Value == product.Name].OriginalPrice.StoreNumericalValue(out var originalPrice, characterToRemove: " ");
+                        .Products.Rows[y => y.Name.Value == product.Name].AmountDiscount.StoreNumericalValue(out var originalPrice, characterToRemove: " ");
 
                         if (product.Quantity != 1)
                         {
@@ -97,7 +108,6 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
                         product.UnitPrice = price;
                         product.Currency = currency;
-                        product.DiscountAmount = product.HasDiscount ? (originalPrice - price) : 0;
                     }
 
                     _amount = $"{ products.Sum(p => p.UnitPrice * p.Quantity) } {products.First().Currency}";
@@ -210,7 +220,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                 .Header.Orders.ClickAndGo();
         }
 
-        protected static IEnumerable TestData(bool singleProduct = true, bool hasDiscount = false, bool manySameArticle = false)
+        protected static IEnumerable TestData(bool singleProduct = true, bool hasAmountDiscount = false, bool hasPercentDiscount = false, bool manySameArticle = false)
         {
             var data = new List<object>();
 
@@ -218,21 +228,21 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             {
                 data.Add(new[]
                    {
-                    new Product { Quantity = 1, HasDiscount = hasDiscount }
+                    new Product { Quantity = 1, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
                 });
             }
             else if(manySameArticle)
             {
                 data.Add(new[]
                    {
-                    new Product { Quantity = 4, HasDiscount = hasDiscount }
+                    new Product { Quantity = 4, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
                 });
             }    
             else
                 data.Add(new[]
                 {
-                    new Product { Quantity = 3, HasDiscount = hasDiscount },
-                    new Product { Quantity = 2 }
+                    new Product { Quantity = 3, HasAmountDiscount = hasAmountDiscount },
+                    new Product { Quantity = 2, HasPercentDiscount = hasPercentDiscount }
                 });
 
             yield return data.ToArray();

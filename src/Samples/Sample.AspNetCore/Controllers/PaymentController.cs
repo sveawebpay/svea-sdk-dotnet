@@ -79,12 +79,15 @@ namespace Sample.AspNetCore.Controllers
             return RedirectToAction("Details", "Orders");
         }
 
-        [HttpGet]
-        public async Task<ActionResult> AddOrderRow(long paymentId)
+        [HttpPost]
+        public async Task<ActionResult> AddOrderRow(long paymentId, int? amountDiscountOrderRow, int? percentDiscountOrderRow)
         {
             try
             {
                 var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
+
+                var discount = amountDiscountOrderRow.HasValue ? amountDiscountOrderRow : percentDiscountOrderRow.HasValue ? percentDiscountOrderRow : 0;
+                var useDiscountPercent = !amountDiscountOrderRow.HasValue && (percentDiscountOrderRow.HasValue);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -96,10 +99,10 @@ namespace Sample.AspNetCore.Controllers
                             name: "Slim Fit 512",
                             quantity: 2,
                             unitPrice: 100,
-                            discount: 0,
+                            discount: discount.Value,
                             vatPercent: 12,
                             unit: "SEK",
-                            false,
+                            useDiscountPercent,
                             TimeSpan.FromSeconds(15)
                         )
                     ).ConfigureAwait(false);
@@ -115,12 +118,15 @@ namespace Sample.AspNetCore.Controllers
             return RedirectToAction("Details", "Orders");
         }
 
-        [HttpGet]
-        public async Task<ActionResult> AddOrderRows(long paymentId)
+        [HttpPost]
+        public async Task<ActionResult> AddOrderRows(long paymentId, int? amountDiscountOrderRows, int? percentDiscountOrderRows)
         {
             try
             {
                 var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
+
+                var discount = amountDiscountOrderRows.HasValue ? amountDiscountOrderRows : percentDiscountOrderRows.HasValue ? percentDiscountOrderRows : 0;
+                var useDiscountPercent = !amountDiscountOrderRows.HasValue && (percentDiscountOrderRows.HasValue);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -130,7 +136,7 @@ namespace Sample.AspNetCore.Controllers
                     {
                         new NewOrderRow(
                             name: "Slim Fit 512",
-                             quantity: 2,
+                            quantity: 2,
                             unitPrice: 100,
                             vatPercent: 12,
                             discount: 0,

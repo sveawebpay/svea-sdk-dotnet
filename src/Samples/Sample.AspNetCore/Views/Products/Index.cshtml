@@ -41,7 +41,10 @@ else if (TempData["ErrorMessage"] != null)
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                Original Price
+                Discount Amount
+            </th>
+            <th>
+                Discount Percent
             </th>
             <th></th>
         </tr>
@@ -64,10 +67,13 @@ else if (TempData["ErrorMessage"] != null)
                 @Html.DisplayFor(modelItem => item.Class)
             </td>
             <td>
-                @((item.Price - item.DiscountAmount).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))
+                @((item.Price).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))
             </td>
             <td>
-                @(item.DiscountAmount != 0 ? item.Price.ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")) : null)
+                @(item.DiscountAmount != 0 ? item.DiscountAmount.ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")) : null)
+            </td>
+            <td>
+                @(item.DiscountPercent != 0 ? item.DiscountPercent.ToString() + "%" : null)
             </td>
             <td>
                 @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

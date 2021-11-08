@@ -77,9 +77,9 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                     break;
             }
 
-            page
-                .PaymentMethods.TotalAmount.IsVisible.WaitTo.BeTrue()
-                .PaymentMethods.TotalAmount.Should.ContainAmount(amount);
+            //page
+            //    .PaymentMethods.TotalAmount.IsVisible.WaitTo.BeTrue()
+            //    .PaymentMethods.TotalAmount.Should.ContainAmount(amount);
 
             if (entity == Entity.Option.Company && checkout == Checkout.Option.Identification)
             {

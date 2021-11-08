@@ -4,52 +4,74 @@
 <h2>Your cart</h2>
 <table class="table table-bordered table-striped">
     <thead>
-    <tr>
-        <th>Quantity</th>
-        <th>Item</th>
+        <tr>
+            <th>Quantity</th>
+            <th>Item</th>
 
-        <th class="text-right">Price</th>
-        <th class="text-right">Subtotal</th>
-    </tr>
+            <th class="text-right">Unit price</th>
+            <th class="text-right">Sub total</th>
+            <th class="text-right">Applied discount</th>
+            <th class="text-right">Sub total after disocunt</th>
+        </tr>
     </thead>
     <tbody>
-    @foreach (var line in Model.CartLines)
-    {
+        @foreach (var line in Model.CartLines)
+        {
         <tr>
             <td class="text-center">
                 <form asp-action="UpdateQuantity" asp-controller="Cart" method="post">
                     <input type="hidden" name="id"
-                           value="@line.Product.ProductId"/>
-                    <input type="number" required min="1" name="Quantity" value="@line.Quantity" automation="input-quantity"/>
+                           value="@line.Product.ProductId" />
+                    <input type="number" required min="1" name="Quantity" value="@line.Quantity" automation="input-quantity" />
                     <button type="submit" class="btn btn-sm btn-danger" automation="button-updatequantity">
                         Update
                     </button>
                 </form>
             </td>
+            @{
+                var discount = line.Product.DiscountAmount != 0
+                    ? $"{line.Product.DiscountAmount.ToString("c", CultureInfo.CreateSpecificCulture("sv-SE"))}"
+                    : line.Product.DiscountPercent != 0 ? $"{line.Product.DiscountPercent}%" : null;
+
+                var orderRowTotalBeforeDiscount = (line.Quantity * line.Product.Price);
+
+                var orderRowTotalAfterDiscount = line.Product.DiscountAmount != 0
+                    ? (orderRowTotalBeforeDiscount - line.Product.DiscountAmount).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE"))
+                    : line.Product.DiscountPercent != 0
+                    ? (orderRowTotalBeforeDiscount - (orderRowTotalBeforeDiscount * line.Product.DiscountPercent / 100)).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE"))
+                    : orderRowTotalBeforeDiscount.ToString("c", CultureInfo.CreateSpecificCulture("sv-SE"));
+
+            }
             <td class="text-left">@line.Product.Name</td>
-            <td class="text-right"> @((line.Product.Price - line.Product.DiscountAmount).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))</td>
+            <td class="text-right"> @((line.Product.Price).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))</td>
             <td class="text-right">
-                @((line.Quantity * (line.Product.Price - line.Product.DiscountAmount)).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))
+                @(orderRowTotalBeforeDiscount)
+            </td>
+            <td class="text-right">
+                @(discount)
+            </td>
+            <td class="text-right">
+                @(orderRowTotalAfterDiscount)
             </td>
             <td>
                 <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
                     <input type="hidden" name="Id"
-                           value="@line.Product.ProductId"/>
+                           value="@line.Product.ProductId" />
                     <button type="submit" class="btn btn-sm btn-danger">
                         Remove
                     </button>
                 </form>
             </td>
         </tr>
-    }
+        }
     </tbody>
     <tfoot>
-    <tr>
-        <td colspan="3" class="text-right">Total:</td>
-        <td class="text-right">
-            @Model.CalculateTotal().ToString("c", CultureInfo.CreateSpecificCulture("sv-SE"))
-        </td>
-    </tr>
+        <tr>
+            <td colspan="3" class="text-right">Total:</td>
+            <td class="text-right">
+                @Model.CalculateTotal().ToString("c", CultureInfo.CreateSpecificCulture("sv-SE"))
+            </td>
+        </tr>
     </tfoot>
 </table>
 <div class="text-center">

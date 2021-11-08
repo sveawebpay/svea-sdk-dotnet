@@ -117,10 +117,9 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task AddOrderRow_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AddOrderRowResponse, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
-            var orderRowResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
-            var expectedOrderRowId = orderRowResponseObject.OrderRowId.FirstOrDefault(); //new AddOrderRowsResponse(orderRowResponseObject);
+            var expectedResponse = new Order(orderResponseObject, null);
 
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowResponse));
 
@@ -140,22 +139,25 @@ namespace Svea.WebPay.SDK.Tests
             ).ConfigureAwait(false);
 
             // Assert
-            Assert.Contains(resourceResponse.Resource.OrderRows, x => x.OrderRowId == expectedOrderRowId);
+            foreach (var id in expectedResponse.OrderRows.Select(x => x.OrderRowId))
+            {
+                Assert.Contains(resourceResponse.Resource.OrderRows, x => x.OrderRowId == id);
+            }
         }
 
         [Fact]
         public async System.Threading.Tasks.Task AddOrderRows_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AddOrderRowsResponse, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
-            var orderRowsResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
-            var expectedResponse = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowsResponse);
+            var expectedResponse = new Order(orderResponseObject, null);
 
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowsResponse));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
+
             var resourceResponse = await order.Actions.AddOrderRows(
                 new AddOrderRowsRequest(
                     new List<NewOrderRow> {
@@ -184,7 +186,7 @@ namespace Svea.WebPay.SDK.Tests
             ).ConfigureAwait(false);
 
             // Assert
-            foreach (var id in resourceResponse.Resource.OrderRows.Select(x => x.OrderRowId))
+            foreach (var id in expectedResponse.OrderRows.Select(x => x.OrderRowId))
             {
                 Assert.Contains(resourceResponse.Resource.OrderRows, x => x.OrderRowId == id);
             }

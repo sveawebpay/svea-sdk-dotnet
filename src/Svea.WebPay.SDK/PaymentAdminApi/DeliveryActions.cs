@@ -9,6 +9,11 @@ namespace Svea.WebPay.SDK.PaymentAdminApi
     {
         public DeliveryActions(long orderId, DeliveryResponseObject deliveryResponse, SveaHttpClient client)
         {
+            if (deliveryResponse.Actions == null)
+            {
+                return;
+            }
+
             foreach (var action in deliveryResponse.Actions)
             {
                 switch (action)

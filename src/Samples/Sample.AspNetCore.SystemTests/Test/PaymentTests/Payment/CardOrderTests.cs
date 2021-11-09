@@ -45,7 +45,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
 
@@ -91,7 +91,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
@@ -191,7 +191,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -239,8 +239,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -287,7 +286,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.False);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -328,7 +327,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
 

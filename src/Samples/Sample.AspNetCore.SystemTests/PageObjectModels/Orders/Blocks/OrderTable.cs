@@ -40,14 +40,14 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         [FindByAutomation("input-addorderrowpercentdiscount")]
         public NumberInput<TOwner> AddOrderRowPercentDiscount { get; private set; }
 
-        [FindByAutomation("input-addorderrowpercentamount")]
+        [FindByAutomation("input-addorderrowamountdiscount")]
         public NumberInput<TOwner> AddOrderRowAmountDiscount { get; private set; }
 
         [FindByAutomation("input-addorderrowspercentdiscount")]
         public NumberInput<TOwner> AddOrderRowsPercentDiscount { get; private set; }
 
-        [FindByAutomation("input-addorderrowspercentamount")]
-        public NumberInput<TOwner> AddOrderRowsPercentAmount { get; private set; }
+        [FindByAutomation("input-addorderrowsamountdiscount")]
+        public NumberInput<TOwner> AddOrderRowsAmountDiscount { get; private set; }
 
         [FindFirst]
         public ControlList<Link<TOwner>, TOwner> AvailableActions { get; private set; }

@@ -105,7 +105,6 @@ else if (TempData["ErrorMessage"] != null)
                                         case nameof(order.Actions.AddOrderRow):
                                             <td>
                                                 <form asp-action="@nameof(order.Actions.AddOrderRow)" asp-controller="Payment" asp-route-paymentId="@order.Id" method="post">
-                                                    <input type="hidden" name="paymentId" value="@order.Id" />
                                                     <span style="display:inline-block; margin-right: 1rem">Discount:</span>
                                                     <input type="number" name="percentDiscountOrderRow" automation="input-addorderrowpercentdiscount" min="0" max="100" style="width:80px"/>
                                                     <label for="percentDiscountOrderRow" style="margin-right: 1rem">% or</label>
@@ -118,7 +117,6 @@ else if (TempData["ErrorMessage"] != null)
                                         case nameof(order.Actions.AddOrderRows):
                                             <td>
                                                 <form asp-action="@nameof(order.Actions.AddOrderRows)" asp-controller="Payment" asp-route-paymentId="@order.Id" method="post">
-                                                    <input type="hidden" name="paymentId" value="@order.Id" />
                                                     <span style="display:inline-block; margin-right: 1rem">Discount:</span>
                                                     <input type="number" name="percentDiscountOrderRows" automation="input-addorderrowspercentdiscount" min="0" max="100" style="width:80px"/>
                                                     <label for="percentDiscountOrderRows" style="margin-right: 1rem">% or</label>
@@ -213,9 +211,7 @@ else if (TempData["ErrorMessage"] != null)
                                             <tr>
                                                 <td>DeliverOrderRow</td>
                                                 <td>
-                                                    <form asp-action="ActionsDeliverOrderRow" asp-controller="Payment" asp-route-paymentId="@order.Id" asp-route-orderRowId="@orderRow.OrderRowId" method="post">
-                                                        <input type="hidden" name="paymentId" value="@order.Id" />
-                                                        <input type="hidden" name="orderRowId" value="@orderRow.OrderRowId" />
+                                                    <form asp-action="DeliverOrderRow" asp-controller="Payment" asp-route-paymentId="@order.Id" asp-route-orderRowId="@orderRow.OrderRowId" method="post">
                                                         <input type="number" min="1" name="quantity" value="" automation="input-deliverorderrowquantity" />
                                                         <button type="submit" class="btn btn-sm btn-danger mx-2 mb-1" automation="a-deliverorderrow">Execute</button>
                                                     </form>

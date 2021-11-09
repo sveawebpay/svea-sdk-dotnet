@@ -19,10 +19,10 @@ else if (TempData["ErrorMessage"] != null)
 
 
 <p>
-	<a asp-action="Create">Create New Product</a>
+    <a asp-action="Create">Create New Product</a>
 </p>
 <table class="table">
-	<thead>
+    <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -48,44 +48,24 @@ else if (TempData["ErrorMessage"] != null)
             </th>
             <th></th>
         </tr>
-	</thead>
-	<tbody>
-	@foreach (var item in Model)
-	{
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reference)
-            </td>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.Type)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Class)
-            </td>
-            <td>
-                @((item.Price).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))
-            </td>
-            <td>
-                @(item.DiscountAmount != 0 ? item.DiscountAmount.ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")) : null)
-            </td>
-            <td>
-                @(item.DiscountPercent != 0 ? item.DiscountPercent.ToString() + "%" : null)
-            </td>
-            <td>
-                @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |*@
-                <a class="btn btn-primary" automation="button-addtocart" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductId">Add to Cart</a>
-            </td>
-        </tr>
-	}
-	</tbody>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Reference)</td>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>@Html.DisplayFor(modelItem => item.Class)</td>
+                <td>@((item.Price).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))</td>
+                <td>@(item.DiscountAmount != 0 ? item.DiscountAmount.ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")) : null)</td>
+                <td>@(item.DiscountPercent != 0 ? item.DiscountPercent.ToString() + "%" : null)</td>
+                <td><a class="btn btn-primary" automation="button-addtocart" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductId">Add to Cart</a></td>
+            </tr>
+        }
+    </tbody>
 </table>
 @if (CartService.CartLines.Any())
 {
-	@await Component.InvokeAsync("CartSummary")
+    @await Component.InvokeAsync("CartSummary")
 }

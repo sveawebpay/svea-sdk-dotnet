@@ -15,9 +15,13 @@ namespace Sample.AspNetCore.Models
         [Range(1, int.MaxValue)]
         public decimal Price { get; set; }
 
-        [Display(Name = "Discount")]
+        [Display(Name = "Discount Amount")]
         [Range(1, int.MaxValue)]
         public decimal DiscountAmount { get; set; }
+
+        [Display(Name = "Discount Percent")]
+        [Range(0, 100)]
+        public decimal DiscountPercent { get; set; }
 
         public int ProductId { get; set; }
         public string Reference { get; set; }

@@ -5,6 +5,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json.Serialization;
 
     public class UpdateOrderRowsRequest : IConfigurableAwait
     {
@@ -26,6 +27,8 @@
         }
 
         public List<NewRow> OrderRows { get; }
+
+        [JsonIgnore]
         public bool ConfigureAwait { get; }
     }
 }

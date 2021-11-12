@@ -79,12 +79,15 @@ namespace Sample.AspNetCore.Controllers
             return RedirectToAction("Details", "Orders");
         }
 
-        [HttpGet]
-        public async Task<ActionResult> AddOrderRow(long paymentId)
+        [HttpPost]
+        public async Task<ActionResult> AddOrderRow(long paymentId, int? amountDiscountOrderRow, int? percentDiscountOrderRow)
         {
             try
             {
                 var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
+
+                var discount = amountDiscountOrderRow.HasValue ? amountDiscountOrderRow : percentDiscountOrderRow.HasValue ? percentDiscountOrderRow : 0;
+                var useDiscountPercent = !amountDiscountOrderRow.HasValue && (percentDiscountOrderRow.HasValue);
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -95,12 +98,13 @@ namespace Sample.AspNetCore.Controllers
                             articleNumber: "1234567890",
                             name: "Slim Fit 512",
                             quantity: 2,
-                            unitPrice: 100,
-                            discountAmount: 0,
+                            unitPrice: 1000,
+                            discount: discount.Value,
                             vatPercent: 12,
                             unit: "SEK",
-                            TimeSpan.FromSeconds(15)
-                        )
+                            useDiscountPercent
+                        ),
+                        new PollingTimeout(15)
                     ).ConfigureAwait(false);
 
                     TempData["OrderRowMessage"] = $"Order row has been added -> {response.ResourceUri.AbsoluteUri}";
@@ -114,12 +118,18 @@ namespace Sample.AspNetCore.Controllers
             return RedirectToAction("Details", "Orders");
         }
 
-        [HttpGet]
-        public async Task<ActionResult> AddOrderRows(long paymentId)
+        [HttpPost]
+        public async Task<ActionResult> AddOrderRows(long paymentId, int? amountDiscountOrderRows, int? percentDiscountOrderRows)
         {
             try
             {
                 var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
+
+                var discount1 = percentDiscountOrderRows.HasValue ? percentDiscountOrderRows.Value : 0;
+                var useDiscountPercent1 = percentDiscountOrderRows.HasValue;
+
+                var discount2 = amountDiscountOrderRows.HasValue ? amountDiscountOrderRows.Value : 0;
+                var useDiscountPercent2 = false;
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -129,23 +139,25 @@ namespace Sample.AspNetCore.Controllers
                     {
                         new NewOrderRow(
                             name: "Slim Fit 512",
-                             quantity: 2,
-                            unitPrice: 100,
+                            quantity: 2,
+                            unitPrice: 1000,
                             vatPercent: 12,
-                            discountAmount: 0,
+                            discount: discount1,
                             rowId: null,
                             unit: "SEK",
-                            articleNumber: "1234567890"
+                            articleNumber: "0987654321",
+                            useDiscountPercent1
                         ),
                         new NewOrderRow(
                             name: "Slim Fit 513",
-                            quantity: 3,
-                            unitPrice: 200,
-                            vatPercent: 25,
-                            discountAmount: 0,
+                            quantity: 2,
+                            unitPrice: 1000,
+                            vatPercent: 12,
+                            discount: discount2,
                             rowId: null,
                             unit: "SEK",
-                            articleNumber: "0987654321"
+                            articleNumber: "1234567890",
+                            useDiscountPercent2
                         )
                     };
 
@@ -296,7 +308,7 @@ namespace Sample.AspNetCore.Controllers
                                 quantity: 2,
                             unitPrice: 100,
                             vatPercent: 12,
-                            discountAmount: 0,
+                            discount: 0,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "1234567890"

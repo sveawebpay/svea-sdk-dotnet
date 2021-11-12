@@ -15,6 +15,7 @@
             Quantity = orderRowResponse.Quantity;
             UnitPrice = orderRowResponse.UnitPrice;
             DiscountAmount = orderRowResponse.DiscountAmount;
+            DiscountPercent = orderRowResponse.DiscountPercent;
             VatPercent = orderRowResponse.VatPercent;
             Unit = orderRowResponse.Unit;
             IsCancelled = orderRowResponse.IsCancelled;
@@ -25,7 +26,7 @@
 
         public OrderRowActions Actions { get; }
 
-        public int OrderRowId { get; }
+        public long OrderRowId { get; }
 
         /// <summary>
         /// Determines if the row is cancelled.

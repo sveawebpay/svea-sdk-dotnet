@@ -51,7 +51,9 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
 
             [FindByXPath("td[5]")] public Text<_> Price { get; set; }
 
-            [FindByXPath("td[6]")] public Text<_> OriginalPrice { get; set; }
+            [FindByXPath("td[6]")] public Text<_> AmountDiscount { get; set; }
+
+            [FindByXPath("td[7]")] public Text<_> PercentDiscount { get; set; }
         }
     }
 }

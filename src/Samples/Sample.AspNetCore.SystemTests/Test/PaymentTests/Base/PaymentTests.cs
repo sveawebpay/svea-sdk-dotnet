@@ -19,7 +19,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 {
     public abstract class PaymentTests : TestBase
     {
-        private string _amount;
+        private string _amountStr;
+        protected double _amount;
 
         public PaymentTests(string driverAlias)
             : base(driverAlias)
@@ -63,6 +64,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
         protected ProductsPage SelectProducts(Product[] products)
         {
+            _amount = 0;
+
             return Go.To<ProductsPage>()
                 .Do((x) =>
                 {
@@ -80,13 +83,25 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
                     foreach (var product in products)
                     {
-                        product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasDiscount == !string.IsNullOrEmpty(y.OriginalPrice.Value)].Name.Value;
-
+                        if (product.HasAmountDiscount)
+                        {
+                            product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasAmountDiscount == !string.IsNullOrWhiteSpace(y.AmountDiscount.Value)].Name.Value;
+                        }
+                        else if(product.HasPercentDiscount)
+                        {
+                            product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasPercentDiscount == !string.IsNullOrWhiteSpace(y.PercentDiscount.Value)].Name.Value;
+                        }
+                        else
+                        {
+                            product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasAmountDiscount == !string.IsNullOrWhiteSpace(y.AmountDiscount.Value) && product.HasPercentDiscount == !string.IsNullOrWhiteSpace(y.PercentDiscount.Value)].Name.Value;
+                        }
+                        
                         x
                         .Products.Rows[y => y.Name.Value == product.Name].AddToCart.ClickAndGo<ProductsPage>()
                         .Products.Rows[y => y.Name.Value == product.Name].Price.StoreNumericalValue(out var price, characterToRemove: " ")
                         .Products.Rows[y => y.Name.Value == product.Name].Price.StoreCurrency(out var currency, characterToRemove: " ")
-                        .Products.Rows[y => y.Name.Value == product.Name].OriginalPrice.StoreNumericalValue(out var originalPrice, characterToRemove: " ");
+                        .Products.Rows[y => y.Name.Value == product.Name].AmountDiscount.StoreNumericalValue(out var amountDiscount, characterToRemove: " ")
+                        .Products.Rows[y => y.Name.Value == product.Name].PercentDiscount.StoreNumericalValue(out var percentDiscount, characterToRemove: "%");
 
                         if (product.Quantity != 1)
                         {
@@ -97,10 +112,22 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
                         product.UnitPrice = price;
                         product.Currency = currency;
-                        product.DiscountAmount = product.HasDiscount ? (originalPrice - price) : 0;
+
+                        double discount = 0;
+                        
+                        if(!string.IsNullOrEmpty(amountDiscount.ToString()) && amountDiscount != 0)
+                        {
+                            discount = double.Parse(amountDiscount.ToString());
+                        }
+                        else if (!string.IsNullOrEmpty(percentDiscount.ToString()) && percentDiscount != 0)
+                        {
+                            discount = double.Parse(percentDiscount.ToString()) * (product.UnitPrice * product.Quantity) / 100;
+                        }
+
+                        _amount += (product.UnitPrice * product.Quantity) - discount;
                     }
 
-                    _amount = $"{ products.Sum(p => p.UnitPrice * p.Quantity) } {products.First().Currency}";
+                    _amountStr = $"{_amount} {products.First().Currency}";
                 });
         }
 
@@ -188,7 +215,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     .IdentifyEntity(checkout, entity);
             }
             
-            page.Pay(checkout, entity, paymentMethod, _amount);
+            page.Pay(checkout, entity, paymentMethod, _amountStr);
 
             try
             {
@@ -210,7 +237,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                 .Header.Orders.ClickAndGo();
         }
 
-        protected static IEnumerable TestData(bool singleProduct = true, bool hasDiscount = false, bool manySameArticle = false)
+        protected static IEnumerable TestData(bool singleProduct = true, bool hasAmountDiscount = false, bool hasPercentDiscount = false, bool manySameArticle = false)
         {
             var data = new List<object>();
 
@@ -218,21 +245,21 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             {
                 data.Add(new[]
                    {
-                    new Product { Quantity = 1, HasDiscount = hasDiscount }
+                    new Product { Quantity = 1, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
                 });
             }
             else if(manySameArticle)
             {
                 data.Add(new[]
                    {
-                    new Product { Quantity = 4, HasDiscount = hasDiscount }
+                    new Product { Quantity = 4, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
                 });
             }    
             else
                 data.Add(new[]
                 {
-                    new Product { Quantity = 3, HasDiscount = hasDiscount },
-                    new Product { Quantity = 2 }
+                    new Product { Quantity = 3, HasAmountDiscount = hasAmountDiscount },
+                    new Product { Quantity = 2, HasPercentDiscount = hasPercentDiscount }
                 });
 
             yield return data.ToArray();

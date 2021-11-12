@@ -37,15 +37,16 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         [InlineData("ref1", "Name", 20, 1000, 100, 0, "stttt")]
         [InlineData("ref1", "", 20, 1000, 100, 0, "st")]
         [InlineData("ref1", "adsfasdfasdfffffffffffffffasdfasdsdfsdfsd", 20, 1000, 100, 0, "st")]
+        [InlineData("ref1", "Name", 20, 1000, 101, 0, "st", true)]
         public void ThrowsArgumentException_WhenGivenInvalidAddOrderRowRequest(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
-            int vatPercent, string unit)
+            int vatPercent, string unit, bool useDiscountPercent = false)
         {
             //ASSERT
             Assert.Throws<ArgumentOutOfRangeException>(() => new AddOrderRowRequest(articleNumber, name,
                 new MinorUnit(quantity),
                 new MinorUnit(unitPrice),
                 new MinorUnit(discountAmount),
-                new MinorUnit(vatPercent), unit));
+                new MinorUnit(vatPercent), unit, useDiscountPercent));
         }
 
         [Theory]

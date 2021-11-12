@@ -34,6 +34,7 @@
         }
 
         public OrderActions Actions { get; }
+
         public IList<string> AvailableActions { get; }
         public Address BillingAddress { get; }
         public MinorUnit CancelledAmount { get; }

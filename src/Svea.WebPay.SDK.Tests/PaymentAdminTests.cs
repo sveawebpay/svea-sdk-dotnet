@@ -30,7 +30,7 @@ namespace Svea.WebPay.SDK.Tests
             // Assert
             Assert.True(DataComparison.OrdersAreEqual(expectedOrder, actualOrder));
         }
-        
+
         [Fact]
         public async System.Threading.Tasks.Task GetOrderWithUri_Should_Serialize_AsExpected()
         {
@@ -117,10 +117,9 @@ namespace Svea.WebPay.SDK.Tests
         public async System.Threading.Tasks.Task AddOrderRow_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AddOrderRowResponse, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
-            var orderRowResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
-            var expectedOrderRow = new AddOrderRowsResponse(orderRowResponseObject);
+            var expectedResponse = new Order(orderResponseObject, null);
 
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowResponse));
 
@@ -132,39 +131,42 @@ namespace Svea.WebPay.SDK.Tests
                     name: "Slim Fit 512",
                     quantity: new MinorUnit(2),
                     unitPrice: new MinorUnit(1000),
-                    discountAmount: new MinorUnit(0),
+                    discount: new MinorUnit(0),
                     vatPercent: new MinorUnit(12),
                     unit: "SEK",
-                    TimeSpan.FromSeconds(15)
-                )
+                    false
+                ), new PollingTimeout(15)
             ).ConfigureAwait(false);
 
             // Assert
-            Assert.Equal(expectedOrderRow.OrderRowId, resourceResponse.Resource.OrderRowId);
+            foreach (var id in expectedResponse.OrderRows.Select(x => x.OrderRowId))
+            {
+                Assert.Contains(resourceResponse.Resource.OrderRows, x => x.OrderRowId == id);
+            }
         }
 
         [Fact]
         public async System.Threading.Tasks.Task AddOrderRows_Should_Serialize_AsExpected()
         {
             // Arrange
-            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AddOrderRowsResponse, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
-            var orderRowsResponseObject = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowResponse);
-            var expectedResponse = JsonSerializer.Deserialize<AddOrderRowsResponseObject>(DataSample.AddOrderRowsResponse);
+            var expectedResponse = new Order(orderResponseObject, null);
 
             var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowsResponse));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
+
             var resourceResponse = await order.Actions.AddOrderRows(
                 new AddOrderRowsRequest(
-                    new List<NewOrderRow> { 
+                    new List<NewOrderRow> {
                         new NewOrderRow(
                             name: "Slim Fit 512",
                             quantity: new MinorUnit(2),
                             unitPrice: new MinorUnit(1000),
                             vatPercent: new MinorUnit(12),
-                            discountAmount: new MinorUnit(0),
+                            discount: new MinorUnit(0),
                             rowId: 3,
                             unit: "SEK",
                             articleNumber: "1234567890"
@@ -174,7 +176,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: new MinorUnit(3),
                             unitPrice: new MinorUnit(2000),
                             vatPercent: new MinorUnit(5),
-                            discountAmount: new MinorUnit(0),
+                            discount: new MinorUnit(0),
                             rowId: 4,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -184,8 +186,10 @@ namespace Svea.WebPay.SDK.Tests
             ).ConfigureAwait(false);
 
             // Assert
-            // List of OrderRowId
-            Assert.Equal(expectedResponse.OrderRowId, resourceResponse.Resource.OrderRowId);
+            foreach (var id in expectedResponse.OrderRows.Select(x => x.OrderRowId))
+            {
+                Assert.Contains(resourceResponse.Resource.OrderRows, x => x.OrderRowId == id);
+            }
         }
 
         [Fact]
@@ -277,7 +281,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: order.OrderRows.ElementAt(0).Quantity,
                             unitPrice: order.OrderRows.ElementAt(0).UnitPrice,
                             vatPercent: order.OrderRows.ElementAt(0).VatPercent,
-                            discountAmount: order.OrderRows.ElementAt(0).DiscountAmount,
+                            discount: order.OrderRows.ElementAt(0).DiscountAmount,
                             rowId: order.OrderRows.ElementAt(0).OrderRowId,
                             unit: order.OrderRows.ElementAt(0).Unit,
                             articleNumber: order.OrderRows.ElementAt(0).ArticleNumber
@@ -287,7 +291,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: order.OrderRows.ElementAt(1).Quantity,
                             unitPrice: order.OrderRows.ElementAt(1).UnitPrice,
                             vatPercent: order.OrderRows.ElementAt(1).VatPercent,
-                            discountAmount: order.OrderRows.ElementAt(1).DiscountAmount,
+                            discount: order.OrderRows.ElementAt(1).DiscountAmount,
                             rowId: order.OrderRows.ElementAt(1).OrderRowId,
                             unit: order.OrderRows.ElementAt(1).Unit,
                             articleNumber: order.OrderRows.ElementAt(1).ArticleNumber
@@ -364,8 +368,8 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: new MinorUnit(2),
                             unitPrice: new MinorUnit(1000),
                             vatPercent: new MinorUnit(12),
-                            discountAmount: new MinorUnit(0),
-                            rowId: 1,                            
+                            discount: new MinorUnit(0),
+                            rowId: 1,
                             unit: "SEK",
                             articleNumber: "1234567890"
                         ),
@@ -374,7 +378,7 @@ namespace Svea.WebPay.SDK.Tests
                             quantity: new MinorUnit(3),
                             unitPrice: new MinorUnit(2000),
                             vatPercent: new MinorUnit(5),
-                            discountAmount: new MinorUnit(0),
+                            discount: new MinorUnit(0),
                             rowId: 2,
                             unit: "SEK",
                             articleNumber: "0987654321"
@@ -483,7 +487,7 @@ namespace Svea.WebPay.SDK.Tests
         public void DeliveredOrder_Should_Serialize_AsExpected()
         {
             // Act
-            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject > (DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
             var order = new Order(orderResponseObject, null);
 
             // Assert
@@ -531,7 +535,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(5588817, delivery.Id);
             Assert.Equal(1111272, delivery.InvoiceId);
             Assert.Equal("Sent", delivery.Status);
-            
+
             Assert.Equal(2, delivery.OrderRows.Count);
 
             var orderRow1 = delivery.OrderRows.ElementAt(0);

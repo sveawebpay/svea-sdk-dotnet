@@ -4,6 +4,7 @@
 
     using System;
     using System.Collections.Generic;
+    using System.Text.Json.Serialization;
 
     public class ReplaceOrderRowsRequest : IConfigurableAwait
     {
@@ -22,6 +23,7 @@
         /// </summary>
         public IList<NewOrderRow> OrderRows { get; }
 
+        [JsonIgnore]
         public bool ConfigureAwait { get; }
     }
 }

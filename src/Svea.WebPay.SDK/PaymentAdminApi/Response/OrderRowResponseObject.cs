@@ -7,7 +7,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi.Response
     public class OrderRowResponseObject : OrderRowBase
     {
         [JsonConstructor]
-        public OrderRowResponseObject(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount,
+        public OrderRowResponseObject(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountAmount, MinorUnit discountPercent,
             MinorUnit vatPercent, string unit, bool isCancelled, int orderRowId, IList<string> actions)
         {
             ArticleNumber = articleNumber;
@@ -15,6 +15,7 @@ namespace Svea.WebPay.SDK.PaymentAdminApi.Response
             Quantity = quantity;
             UnitPrice = unitPrice;
             DiscountAmount = discountAmount;
+            DiscountPercent = discountPercent;
             VatPercent = vatPercent;
             Unit = unit;
             IsCancelled = isCancelled;

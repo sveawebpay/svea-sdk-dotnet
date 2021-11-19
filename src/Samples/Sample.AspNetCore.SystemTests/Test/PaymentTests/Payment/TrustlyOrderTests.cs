@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4781: Köp som privatperson i anonyma flödet(Trustly) -> kreditera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreateOrderWithTrustlyAsPrivateAnonymousAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -46,7 +46,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.False);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo("aaa@bbb.ccc"));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.DirectBank)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
@@ -66,7 +66,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4781: Köp som privatperson i anonyma flödet(Trustly) -> kreditera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithTrustlyAsPrivateAnonymousAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -98,7 +98,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.False);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo("aaa@bbb.ccc"));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.DirectBank)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 

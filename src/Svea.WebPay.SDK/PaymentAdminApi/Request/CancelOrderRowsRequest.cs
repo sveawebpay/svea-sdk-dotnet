@@ -1,5 +1,7 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Request
 {
+    using System.Text.Json.Serialization;
+
     public class CancelOrderRowsRequest : IConfigurableAwait
     {
         /// <summary>
@@ -14,6 +16,8 @@
         }
 
         public long[] OrderRowIds { get; }
+
+        [JsonIgnore]
         public bool ConfigureAwait { get; }
     }
 }

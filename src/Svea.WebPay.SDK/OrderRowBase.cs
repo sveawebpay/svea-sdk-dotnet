@@ -1,5 +1,7 @@
 ﻿namespace Svea.WebPay.SDK
 {
+    using System.Text.Json.Serialization;
+
     public class OrderRowBase
     {
         /// <summary>
@@ -27,9 +29,14 @@
         public MinorUnit UnitPrice { get; internal set; }
 
         /// <summary>
-        /// The discount amount of the product
+        /// The discount amount of the product.
         /// </summary>
         public MinorUnit DiscountAmount { get; internal set; }
+
+        /// <summary>
+        /// The discount percent of the product.
+        /// </summary>
+        public MinorUnit DiscountPercent { get; internal set; }
 
         /// <summary>
         /// The VAT percentage of the current product. Valid vat percentage for that country.

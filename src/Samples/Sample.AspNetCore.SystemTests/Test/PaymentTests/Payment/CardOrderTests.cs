@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreateOrderWithCardAsCompanyAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -45,7 +45,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
 
@@ -61,7 +61,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void DeliverWithCardAsCompanyAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -91,7 +91,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
 
@@ -111,7 +111,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4772: Köp som privatperson i anonyma flödet(kort) -> makulera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithCardAsPrivateAnonymousAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -157,7 +157,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4771: Köp som företag i anonyma flödet(kort) -> makulera transaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithCardAsCompanyAnonymousAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -191,7 +191,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -204,7 +204,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4782: Köp som företag(kort)-> leverera korttransaktion -> makulera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CancelWithCardAsCompanyAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -239,8 +239,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -253,7 +252,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4777: Köp som privatperson(kort)-> leverera korttransaktion -> makulera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, false, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CancelWithCardAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () =>
@@ -287,7 +286,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.False);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
 
@@ -300,7 +299,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
         [RetryWithException(2)]
         [Test(Description = "4782: Köp som privat(kort) med DiscountAmount-> leverera korttransaktion")]
-        [TestCaseSource(nameof(TestData), new object[] { true, true, false })]
+        [TestCaseSource(nameof(TestData), new object[] { true, true, false, false })]
         public void CreateOrderWithDiscountAmountWithCardAsPrivateAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () => 
@@ -328,7 +327,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
-                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(products.Sum(x => x.Quantity * x.UnitPrice) * 100));
+                Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
 

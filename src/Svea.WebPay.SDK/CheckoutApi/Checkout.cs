@@ -45,7 +45,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// <param name="orderId">Checkoutorderid of the specified order.</param>
         /// <param name="updateOrderModel">Contains the order rows that will be set to the specified order, as well as MerchantData.</param>
         /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
-        /// <remarks>Quantity, UnitPrice, DiscountPercent and VatPercent for each order row is expected to be given in minor currency.</remarks>
+        /// <remarks>Quantity, UnitPrice, Discount and VatPercent for each order row is expected to be given in minor currency.</remarks>
         /// <returns></returns>
         public async Task<Data> UpdateOrder(long orderId, UpdateOrderModel updateOrderModel, bool configureAwait = false)
         {

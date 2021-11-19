@@ -139,20 +139,22 @@ namespace Sample.AspNetCore.Controllers
                             quantity: 2,
                             unitPrice: 100,
                             vatPercent: 12,
-                            discount: 0,
+                            discount: discount.Value,
                             rowId: null,
                             unit: "SEK",
-                            articleNumber: "1234567890"
+                            articleNumber: "1234567890",
+                            useDiscountPercent
                         ),
                         new NewOrderRow(
                             name: "Slim Fit 513",
                             quantity: 3,
                             unitPrice: 200,
                             vatPercent: 25,
-                            discount: 0,
+                            discount: discount.Value,
                             rowId: null,
                             unit: "SEK",
-                            articleNumber: "0987654321"
+                            articleNumber: "0987654321",
+                            useDiscountPercent
                         )
                     };
 
@@ -260,15 +262,19 @@ namespace Sample.AspNetCore.Controllers
                     var newOrderRows = new List<NewOrderRow>();
                     foreach (var orderRow in existingOrderRows)
                     {
+                        var discount = orderRow.DiscountAmount != 0 ? orderRow.DiscountAmount : orderRow.DiscountPercent;
+                        var useDiscountPercent = orderRow.DiscountAmount != 0 ? false : true;
+
                         newOrderRows.Add(new NewOrderRow(
                             orderRow.Name,
                           (orderRow.Quantity + 1) % 4 + 1,
                             orderRow.UnitPrice,
                             orderRow.VatPercent,
-                            orderRow.DiscountAmount,
+                            discount,
                             orderRow.OrderRowId,
                             orderRow.Unit,
-                            orderRow.ArticleNumber
+                            orderRow.ArticleNumber,
+                            useDiscountPercent
                         ));
                     }
 
@@ -369,20 +375,26 @@ namespace Sample.AspNetCore.Controllers
             {
                 var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
+              
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderRowAction(paymentOrder, orderRowId, OrderRowActionType.CanUpdateRow);
 
                 if (TempData["ErrorMessage"] == null)
                 {
                     var orderRow = paymentOrder.OrderRows.FirstOrDefault(row => row.OrderRowId == orderRowId);
+
+                    var discount = orderRow.DiscountAmount != 0 ? orderRow.DiscountAmount : orderRow.DiscountPercent;
+                    var useDiscountPercent = orderRow.DiscountAmount != 0 ? false : true;
+
                     await orderRow.Actions.UpdateOrderRow(
                         new UpdateOrderRowRequest(
                             orderRow.ArticleNumber,
                             orderRow.Name + " Updated",
                             orderRow.Quantity,
                             orderRow.UnitPrice,
-                            orderRow.DiscountAmount,
+                            discount,
                             orderRow.VatPercent,
-                            orderRow.Unit
+                            orderRow.Unit,
+                            useDiscountPercent
                         )
                     ).ConfigureAwait(false);
 

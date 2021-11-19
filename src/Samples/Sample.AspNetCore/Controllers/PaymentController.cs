@@ -98,7 +98,7 @@ namespace Sample.AspNetCore.Controllers
                             articleNumber: "1234567890",
                             name: "Slim Fit 512",
                             quantity: 2,
-                            unitPrice: 100,
+                            unitPrice: 1000,
                             discount: discount.Value,
                             vatPercent: 12,
                             unit: "SEK",
@@ -125,8 +125,11 @@ namespace Sample.AspNetCore.Controllers
             {
                 var paymentOrder = await this._sveaClient.PaymentAdmin.GetOrder(paymentId).ConfigureAwait(false);
 
-                var discount = amountDiscountOrderRows.HasValue ? amountDiscountOrderRows : percentDiscountOrderRows.HasValue ? percentDiscountOrderRows : 0;
-                var useDiscountPercent = !amountDiscountOrderRows.HasValue && (percentDiscountOrderRows.HasValue);
+                var discount1 = percentDiscountOrderRows.HasValue ? percentDiscountOrderRows.Value : 0;
+                var useDiscountPercent1 = percentDiscountOrderRows.HasValue;
+
+                var discount2 = amountDiscountOrderRows.HasValue ? amountDiscountOrderRows.Value : 0;
+                var useDiscountPercent2 = false;
 
                 TempData["ErrorMessage"] = ActionsValidationHelper.ValidateOrderAction(paymentOrder, OrderActionType.CanAddOrderRow);
 
@@ -134,27 +137,27 @@ namespace Sample.AspNetCore.Controllers
                 {
                     var newOrderRows = new List<NewOrderRow>
                     {
-                        new NewOrderRow(
+                         new NewOrderRow(
                             name: "Slim Fit 512",
                             quantity: 2,
-                            unitPrice: 100,
+                            unitPrice: 1000,
                             vatPercent: 12,
-                            discount: discount.Value,
-                            rowId: null,
-                            unit: "SEK",
-                            articleNumber: "1234567890",
-                            useDiscountPercent
-                        ),
-                        new NewOrderRow(
-                            name: "Slim Fit 513",
-                            quantity: 3,
-                            unitPrice: 200,
-                            vatPercent: 25,
-                            discount: discount.Value,
+                            discount: discount1,
                             rowId: null,
                             unit: "SEK",
                             articleNumber: "0987654321",
-                            useDiscountPercent
+                            useDiscountPercent1
+                        ),
+                        new NewOrderRow(
+                            name: "Slim Fit 513",
+                            quantity: 2,
+                            unitPrice: 1000,
+                            vatPercent: 12,
+                            discount: discount2,
+                            rowId: null,
+                            unit: "SEK",
+                            articleNumber: "1234567890",
+                            useDiscountPercent2
                         )
                     };
 

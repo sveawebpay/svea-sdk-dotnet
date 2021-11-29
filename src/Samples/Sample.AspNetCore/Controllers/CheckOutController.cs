@@ -12,6 +12,7 @@ using Cart = Sample.AspNetCore.Models.Cart;
 
 namespace Sample.AspNetCore.Controllers
 {
+    using Svea.WebPay.SDK.Exceptions;
     using System.Globalization;
 
     public class CheckOutController : Controller
@@ -65,6 +66,11 @@ namespace Sample.AspNetCore.Controllers
                 var data = await _sveaClient.Checkout.CreateOrder(paymentOrderRequest).ConfigureAwait(false);
 
                 return data;
+            }
+            catch (HttpResponseException ex)
+            {
+                Debug.Write(ex.Message);
+                return null;
             }
             catch (Exception ex)
             {

@@ -3,7 +3,7 @@
     using System;
     using System.Net.Http;
 
-    internal class HttpResponseException : Exception
+    public class HttpResponseException : Exception
     {
         public HttpResponseException(HttpResponseMessage httpResponse,
             ErrorResponse problemResponse = null,

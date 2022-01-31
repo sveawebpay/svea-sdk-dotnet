@@ -150,11 +150,11 @@ jobs:
           authtoken: ${{ secrets.NGROK_AUTHTOKEN }}
           Credentials.MerchantId: ${{ secrets.MERCHANT_ID }}
           Credentials.Secret: ${{ secrets.MERCHANT_SECRET }}
-          MerchantSettings.PushUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/api/svea/push/{checkout.order.uri}
+          MerchantSettings.PushUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/api/svea/push/{checkout.order.uri}/?marketId={marketId}
           MerchantSettings.TermsUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/terms
           MerchantSettings.CheckoutUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/CheckOut/LoadPaymentMenu
           MerchantSettings.ConfirmationUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/checkout/thankyou
-          MerchantSettings.CheckoutValidationCallbackUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/api/svea/validation/{checkout.order.uri}
+          MerchantSettings.CheckoutValidationCallbackUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1

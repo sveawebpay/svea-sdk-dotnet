@@ -16,3 +16,9 @@ for (i = 0; i < coll.length; i++) {
         }
     });
 }
+
+var updateSettings = function(element) {
+    var form = element.closest('form');
+    form.find('[type="hidden"]:first').val(element.html());
+    form.submit();
+};

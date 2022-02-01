@@ -6,24 +6,42 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 {
     public static class IdentificationHelper
     {
-        public static SveaPaymentFramePage ProceedWithPrivateIdentification(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage ProceedWithSwedishPrivateIdentification(this SveaPaymentFramePage page)
         {
             return page
                 .Entity.IsPrivate.Click()
                 .B2CIdentification.Email.Set(TestDataService.Email)
-                .B2CIdentification.ZipCode.Set(TestDataService.ZipCode)
+                .B2CIdentification.ZipCode.Set(TestDataService.SwedishZipCode)
                 .Submit.Click()
                 .Do(x =>
                 {
                     if (x.B2CIdentification.PersonalNumber.Exists(new SearchOptions { IsSafely = true }))
                     {
                         x
-                        .B2CIdentification.PersonalNumber.Set(TestDataService.PersonalNumber)
-                        .B2CIdentification.Phone.Set(TestDataService.PhoneNumber)
+                        .B2CIdentification.PersonalNumber.Set(TestDataService.SwedishPersonalNumber)
+                        .B2CIdentification.Phone.Set(TestDataService.SwedishPhoneNumber)
                         .Submit.Click();
                     }
                 });
+        }
 
+        public static SveaPaymentFramePage ProceedWithNorwegianPrivateIdentification(this SveaPaymentFramePage page)
+        {
+            return page
+                .Entity.IsPrivate.Click()
+                .B2CIdentification.Email.Set(TestDataService.Email)
+                .B2CIdentification.ZipCode.Set(TestDataService.NorwegianZipCode)
+                .Submit.Click()
+                .Do(x =>
+                {
+                    if (x.B2CIdentification.PersonalNumber.Exists(new SearchOptions { IsSafely = true }))
+                    {
+                        x
+                        .B2CIdentification.PersonalNumber.Set(TestDataService.NorwegianPersonalNumber)
+                        .B2CIdentification.Phone.Set(TestDataService.NorwegianPhoneNumber)
+                        .Submit.Click();
+                    }
+                });
         }
 
         public static SveaPaymentFramePage ProceedWithCompanyIdentification(this SveaPaymentFramePage page)
@@ -38,7 +56,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                     if (x.B2BIdentification.Phone.Exists(new SearchOptions { IsSafely = true }))
                     {
                         x
-                        .B2BIdentification.Phone.Set(TestDataService.PhoneNumber)
+                        .B2BIdentification.Phone.Set(TestDataService.SwedishPhoneNumber)
                         .Submit.Click();
                     }
                 });
@@ -49,15 +67,15 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .Entity.IsPrivate.Click()
                 .B2CIdentification.Email.Set("aaa@bbb.ccc")
-                .B2CIdentification.ZipCode.Set(TestDataService.ZipCode)
+                .B2CIdentification.ZipCode.Set(TestDataService.SwedishZipCode)
                 .Submit.Click()
                 .AnonymousToggle.Click()
                 .B2CAnonymous.IsVisible.WaitTo.BeTrue()
-                .B2CAnonymous.PhoneNumber.Set(TestDataService.PhoneNumber)
-                .B2CAnonymous.FirstName.Set(TestDataService.FirstName)
-                .B2CAnonymous.LastName.Set(TestDataService.LastName)
-                .B2CAnonymous.Street.Set(TestDataService.Street)
-                .B2CAnonymous.City.Set(TestDataService.City)
+                .B2CAnonymous.PhoneNumber.Set(TestDataService.SwedishPhoneNumber)
+                .B2CAnonymous.FirstName.Set(TestDataService.SwedishFirstName)
+                .B2CAnonymous.LastName.Set(TestDataService.SwedishLastName)
+                .B2CAnonymous.Street.Set(TestDataService.SwedishStreet)
+                .B2CAnonymous.City.Set(TestDataService.SwedishCity)
                 .Submit.Click();
         }
 
@@ -68,11 +86,11 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .AnonymousToggle.Click()
                 .B2BAnonymous.IsVisible.WaitTo.BeTrue()
                 .B2BAnonymous.Email.Set(TestDataService.Email)
-                .B2BAnonymous.PhoneNumber.Set(TestDataService.PhoneNumber)
+                .B2BAnonymous.PhoneNumber.Set(TestDataService.SwedishPhoneNumber)
                 .B2BAnonymous.OrganizationName.Set(TestDataService.CompanyName)
-                .B2BAnonymous.Street.Set(TestDataService.Street)
-                .B2BAnonymous.ZipCode.Set(TestDataService.ZipCode)
-                .B2BAnonymous.City.Set(TestDataService.City)
+                .B2BAnonymous.Street.Set(TestDataService.SwedishStreet)
+                .B2BAnonymous.ZipCode.Set(TestDataService.SwedishZipCode)
+                .B2BAnonymous.City.Set(TestDataService.SwedishCity)
                 .Submit.Click();
         }
     }

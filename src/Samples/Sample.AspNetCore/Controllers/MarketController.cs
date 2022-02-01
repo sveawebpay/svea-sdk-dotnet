@@ -44,7 +44,7 @@
                 this.marketService.Update();
             }
             
-            return Redirect(Request.Headers["Referer"].ToString());
+            return await Task.FromResult(Redirect(Request.Headers["Referer"].ToString()));
         }
     }
 }

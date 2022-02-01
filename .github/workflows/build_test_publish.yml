@@ -167,8 +167,10 @@ jobs:
       - name: Run Unit Tests
         run: dotnet test --configuration ${{ env.Configuration }} src/Svea.WebPay.SDK.Tests/Svea.WebPay.SDK.Tests.csproj
         env:
-          Credentials:MerchantId: ${{ secrets.MERCHANT_ID }}
-          Credentials:Secret: ${{ secrets.MERCHANT_SECRET }}
+          Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
+          Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
+          Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
+          Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
           
       - name: Publish Sdk Sample site
         run: dotnet publish --configuration ${{ env.Configuration }} -p:Version=${{ needs.variables.outputs.nuGetVersionV2 }} --no-restore src/Samples/Sample.AspNetCore/Sample.AspNetCore.csproj --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/samplesite'
@@ -190,8 +192,10 @@ jobs:
         run:
             dotnet Sample.AspNetCore.dll &
         env:
-          Credentials:MerchantId: ${{ secrets.MERCHANT_ID }}
-          Credentials:Secret: ${{ secrets.MERCHANT_SECRET }}
+          Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
+          Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
+          Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
+          Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
           MerchantSettings:PushUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/api/svea/push/{checkout.order.uri}
           MerchantSettings:TermsUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/terms
           MerchantSettings:CheckoutUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/CheckOut/LoadPaymentMenu

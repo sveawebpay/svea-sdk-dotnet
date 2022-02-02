@@ -20,7 +20,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
             Assert.DoesNotThrow(() => 
             {
-                SelectProducts(products)
+                SelectProducts(products, PaymentMethods.Option.Card)
                     .InternationalCheckout.ClickAndGo()
                     .SveaFrame.SwitchTo<SveaPaymentFramePage>()
                     .International.Should.Within(20).BeVisible()

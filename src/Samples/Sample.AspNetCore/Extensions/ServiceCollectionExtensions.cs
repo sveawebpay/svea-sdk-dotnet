@@ -1,14 +1,20 @@
-﻿using System;
-using System.Net.Http;
-
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
-
 using Svea.WebPay.SDK;
+using System;
+using System.Net.Http;
 
 namespace Sample.AspNetCore.Extensions
 {
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.Extensions.Options;
+
+    using Sample.AspNetCore.Models;
+
+    using System.Collections.Generic;
+    using System.Linq;
+
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddSveaClient(this IServiceCollection services, Uri checkoutUri, Uri paymentAdminUri, string merchantId, string secret)
@@ -23,10 +29,15 @@ namespace Sample.AspNetCore.Extensions
 
             services.AddTransient(s =>
             {
+                var httpContextAccessor= s.GetService<IHttpContextAccessor>();
+                var marketService = s.GetService<Market>();
+                var currentMarket = httpContextAccessor.HttpContext.Request.Query["marketId"].FirstOrDefault() ?? marketService.MarketId;
+                var credentials = s.GetService<IOptions<List<Credentials>>>()?.Value;
+                var credential = credentials?.FirstOrDefault(x => x.MarketId.Equals(currentMarket, StringComparison.InvariantCultureIgnoreCase));
                 var httpClientFactory = s.GetService<IHttpClientFactory>();
                 var checkoutApiHttpClient = httpClientFactory.CreateClient("checkoutApi");
                 var paymentAdminApiHttpClient = httpClientFactory.CreateClient("paymentAdminApi");
-                return new SveaWebPayClient(checkoutApiHttpClient, paymentAdminApiHttpClient, new Svea.WebPay.SDK.Credentials(merchantId, secret), s.GetService<ILogger>());
+                return new SveaWebPayClient(checkoutApiHttpClient, paymentAdminApiHttpClient, new Svea.WebPay.SDK.Credentials(credential?.MerchantId ?? merchantId, credential?.Secret ?? secret), s.GetService<ILogger>());
             });
 
             return services;

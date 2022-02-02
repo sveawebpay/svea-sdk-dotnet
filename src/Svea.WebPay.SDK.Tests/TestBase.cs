@@ -10,7 +10,7 @@ namespace Svea.WebPay.SDK.Tests
 
     using Svea.WebPay.SDK.Tests.Helpers;
     using Svea.WebPay.SDK.Tests.Models;
-
+    using System.Linq;
     using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
@@ -47,7 +47,8 @@ namespace Svea.WebPay.SDK.Tests
             {
                 BaseAddress = Configuration.SveaApiUrls.PaymentAdminApiUri
             };
-            this.Sut = new SveaWebPayClient(checkoutApihttpClient, paymentAdminApiHttpClient, new Credentials(Configuration.Credentials.MerchantId, Configuration.Credentials.Secret));
+
+            this.Sut = new SveaWebPayClient(checkoutApihttpClient, paymentAdminApiHttpClient, new Credentials(Configuration.Credentials.First(x => x.MarketId == "SE").MerchantId, Configuration.Credentials.First(x => x.MarketId == "SE").Secret));
         }
 
         #region Mock
@@ -160,7 +161,7 @@ namespace Svea.WebPay.SDK.Tests
                 BaseAddress = Configuration.SveaApiUrls.PaymentAdminApiUri
             };
 
-            return new SveaWebPayClient(httpClient, httpClient, new Credentials(Configuration.Credentials.MerchantId, Configuration.Credentials.Secret));
+            return new SveaWebPayClient(httpClient, httpClient, new Credentials(Configuration.Credentials.First(x => x.MarketId == "SE").MerchantId, Configuration.Credentials.First(x => x.MarketId == "SE").Secret));
         }
 
         #endregion

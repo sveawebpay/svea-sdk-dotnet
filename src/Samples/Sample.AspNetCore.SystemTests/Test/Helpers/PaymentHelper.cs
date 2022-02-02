@@ -54,20 +54,25 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Submit.ClickAndGo<TrustlyPaymentPage>()
                 .Banks[0].IsVisible.WaitTo.BeTrue()
                 .Banks[0].Click()
+                .Next.IsVisible.WaitTo.Within(60).BeTrue()
                 .Next.Click()
                 .Do(x => { 
                     if(checkout == Checkout.Option.Anonymous)
                     {
-                        x.PersonalNumber.Set(TestDataService.PersonalNumber);
+                        x.PersonalNumber.IsVisible.WaitTo.Within(60).BeTrue()
+                        .PersonalNumber.Set(TestDataService.SwedishPersonalNumber);
                     }
                 })
+                .SecurityCodeOption.IsVisible.WaitTo.Within(60).BeTrue()
                 .SecurityCodeOption.Click()
                 .Next.Click()
+                .MessageCode.IsVisible.WaitTo.Within(60).BeTrue()
                 .MessageCode.StoreValue(out string code)
                 .Code.Set(code)
                 .Next.Click()
                 .AccountOptions.IsVisible.WaitTo.Within(60).BeTrue()
                 .Next.Click()
+                .MessageCode.IsVisible.WaitTo.Within(60).BeTrue()
                 .MessageCode.StoreValue(out code)
                 .Code.Set(code)
                 .Next.Click()
@@ -105,6 +110,16 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.Swish.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Swish.Click()
                 .Submit.Click();
+        }
+
+        public static SveaPaymentFramePage PayWithVipps(this SveaPaymentFramePage page)
+        {
+            return page
+                .PaymentMethods.Vipps.IsVisible.WaitTo.BeTrue()
+                .PaymentMethods.Vipps.Click()
+                .Submit.ClickAndGo<VippsPaymentPage>()
+                .Next.Click()
+                .SwitchToRoot<SveaPaymentFramePage>();
         }
     }
 }

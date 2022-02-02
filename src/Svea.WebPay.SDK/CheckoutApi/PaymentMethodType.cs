@@ -13,6 +13,7 @@
         Leasing,
         PaymentPlan,
         Trustly,
-        Swish
+        Swish,
+        Vipps
     }
 }

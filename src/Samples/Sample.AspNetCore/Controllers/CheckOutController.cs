@@ -18,17 +18,20 @@ namespace Sample.AspNetCore.Controllers
     public class CheckOutController : Controller
     {
         private readonly Cart _cartService;
+        private readonly Market _marketService;
         private readonly SveaWebPayClient _sveaClient;
         private readonly Models.MerchantSettings _merchantSettings;
 
 
-    public CheckOutController(
-        IOptionsSnapshot<Models.MerchantSettings> merchantsAccessor,
-        Cart cartService,
-        SveaWebPayClient sveaClient)
+        public CheckOutController(
+            IOptionsSnapshot<Models.MerchantSettings> merchantsAccessor,
+            Cart cartService,
+            Market marketService,
+            SveaWebPayClient sveaClient)
         {
             _merchantSettings = merchantsAccessor.Value;
             _cartService = cartService;
+            _marketService = marketService;
             _sveaClient = sveaClient;
         }
 
@@ -52,15 +55,17 @@ namespace Sample.AspNetCore.Controllers
             var orderItems = _cartService.CartLines.ToOrderItems().ToList();
             try
             {
-                var noRegion = new RegionInfo("NO");
-                var nok = new CurrencyCode("NOK");
+                var currencyRequest = new CurrencyCode(_marketService.CurrencyCode);
+                var languageRequest = new Language(_marketService.LanguageId);
+                var regionRequest = new RegionInfo(_marketService.MarketId);
 
-                RegionInfo region = isInternational ? new RegionInfo("US") : new RegionInfo("SE");
+                var region = isInternational ? new RegionInfo("US") : regionRequest;
 
-                var sek = new CurrencyCode("SEK");
+                var pushUri = new Uri(_merchantSettings.PushUri.ToString().Replace("{marketId}", _marketService.MarketId));
+                var checkoutValidationCallbackUri = new Uri(_merchantSettings.CheckoutValidationCallbackUri.ToString().Replace("{marketId}", _marketService.MarketId));
 
-                var paymentOrderRequest = new CreateOrderModel(region, sek, new Language("sv-SE"), DateTime.Now.Ticks.ToString(),
-                    new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(_merchantSettings.PushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, _merchantSettings.CheckoutValidationCallbackUri),
+                var paymentOrderRequest = new CreateOrderModel(region, currencyRequest, languageRequest, DateTime.Now.Ticks.ToString(), 
+                    new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(pushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, checkoutValidationCallbackUri),
                     new Svea.WebPay.SDK.CheckoutApi.Cart(orderItems), requireBanKId);
 
                 var data = await _sveaClient.Checkout.CreateOrder(paymentOrderRequest).ConfigureAwait(false);

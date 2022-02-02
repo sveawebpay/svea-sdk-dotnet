@@ -11,5 +11,10 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Base
         [FindByClass("navbar-nav")] public Header<TOwner> Header { get; private set; }
 
         [FindById("")] public TextInput<TOwner> SearchInput { get; private set; }
+
+        [FindById("marketMenuButton")] public Button<TOwner> Market { get; private set; }
+
+        [FindByClass("dropdown-menu", Visibility = Visibility.Visible)]
+        public ControlList<Link<TOwner>, TOwner> Markets { get; private set; }
     }
 }

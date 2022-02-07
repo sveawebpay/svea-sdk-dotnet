@@ -24,7 +24,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Vipps)
 
-                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") && x.Orders.Any(), 10, 3)
+                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") && x.Orders.Any(), 15, 3)
 
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().OrderRows.First().Table.Toggle.Click()

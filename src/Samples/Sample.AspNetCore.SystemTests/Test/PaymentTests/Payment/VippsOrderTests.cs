@@ -1,5 +1,6 @@
 ﻿using Atata;
 using NUnit.Framework;
+using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.Services;
 using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
@@ -22,10 +23,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         {
             Assert.DoesNotThrowAsync(async () => 
             {
-                GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Vipps)
+                GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Vipps);
 
-                .Market.Click()
-                .Markets[m => m.Content.Value == "NO"].Click()
+                Go.To<ProductsPage>()
+                .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 25, retryInterval: 3)
+                .Header.Orders.ClickAndGo()
 
                 .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") && x.Orders.Any(), 15, 3)
 

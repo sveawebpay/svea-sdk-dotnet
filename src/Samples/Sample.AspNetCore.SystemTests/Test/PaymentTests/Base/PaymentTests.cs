@@ -267,6 +267,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                         x.Wait(1).Market.Click()
                         .Markets[m => m.Content.Value == "NO"].Click();
                     }
+                    else
+                    {
+                        x.Wait(1).Market.Click()
+                        .Markets[m => m.Content.Value == "SE"].Click();
+                    }
                 })
                 .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 25, retryInterval: 3)
                 .Header.Orders.ClickAndGo();

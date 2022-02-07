@@ -260,6 +260,14 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
         protected OrdersPage GoToOrdersPage(Product[] products, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
         {
             return GoToThankYouPage(products, checkout, entity, paymentMethod)
+                .Do(x => 
+                { 
+                    if(paymentMethod == PaymentMethods.Option.Vipps)
+                    {   
+                        x.Wait(1).Market.Click()
+                        .Markets[m => m.Content.Value == "NO"].Click();
+                    }
+                })
                 .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 25, retryInterval: 3)
                 .Header.Orders.ClickAndGo();
         }

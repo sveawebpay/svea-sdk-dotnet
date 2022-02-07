@@ -4,6 +4,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Orders;
+using Sample.AspNetCore.SystemTests.PageObjectModels.Payment;
 using Sample.AspNetCore.SystemTests.PageObjectModels.ThankYou;
 using Sample.AspNetCore.SystemTests.Services;
 using Sample.AspNetCore.SystemTests.Test.Base;
@@ -14,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 {
@@ -21,6 +23,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
     {
         private string _amountStr;
         protected double _amount;
+        protected string _orderId;
 
         public PaymentTests(string driverAlias)
             : base(driverAlias)
@@ -149,24 +152,32 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
         protected SveaPaymentFramePage GoToSveaPaymentFrame(Product[] products, bool requireBankId = false, bool isInternational = false, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
         {
+            Frame<SveaPaymentFramePage, PaymentPage> frame;
+
             if (requireBankId)
             {
-                return SelectProducts(products, paymentMethod)
+                frame = SelectProducts(products, paymentMethod)
                     .CheckoutAndRequireBankId.ClickAndGo()
-                    .SveaFrame.SwitchTo<SveaPaymentFramePage>();
+                    .SveaFrame;
             }
             else if (isInternational)
             {
-                return SelectProducts(products, paymentMethod)
+                frame = SelectProducts(products, paymentMethod)
                     .InternationalCheckout.ClickAndGo()
-                    .SveaFrame.SwitchTo<SveaPaymentFramePage>();
+                    .SveaFrame;
             }
             else 
             {
-                return SelectProducts(products, paymentMethod)
+                frame = SelectProducts(products, paymentMethod)
                     .AnonymousCheckout.ClickAndGo()
-                    .SveaFrame.SwitchTo<SveaPaymentFramePage>();
+                    .SveaFrame;
             }
+
+            var match = Regex.Match(frame.Attributes.Src.Value, "orderId=(\\d+)");
+
+            _orderId = match?.Groups?.Count > 1 ? match.Groups[1].Value : null;
+
+            return frame.SwitchTo<SveaPaymentFramePage>(); ;
         }
 
         protected SveaPaymentFramePage GoToBankId(Product[] products, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)

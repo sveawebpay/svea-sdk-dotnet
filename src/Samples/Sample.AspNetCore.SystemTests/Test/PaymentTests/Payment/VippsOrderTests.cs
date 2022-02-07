@@ -1,6 +1,5 @@
 ﻿using Atata;
 using NUnit.Framework;
-using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.Services;
 using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
@@ -25,41 +24,24 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Vipps);
 
-                Go.To<ProductsPage>()
-                .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 25, retryInterval: 3)
-                .Header.Orders.ClickAndGo()
-
-                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") && x.Orders.Any(), 15, 3)
-
-                .Orders.Last().Order.OrderId.StoreValue(out var orderId)
-                .Orders.Last().OrderRows.First().Table.Toggle.Click()
-                .Orders.Last().OrderRows.First().Table.DeliverOrderRowQuantity.Set(1)
-                .Orders.Last().OrderRows.First().Table.DeliverOrderRow.ClickAndGo()
-
-                // Validate order info
-                .RefreshPageUntil(x => x.Orders.Last().Order.OrderStatus.Value == nameof(OrderStatus.Delivered), 10, 3)
-                .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
-                .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Vipps))
-                .Orders.Last().Order.Table.Toggle.Click();
-
-            // Assert sdk/api response
-            var response = await _sveaClientNorway.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
+                // Assert sdk/api response
+                var response = await _sveaClientNorway.PaymentAdmin.GetOrder(long.Parse(_orderId)).ConfigureAwait(false);
 
                 Assert.That(response.Currency, Is.EqualTo("NOK"));
                 Assert.That(response.IsCompany, Is.False);
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
                 Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Vipps)));
-                Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
+                Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
                 CollectionAssert.AreEquivalent(
-                    new string[] { OrderActionType.CanCancelOrder, OrderActionType.CanCancelAmount },
+                    new string[] { OrderActionType.CanDeliverOrder, OrderActionType.CanCancelOrder, OrderActionType.CanCancelAmount },
                     response.AvailableActions
                 );
 
-                Assert.Null(response.OrderRows);
+                Assert.That(response.OrderRows.Count(), Is.EqualTo(1));
+                Assert.That(response.OrderRows.First().AvailableActions.Count, Is.EqualTo(0));
 
-                Assert.That(response.Deliveries.Count(), Is.EqualTo(1));
-                Assert.That(response.Deliveries.First().AvailableActions.Count, Is.EqualTo(0));
+                Assert.IsNull(response.Deliveries);
             });
         }
 

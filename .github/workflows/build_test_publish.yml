@@ -206,7 +206,7 @@ jobs:
         
       - name: Run SDK UI tests
         if: ${{ github.event_name != 'pull_request' && needs.variables.outputs.ENVIRONMENT != 'dev'}}
-        run: dotnet test --configuration ${{ env.Configuration }} src/Samples/Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.csproj --filter "FullyQualifiedName=Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment.VippsOrderTests.CreditWithVippsAsPrivateAsync"
+        run: dotnet test --configuration ${{ env.Configuration }} src/Samples/Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.csproj
         env:
           Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
           Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}

@@ -98,6 +98,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Base
         public static string PageSource()
         {
             return $"------ Start Page content ------"
+                + AtataContext.Current.Driver.Url
                 + Environment.NewLine
                 + Environment.NewLine
                 + AtataContext.Current.Driver.PageSource

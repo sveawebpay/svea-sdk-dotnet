@@ -20,7 +20,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithVippsAsPrivateAsync(Product[] products)
         {
-            Assert.DoesNotThrowAsync(async () => 
+            Assert.DoesNotThrowAsync(async () =>
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Vipps)
 
@@ -37,8 +37,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Vipps))
                 .Orders.Last().Order.Table.Toggle.Click();
 
-            // Assert sdk/api response
-            var response = await _sveaClientNorway.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
+                // Assert sdk/api response
+                var response = await _sveaClientNorway.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
                 Assert.That(response.Currency, Is.EqualTo("NOK"));
                 Assert.That(response.IsCompany, Is.False);
@@ -57,6 +57,5 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.Deliveries.First().AvailableActions.Count, Is.EqualTo(0));
             });
         }
-
     }
 }

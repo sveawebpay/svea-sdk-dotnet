@@ -13,6 +13,8 @@ using Sample.AspNetCore.Models;
 namespace Sample.AspNetCore
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -33,12 +35,14 @@ namespace Sample.AspNetCore
             var sveaApiUrls = sveaApiUrlsSettings.Get<SveaApiUrls>();
 
             var credentialsSettings = Configuration.GetSection("Credentials");
-            services.Configure<Credentials>(sveaApiUrlsSettings);
-            var credentials = credentialsSettings.Get<Credentials>();
+            services.Configure<List<Credentials>>(credentialsSettings);
+            var credentials = credentialsSettings.Get<List<Credentials>>();
 
             var merchantSettingsSettings = Configuration.GetSection("MerchantSettings");
             services.Configure<MerchantSettings>(sveaApiUrlsSettings);
             var merchantSettings = merchantSettingsSettings.Get<MerchantSettings>();
+
+            services.Configure<List<MarketSettings>>(Configuration.GetSection("Markets"));
 
             services.AddTransient(s => merchantSettings);
             services.AddDbContext<StoreDbContext>(options => options.UseInMemoryDatabase("Products"));
@@ -48,6 +52,8 @@ namespace Sample.AspNetCore
 
             services.Configure<MerchantSettings>(Configuration.GetSection("MerchantSettings"));
             services.AddScoped(provider => SessionCart.GetCart(provider));
+            services.AddScoped(provider => SessionMarket.GetMarket(provider));
+
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
             Console.WriteLine("Credentials");
@@ -62,7 +68,8 @@ namespace Sample.AspNetCore
             Console.WriteLine(JsonSerializer.Serialize(sveaApiUrlsSettings));
             Console.WriteLine(JsonSerializer.Serialize(sveaApiUrls));
 
-            services.AddSveaClient(sveaApiUrls.CheckoutApiUri, sveaApiUrls.PaymentAdminApiUri, credentials.MerchantId, credentials.Secret);
+            var credential = credentials.FirstOrDefault();
+            services.AddSveaClient(sveaApiUrls.CheckoutApiUri, sveaApiUrls.PaymentAdminApiUri, credential?.MerchantId, credential?.Secret);
             services.AddSession();
         }
 

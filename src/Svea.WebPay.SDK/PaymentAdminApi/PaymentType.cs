@@ -32,6 +32,11 @@
         /// <summary>
         /// Swish order
         /// </summary>
-        Swish
+        Swish,
+
+        /// <summary>
+        /// Vipps order
+        /// </summary>
+        Vipps
     }
 }

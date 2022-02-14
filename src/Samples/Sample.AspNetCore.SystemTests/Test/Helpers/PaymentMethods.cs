@@ -12,6 +12,7 @@
             AccountCredit,
             BlackFriday,
             Swish,
+            Vipps,
         }
     }
 }

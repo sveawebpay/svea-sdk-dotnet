@@ -16,6 +16,8 @@
 
         SWISH,
 
+        VIPPS,
+
         /// <summary>
         /// PaymentPlan order
         /// </summary>

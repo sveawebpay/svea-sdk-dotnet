@@ -6,7 +6,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 {
     public static class SveaPaymentFrameHelper
     {
-        public static SveaPaymentFramePage IdentifyEntity(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private)
+        public static SveaPaymentFramePage IdentifyEntity(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
         {
             page.Entity.IsVisible.WaitTo.BeTrue();
 
@@ -19,7 +19,15 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                     {
                         default:
                         case Checkout.Option.Identification:
-                            return page.ProceedWithPrivateIdentification().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            
+                            if(paymentMethod != PaymentMethods.Option.Vipps)
+                            {
+                                return page.ProceedWithSwedishPrivateIdentification().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            }
+                            else
+                            {
+                                return page.ProceedWithNorwegianPrivateIdentification().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            }
 
                         case Checkout.Option.Anonymous:
                             return page.ProceedWithPrivateAnonymous().PaymentMethods.IsVisible.WaitTo.BeTrue();
@@ -75,6 +83,10 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 case PaymentMethods.Option.Swish:
                     page.PaymentMethods.Swish.IsVisible.WaitTo.BeTrue().PaymentMethods.Swish.Click();
                     break;
+
+                case PaymentMethods.Option.Vipps:
+                    page.PaymentMethods.Vipps.IsVisible.WaitTo.BeTrue().PaymentMethods.Vipps.Click();
+                    break;
             }
 
             //page
@@ -112,6 +124,9 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
                 case PaymentMethods.Option.Swish:
                     return page.PayWithSwish();
+
+                case PaymentMethods.Option.Vipps:
+                    return page.PayWithVipps();
             }
         }
     }

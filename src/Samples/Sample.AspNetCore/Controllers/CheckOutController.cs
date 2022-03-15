@@ -59,7 +59,7 @@ namespace Sample.AspNetCore.Controllers
                 var languageRequest = new Language(_marketService.LanguageId);
                 var regionRequest = new RegionInfo(_marketService.MarketId);
 
-                var region = isInternational ? new RegionInfo("BE") : regionRequest;
+                var region = isInternational ? new RegionInfo("US") : regionRequest;
 
                 var pushUri = new Uri(_merchantSettings.PushUri.ToString().Replace("{marketId}", _marketService.MarketId));
                 var checkoutValidationCallbackUri = new Uri(_merchantSettings.CheckoutValidationCallbackUri.ToString().Replace("{marketId}", _marketService.MarketId));

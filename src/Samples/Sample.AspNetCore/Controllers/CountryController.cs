@@ -1,16 +1,14 @@
-﻿namespace Sample.AspNetCore.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+using Sample.AspNetCore.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Sample.AspNetCore.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
-    using Microsoft.Extensions.Options;
-
-    using Sample.AspNetCore.Models;
-
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     public class CountryController : Controller
     {
         private readonly ILogger<CountryController> logger;
@@ -30,21 +28,10 @@
             var selectedMarket = markets.FirstOrDefault(x => x.Countries.ToList().Contains(countryId));
             if (selectedMarket != null)
             {
-                this.marketService.SetMarket(selectedMarket.Id);
-                this.logger.LogInformation($"Market changed to {selectedMarket.Id}");
-                if (!selectedMarket.Languages.Contains(marketService.LanguageId))
-                {
-                    marketService.SetLanguage(selectedMarket.Languages.FirstOrDefault());
-                }
-
-                if (!selectedMarket.Currencies.Contains(marketService.CurrencyCode))
-                {
-                    marketService.SetCurrency(selectedMarket.Currencies.FirstOrDefault());
-                }
-
-                this.marketService.Update();
+                marketService.ChangeMarket(selectedMarket);
+                logger.LogInformation($"Market changed to {selectedMarket.Id}");
             }
-            
+
             return await Task.FromResult(Redirect(Request.Headers["Referer"].ToString()));
         }
     }

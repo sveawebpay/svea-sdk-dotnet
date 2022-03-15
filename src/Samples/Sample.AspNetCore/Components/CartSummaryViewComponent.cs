@@ -18,10 +18,7 @@ namespace Sample.AspNetCore.Components
 
         public IViewComponentResult Invoke()
         {
-            var m = marketService.MarketId;
-            var c = marketService.CountryId;
-
-            this.cart.IsInternational = m == "FI";
+            this.cart.IsInternational = marketService.MarketId == "FI";
             return View(this.cart);
         }
     }

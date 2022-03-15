@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
-
+    using Microsoft.Extensions.Logging;
     using Sample.AspNetCore.Extensions;
 
     using System;
@@ -11,9 +11,7 @@
     public class SessionMarket : Market
     {
         public const string MarketSessionKey = "_Market";
-
         [JsonIgnore] public ISession Session { get; set; }
-
 
         public override void SetMarket(string marketId)
         {

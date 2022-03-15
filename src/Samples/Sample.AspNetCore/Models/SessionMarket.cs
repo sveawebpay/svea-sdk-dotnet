@@ -33,6 +33,12 @@
             Session.SetJson(MarketSessionKey, this);
         }
 
+        public override void SetCountry(string countryId)
+        {
+            base.SetCountry(countryId);
+            Session.SetJson(MarketSessionKey, this);
+        }
+
 
         public static Market GetMarket(IServiceProvider services)
         {

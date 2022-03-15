@@ -44,3 +44,19 @@
         </div>
     </div>
 </form>
+
+
+<form asp-controller="Country" asp-action="SetCountry" method="post">
+    <input type="hidden" name="countryId"/>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="countryMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Country: @Model.SelectedCountry
+        </button>
+        <div class="dropdown-menu" aria-labelledby="countryMenuButton">
+            @foreach (var country in Model.AvailableCountries)
+            {
+                <a onclick="updateSettings($(this))" class="dropdown-item" href="#">@country</a>
+            }
+        </div>
+    </div>
+</form>

@@ -72,7 +72,7 @@ namespace Sample.AspNetCore.Controllers
 
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return Ok();
             }

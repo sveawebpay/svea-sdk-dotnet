@@ -1,6 +1,7 @@
 ﻿namespace Sample.AspNetCore.Models
 {
     using Svea.WebPay.SDK.CheckoutApi;
+    using System;
 
     public class Market
     {
@@ -28,6 +29,14 @@
             set => _currencyCode = value;
         }
 
+        private string _countryId;
+
+        public string CountryId
+        {
+            get => !string.IsNullOrWhiteSpace(_countryId) ? _countryId : "SE";
+            set => _countryId = value;
+        }
+
         public virtual void Update()
         {
         }
@@ -47,6 +56,10 @@
         {
             var currency = new CurrencyCode(currencyCode);
             CurrencyCode = currency.ToString();
+        }
+        public virtual void SetCountry(string countryId)
+        {
+            CountryId = countryId;
         }
     }
 }

@@ -1,13 +1,13 @@
-﻿namespace Sample.AspNetCore.Models
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Sample.AspNetCore.Extensions;
+
+using System;
+using System.Text.Json.Serialization;
+
+namespace Sample.AspNetCore.Models
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using Sample.AspNetCore.Extensions;
-
-    using System;
-    using System.Text.Json.Serialization;
-
     public class SessionMarket : Market
     {
         public const string MarketSessionKey = "_Market";

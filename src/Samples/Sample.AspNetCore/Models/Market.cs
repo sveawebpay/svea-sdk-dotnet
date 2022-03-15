@@ -1,14 +1,12 @@
-﻿namespace Sample.AspNetCore.Models
-{
-    using Microsoft.Extensions.Logging;
-    using Svea.WebPay.SDK.CheckoutApi;
-    using System;
-    using System.Linq;
+﻿using Microsoft.Extensions.Logging;
+using Svea.WebPay.SDK.CheckoutApi;
+using System;
+using System.Linq;
 
+namespace Sample.AspNetCore.Models
+{
     public class Market
     {
-        private readonly ILogger<Market> logger;
-
         private string _marketId;
         public string MarketId
         {

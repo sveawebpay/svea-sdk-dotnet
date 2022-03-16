@@ -19,6 +19,7 @@ namespace Sample.AspNetCore.Models
 
         public string SveaOrderId { get; set; }
         public bool Vat { get; set; }
+        public bool IsInternational { get; set; }
 
 
         public virtual void AddItem(Product product, int quantity)

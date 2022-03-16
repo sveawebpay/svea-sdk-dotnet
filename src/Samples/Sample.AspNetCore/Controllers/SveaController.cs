@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Sample.AspNetCore.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-
+    using Microsoft.Extensions.Logging;
     using Sample.AspNetCore.Data;
     using Sample.AspNetCore.Models;
 
@@ -19,13 +19,15 @@ namespace Sample.AspNetCore.Controllers
     [Route("api/svea")]
     public class SveaController : ControllerBase
     {
+        private readonly ILogger<SveaController> _logger;
         private readonly Cart _cartService;
         private readonly StoreDbContext _context;
         private readonly SveaWebPayClient _sveaClient;
 
 
-        public SveaController(Cart cartService, StoreDbContext context, SveaWebPayClient sveaClient)
+        public SveaController(ILogger<SveaController> logger, Cart cartService, StoreDbContext context, SveaWebPayClient sveaClient)
         {
+            _logger = logger;
             _cartService = cartService;
             _context = context;
             _sveaClient = sveaClient;
@@ -72,8 +74,9 @@ namespace Sample.AspNetCore.Controllers
 
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError("Callback failed", e);
                 return Ok();
             }
         }

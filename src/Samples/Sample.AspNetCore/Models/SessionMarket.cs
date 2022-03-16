@@ -1,19 +1,17 @@
-﻿namespace Sample.AspNetCore.Models
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Sample.AspNetCore.Extensions;
+
+using System;
+using System.Text.Json.Serialization;
+
+namespace Sample.AspNetCore.Models
 {
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.Extensions.DependencyInjection;
-
-    using Sample.AspNetCore.Extensions;
-
-    using System;
-    using System.Text.Json.Serialization;
-
     public class SessionMarket : Market
     {
         public const string MarketSessionKey = "_Market";
-
         [JsonIgnore] public ISession Session { get; set; }
-
 
         public override void SetMarket(string marketId)
         {
@@ -30,6 +28,12 @@
         public override void SetCurrency(string currencyCode)
         {
             base.SetCurrency(currencyCode);
+            Session.SetJson(MarketSessionKey, this);
+        }
+
+        public override void SetCountry(string countryId)
+        {
+            base.SetCountry(countryId);
             Session.SetJson(MarketSessionKey, this);
         }
 

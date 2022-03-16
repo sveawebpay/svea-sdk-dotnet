@@ -3,30 +3,29 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 using Sample.AspNetCore.Models;
-
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Sample.AspNetCore.Controllers
 {
-    public class MarketController : Controller
+    public class CountryController : Controller
     {
-        private readonly ILogger<MarketController> logger;
+        private readonly ILogger<CountryController> logger;
         private readonly Market marketService;
         private readonly List<MarketSettings> markets;
 
-        public MarketController(ILogger<MarketController> logger, Market marketService, IOptions<List<MarketSettings>> markets)
+        public CountryController(ILogger<CountryController> logger, Market marketService, IOptions<List<MarketSettings>> markets)
         {
             this.logger = logger;
             this.marketService = marketService;
             this.markets = markets.Value;
         }
 
-        public async Task<IActionResult> SetMarket(string marketId)
+        public async Task<IActionResult> SetCountry(string countryId)
         {
-            var selectedMarket = markets.FirstOrDefault(x => x.Id.Equals(marketId, StringComparison.InvariantCultureIgnoreCase));
+            marketService.SetCountry(countryId);
+            var selectedMarket = markets.FirstOrDefault(x => x.Countries.ToList().Contains(countryId));
             if (selectedMarket != null)
             {
                 marketService.ChangeMarket(selectedMarket);

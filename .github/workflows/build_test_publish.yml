@@ -152,6 +152,8 @@ jobs:
           Credentials.0.Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
           Credentials.1.MerchantId: ${{ secrets.NORWAY_MERCHANT_ID }}
           Credentials.1.Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
+          Credentials.2.MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
+          Credentials.2.Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
           MerchantSettings.PushUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/api/svea/push/{checkout.order.uri}/?marketId={marketId}
           MerchantSettings.TermsUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/terms
           MerchantSettings.CheckoutUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/CheckOut/LoadPaymentMenu
@@ -173,6 +175,8 @@ jobs:
           Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
           Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
           Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
+          Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
+          Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
           
       - name: Publish Sdk Sample site
         run: dotnet publish --configuration ${{ env.Configuration }} -p:Version=${{ needs.variables.outputs.nuGetVersionV2 }} --no-restore src/Samples/Sample.AspNetCore/Sample.AspNetCore.csproj --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/samplesite'
@@ -198,6 +202,8 @@ jobs:
           Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
           Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
           Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
+          Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
+          Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
           MerchantSettings:PushUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/api/svea/push/{checkout.order.uri}/?marketId={marketId}
           MerchantSettings:TermsUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/terms
           MerchantSettings:CheckoutUri: https://uitest-${{ needs.variables.outputs.ENVIRONMENT }}-svea-webpay-sdk.eu.ngrok.io/CheckOut/LoadPaymentMenu
@@ -218,6 +224,8 @@ jobs:
           Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
           Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
           Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
+          Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
+          Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
           SampleWebsite:Url: https://localhost:5001
 
 

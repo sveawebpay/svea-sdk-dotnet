@@ -28,14 +28,14 @@
                 return false;
 
             var regions = CultureInfo.GetCultures(CultureTypes.AllCultures)
-                .Where(c => !c.IsNeutralCulture)
+                .Where(c => !c.IsNeutralCulture && !string.IsNullOrWhiteSpace(c.Name))
                 .Select(culture =>
                 {
                     try
                     {
                         return new RegionInfo(culture.Name);
                     }
-                    catch
+                    catch (Exception e)
                     {
                         return null;
                     }

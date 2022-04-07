@@ -93,6 +93,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     {
                         x.Market.Click();
                         x.Markets[m => m.Content.Value == "NO"].Click();
+                        x.Country.Click();
+                        x.Countries[m => m.Content.Value == "NO"].Click();
                     }
 
                     foreach(var product in products)

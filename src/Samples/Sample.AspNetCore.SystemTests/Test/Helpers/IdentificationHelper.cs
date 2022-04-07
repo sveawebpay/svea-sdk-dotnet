@@ -69,6 +69,13 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .B2CIdentification.Email.Set("aaa@bbb.ccc")
                 .B2CIdentification.ZipCode.Set(TestDataService.SwedishZipCode)
                 .Submit.Click()
+                .Do(x => 
+                {
+                    if (x.NotYou.IsVisible)
+                    {
+                        x.NotYou.Click();
+                    }
+                })
                 .AnonymousToggle.Click()
                 .B2CAnonymous.IsVisible.WaitTo.BeTrue()
                 .B2CAnonymous.PhoneNumber.Set(TestDataService.SwedishPhoneNumber)

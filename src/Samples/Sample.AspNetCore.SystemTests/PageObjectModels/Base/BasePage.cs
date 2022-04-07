@@ -14,7 +14,13 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Base
 
         [FindById("marketMenuButton")] public Button<TOwner> Market { get; private set; }
 
-        [FindByClass("dropdown-menu", Visibility = Visibility.Visible)]
+        [FindById("marketMenuDropdown", Visibility = Visibility.Visible)]
         public ControlList<Link<TOwner>, TOwner> Markets { get; private set; }
+
+        [FindById("countryMenuButton")] public Button<TOwner> Country { get; private set; }
+
+        [FindById("countryMenuDropdown", Visibility = Visibility.Visible)]
+        public ControlList<Link<TOwner>, TOwner> Countries { get; private set; }
+
     }
 }

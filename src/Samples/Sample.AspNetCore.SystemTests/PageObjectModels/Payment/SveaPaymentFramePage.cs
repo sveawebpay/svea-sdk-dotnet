@@ -24,7 +24,11 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
         [Wait(1, TriggerEvents.BeforeClick)]
         [FindByCss("button[data-testid='anonymous-toggle']")]
         public Button<_> AnonymousToggle { get; private set; }
-        
+
+        [Wait(1, TriggerEvents.BeforeClick)]
+        [FindByCss("button[data-testid='not-you-link']")]
+        public Button<_> NotYou { get; private set; }
+
         [Wait(1, TriggerEvents.BeforeAndAfterClick)]
         [FindByCss("button[data-testid='submit-button']")]
         public Button<_> Submit { get; private set; }

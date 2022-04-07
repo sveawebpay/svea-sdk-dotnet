@@ -31,6 +31,9 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 
         [FindByName("phoneNumber")]
         public TelInput<TOwner> PhoneNumber { get; private set; }
+        
+        [FindByName("country")]
+        public TextInput<TOwner> Country { get; private set; }
 
     }
 }

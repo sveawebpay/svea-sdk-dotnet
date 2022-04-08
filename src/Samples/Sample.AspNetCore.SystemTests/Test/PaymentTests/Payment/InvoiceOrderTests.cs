@@ -5,6 +5,7 @@ using Sample.AspNetCore.SystemTests.Services;
 using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
 using Svea.WebPay.SDK.PaymentAdminApi;
+using System;
 using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
@@ -25,7 +26,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
 
-                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                .RefreshPageUntil(x =>
+                    x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                    x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                    x.Orders.Any(), 15, 3)
 
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -75,7 +79,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
 
-                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                .RefreshPageUntil(x =>
+                    x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                    x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                    x.Orders.Any(), 15, 3)
 
                 // Deliver
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -126,7 +133,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
 
-                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                .RefreshPageUntil(x =>
+                    x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                    x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                    x.Orders.Any(), 15, 3)
 
                 // Deliver -> Credit
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -178,7 +188,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Invoice)
 
-                    .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                    .RefreshPageUntil(x =>
+                        x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                        x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                        x.Orders.Any(), 15, 3)
+
 
                     // Deliver -> Credit
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -230,7 +244,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
 
-                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                .RefreshPageUntil(x =>
+                    x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                    x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                    x.Orders.Any(), 15, 3)
 
                 // Cancel
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -276,7 +293,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Company, PaymentMethods.Option.Invoice)
 
-                    .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                    .RefreshPageUntil(x =>
+                        x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                        x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                        x.Orders.Any(), 15, 3)
 
                     // Cancel
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -332,7 +352,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
 
-                .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                .RefreshPageUntil(x =>
+                    x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                    x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                    x.Orders.Any(), 15, 3)
 
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().OrderRows.Last().Table.Toggle.Click()
@@ -359,7 +382,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
 
-                    .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                    .RefreshPageUntil(x =>
+                        x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                        x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                        x.Orders.Any(), 15, 3)
+
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                     // Deliver 1
@@ -414,7 +441,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
 
-                    .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                    .RefreshPageUntil(x =>
+                        x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                        x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                        x.Orders.Any(), 15, 3)
+
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                     // Add order row 1
@@ -477,7 +508,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             {
                 GoToOrdersPage(products, Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.Invoice)
 
-                    .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details"), 10, 3)
+                    .RefreshPageUntil(x =>
+                        x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
+                        x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
+                        x.Orders.Any(), 15, 3)
+
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
                     // Add order row 1

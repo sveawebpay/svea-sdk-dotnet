@@ -67,6 +67,21 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(6, actualOrder.Cart.Items[0].VatPercent);
         }
 
+
+        [Fact]
+        public void ShouldCalculateShippingOrderRows_AsExpected()
+        {
+            var orderRow = new OrderRow("articleNumber", "name", new MinorUnit(1), new MinorUnit(1000), new MinorUnit(200), new MinorUnit(25), "pcs", null, 1);
+            //var orderRow4 = new OrderRow("articleNumber", "name", new MinorUnit(5), new MinorUnit(350), new MinorUnit(0), new MinorUnit(25), "pcs", null, 4);
+            var orderRow2 = new OrderRow("articleNumber2", "name2", new MinorUnit(1), new MinorUnit(200), new MinorUnit(0), new MinorUnit(6), "pcs", null, 3);
+            //var orderRow3 = new OrderRow("articleNumber2", "name2", new MinorUnit(2), new MinorUnit(350), new MinorUnit(0), new MinorUnit(12), "pcs", null, 2);
+
+            var orderRows = new List<OrderRow> { orderRow, orderRow2 };
+            var cart = new Cart(orderRows);
+            var shippingOption = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", "orderId", "Budbee", "Paketskåp Budbee", 100);
+            cart.CalculateShippingOrderRows(shippingOption);
+        }
+
         [Fact]
         public void Order_Should_Serialize_AsExpected()
         {

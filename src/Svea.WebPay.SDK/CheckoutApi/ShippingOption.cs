@@ -2,28 +2,39 @@
 {
     public class ShippingOption : IShippingOption
     {
-        public ShippingOption(string id, string orderId, string carrier, string name, long price)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">Id of the carrier, nShift specific (typically in form of a guid)	</param>
+        /// <param name="carrier">Name of the carrier, nShift specific</param>
+        /// <param name="name">Delivery option name, nShift specific</param>
+        /// <param name="price">Price of the parcel, NOT minor currency!</param>
+        public ShippingOption(string id, string carrier, string name, long price)
         {
             Id = id;
-            OrderId = orderId;
             Carrier = carrier;
             Name = name;
             Price = price;
         }
 
+        /// <summary>
+        /// Id of the carrier, nShift specific (typically in form of a guid)	
+        /// </summary>
         public string Id { get; }
-        public string OrderId { get; }
-        public string Carrier { get; }
-        public string Name { get; }
-        public long Price { get; }
-    }
 
-    public interface IShippingOption
-    {
-        string Id { get; }
-        string OrderId { get; }
-        string Carrier { get; }
-        string Name { get; }
-        long Price { get; }
+        /// <summary>
+        /// Name of the carrier, nShift specific
+        /// </summary>
+        public string Carrier { get; }
+
+        /// <summary>
+        /// Delivery option name, nShift specific
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
+        /// Price of the parcel, NOT minor currency!
+        /// </summary>
+        public long Price { get; }
     }
 }

@@ -12,7 +12,6 @@ namespace Svea.WebPay.SDK.CheckoutApi
 
         public IList<OrderRow> Items { get; }
 
-
         public IList<OrderRow> CalculateShippingOrderRows(IShippingOption shippingOption)
         {
             var shippingOrderRows = new List<OrderRow>();

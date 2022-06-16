@@ -64,7 +64,11 @@ namespace Sample.AspNetCore.Controllers
                 var pushUri = new Uri(_merchantSettings.PushUri.ToString().Replace("{marketId}", _marketService.MarketId));
                 var checkoutValidationCallbackUri = new Uri(_merchantSettings.CheckoutValidationCallbackUri.ToString().Replace("{marketId}", _marketService.MarketId));
 
-                var paymentOrderRequest = new CreateOrderModel(region, currencyRequest, languageRequest, DateTime.Now.Ticks.ToString(), 
+                var shippingFallback = new ShippingOption("79d0c2d3-71f4-4205-a5bc-4aa9ab324c98", "DHL Home Delivery", "dhl", Convert.ToInt64(_cartService.CalculateTotal()));
+                var shippingInformation = new ShippingInformation(false, true, 1000, null)
+
+
+                var paymentOrderRequest = new CreateOrderModel(region, currencyRequest, languageRequest, DateTime.Now.Ticks.ToString(),
                     new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(pushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, checkoutValidationCallbackUri),
                     new Svea.WebPay.SDK.CheckoutApi.Cart(orderItems), requireBanKId);
 

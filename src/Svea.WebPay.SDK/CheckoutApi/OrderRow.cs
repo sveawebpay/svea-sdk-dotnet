@@ -8,7 +8,7 @@
         /// </summary>
         /// <param name="articleNumber">
         /// <summary>
-        /// Articlenumber as a string, can contain letters and numbers.
+        /// Article number as a string, can contain letters and numbers.
         /// </summary>
         /// <remarks>Max length: 256. Min length: 0.</remarks>
         /// </param>
@@ -65,8 +65,9 @@
         /// <remarks>Max length: 255. Optional. Cleaned up from Checkout database after 45 days.</remarks>
         /// </param>
         /// <param name="useDiscountPercent">Set to true if using percent in discount</param>
+        /// <param name="rowType">Is used just to distinguish ShippingFee item from the order items. Can be one of "Row" or "ShippingFee"</param>
         public OrderRow(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discount,
-            MinorUnit vatPercent, string unit, string temporaryReference, int rowNumber, string merchantData = null, bool useDiscountPercent = false)
+            MinorUnit vatPercent, string unit, string temporaryReference, int rowNumber, string merchantData = null, bool useDiscountPercent = false, RowType rowType = CheckoutApi.RowType.Row)
         {
             ArticleNumber = articleNumber;
             Unit = unit;
@@ -128,6 +129,8 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(merchantData), "Can only be 0-255 characters.");
             }
+
+            RowType = rowType.ToString();
         }
 
         /// <summary>
@@ -146,5 +149,10 @@
         /// </summary>
         /// <remarks>Max length: 255. Optional. Cleaned up from Checkout database after 45 days.</remarks>
         public string MerchantData { get; }
+
+        /// <summary>
+        /// Is used just to distinguish ShippingFee item from the order items. It is a string and can be one of "Row" or "ShippingFee"	
+        /// </summary>
+        public string RowType { get; }
     }
 }

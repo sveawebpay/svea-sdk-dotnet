@@ -48,7 +48,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </param>
         public CreateOrderModel(RegionInfo countryCode, CurrencyCode currency, Language locale, string clientOrderNumber,
             MerchantSettings merchantSettings, Cart cart, bool requireElectronicIdAuthentication, IList<Presetvalue> presetValues = null,
-            IdentityFlags identityFlags = null, Guid? partnerKey = null, string merchantData = null)
+            IdentityFlags identityFlags = null, Guid? partnerKey = null, string merchantData = null, ShippingInformation shippingInformation = null)
         {
             CountryCode = countryCode;
             Currency = currency;
@@ -61,6 +61,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             IdentityFlags = identityFlags;
             PartnerKey = partnerKey;
             MerchantData = merchantData;
+            ShippingInformation = shippingInformation;
         }
 
         public RegionInfo CountryCode { get; }
@@ -100,5 +101,10 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </summary>
         /// <remarks>Max length: 6000. Optional. Cleaned up from Checkout database after 45 days.</remarks>
         public string MerchantData { get; }
+
+        /// <summary>
+        /// Shipping information needed for the shipping checkout. Only applicable if merchant has shipping enabled.	
+        /// </summary>
+        public ShippingInformation ShippingInformation { get; }
     }
 }

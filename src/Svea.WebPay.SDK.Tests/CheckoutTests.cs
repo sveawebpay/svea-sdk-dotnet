@@ -78,7 +78,7 @@ namespace Svea.WebPay.SDK.Tests
 
             var orderRows = new List<OrderRow> { orderRow, orderRow2 };
             var cart = new Cart(orderRows);
-            var shippingOption = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", "orderId", "Budbee", "Paketskåp Budbee", 100);
+            var shippingOption = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", "orderId", "DHL Home Delivery", "dhl", 26);
             cart.CalculateShippingOrderRows(shippingOption);
         }
 

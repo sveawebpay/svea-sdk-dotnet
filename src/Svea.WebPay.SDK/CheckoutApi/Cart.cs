@@ -30,7 +30,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
 
                 var price = new MinorUnit(shippingPrice);
                 var discount = new MinorUnit(0);
-                shippingOrderRows.Add(new OrderRow($"{shippingOption.Carrier}_{tax.Key}", $"{shippingOption.Carrier} VAT: {tax.Key}%", new MinorUnit(100), price, discount, tax.Key, "st", null, rowNumber, rowType: RowType.ShippingFee));
+                shippingOrderRows.Add(new OrderRow($"{shippingOption.Carrier}_{tax.Key}", $"{shippingOption.Carrier} VAT: {tax.Key}%", new MinorUnit(1), price, discount, tax.Key, "st", null, rowNumber, rowType: RowType.ShippingFee));
             }
 
             return shippingOrderRows;

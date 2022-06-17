@@ -1,8 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your Javascript code.
-var coll = document.getElementsByClassName("collapsible");
+﻿var coll = document.getElementsByClassName("collapsible");
 var i;
 
 for (i = 0; i < coll.length; i++) {
@@ -22,3 +18,22 @@ var updateSettings = function(element) {
     form.find('[type="hidden"]:first').val(element.html());
     form.submit();
 };
+
+
+var shippingHandler = new function (data) {
+    var a = data;
+    console.log('event: ' + data);
+
+    if (data) {
+        document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: true } }));
+
+    }
+}
+
+
+
+$(function () {
+
+    document.addEventListener("sveaCheckout:shippingConfirmed", shippingHandler)
+
+});

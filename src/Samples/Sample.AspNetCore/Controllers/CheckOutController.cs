@@ -64,7 +64,8 @@ namespace Sample.AspNetCore.Controllers
                 var pushUri = new Uri(_merchantSettings.PushUri.ToString().Replace("{marketId}", _marketService.MarketId));
                 var checkoutValidationCallbackUri = new Uri(_merchantSettings.CheckoutValidationCallbackUri.ToString().Replace("{marketId}", _marketService.MarketId));
 
-                var shippingFallback = new ShippingOption("79d0c2d3-71f4-4205-a5bc-4aa9ab324c98", "DHL Home Delivery", "dhl", Convert.ToInt64(_cartService.CalculateTotal()));
+                //79d0c2d3-71f4-4205-a5bc-4aa9ab324c98 
+                var shippingFallback = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", "DHL Home Delivery", "dhl", Convert.ToInt64(_cartService.CalculateTotal()));
                 var shippingInformation = new ShippingInformation(false, true, 1000, null, null);
 
 

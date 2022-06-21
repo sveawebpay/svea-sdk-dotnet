@@ -147,12 +147,16 @@ namespace Svea.WebPay.SDK
 
                     try
                     {
-                        PaymentAdminApi.Models.Task taskResponse;
+                        PaymentAdminApi.Models.Task taskResponse = null;
 
                         do
                         {
+                            if (taskResponse is object)
+                            {
+                                await Task.Delay(1000).ConfigureAwait(configureAwait);
+                            }
+
                             taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri, configureAwait).ConfigureAwait(configureAwait);
-                            await Task.Delay(1000);
 
                         } while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
 

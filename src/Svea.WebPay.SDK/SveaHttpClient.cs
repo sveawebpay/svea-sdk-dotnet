@@ -127,7 +127,7 @@ namespace Svea.WebPay.SDK
             var polling = true;
             if (timeout == null)
             {
-                timeout = new PollingTimeout(10);
+                timeout = new PollingTimeout();
                 polling = false; 
             }
 
@@ -153,7 +153,7 @@ namespace Svea.WebPay.SDK
                         {
                             if (taskResponse is object)
                             {
-                                await Task.Delay(1000).ConfigureAwait(configureAwait);
+                                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(configureAwait);
                             }
 
                             taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri, configureAwait).ConfigureAwait(configureAwait);

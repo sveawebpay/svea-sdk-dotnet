@@ -20,6 +20,7 @@ using Task = System.Threading.Tasks.Task;
 namespace Svea.WebPay.SDK
 {
     using Svea.WebPay.SDK.PaymentAdminApi;
+    using System.Diagnostics;
 
     public class SveaHttpClient : ISveaHttpClient
     {
@@ -126,7 +127,7 @@ namespace Svea.WebPay.SDK
             var polling = true;
             if (timeout == null)
             {
-                timeout = new PollingTimeout(10);
+                timeout = new PollingTimeout();
                 polling = false; 
             }
 
@@ -146,10 +147,17 @@ namespace Svea.WebPay.SDK
 
                     try
                     {
-                        PaymentAdminApi.Models.Task taskResponse;
+                        PaymentAdminApi.Models.Task taskResponse = null;
+
                         do
                         {
+                            if (taskResponse is object)
+                            {
+                                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(configureAwait);
+                            }
+
                             taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri, configureAwait).ConfigureAwait(configureAwait);
+
                         } while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
 
                         response.ResourceUri = taskResponse.ResourceUri;

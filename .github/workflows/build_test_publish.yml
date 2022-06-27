@@ -51,7 +51,7 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.13
 
       - name: Set dev environment variables
-        uses: allenevans/set-env@v2.0.0
+        uses: allenevans/set-env@v2.2.0
         if: ${{ startsWith(github.ref, 'refs/heads/develop') }} || ${{ github.event_name == 'pull_request' }}
         with: 
           ENVIRONMENT: dev
@@ -59,7 +59,7 @@ jobs:
           NUGETVERSIONV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
       - name: Set uat environment variables
-        uses: allenevans/set-env@v2.0.0
+        uses: allenevans/set-env@v2.2.0
         if: ${{ startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/hotfix/') || contains(github.ref, '-beta')}} 
         with: 
           ENVIRONMENT: uat
@@ -67,7 +67,7 @@ jobs:
           NUGETVERSIONV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
       - name: Set pro environment variables
-        uses: allenevans/set-env@v2.0.0
+        uses: allenevans/set-env@v2.2.0
         if: ${{ startsWith(github.ref, 'refs/tags/') && !contains(github.ref, 'refs/tags/*-*') }} 
         with: 
           ENVIRONMENT: pro

@@ -36,7 +36,7 @@ jobs:
   
        
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.13
@@ -92,7 +92,7 @@ jobs:
     
     steps:
       
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
@@ -111,7 +111,7 @@ jobs:
     needs: [variables, build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
@@ -139,7 +139,7 @@ jobs:
     runs-on: ubuntu-20.04
     
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
        
       - name: Variable Substitution
         uses: microsoft/variable-substitution@v1

@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
 
     <UserSecretsId>6343ea20-120b-4075-a141-c8154cad1d14</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup> 
+  <ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
 

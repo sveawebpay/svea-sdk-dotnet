@@ -230,7 +230,7 @@ jobs:
 
 
       - name: Archive Sample.AspNetCore
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Sample.AspNetCore
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/samplesite
@@ -239,7 +239,7 @@ jobs:
         run: dotnet pack ${{ env.CsprojPath }} -p:PackageVersion=${{ needs.variables.outputs.NUGETVERSIONV2 }} -p:Version=${{ needs.variables.outputs.NUGETVERSIONV2 }} --configuration=${{ env.Configuration }} --output=artifacts
 
       - name: Archive nuget packages artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           # Artifact name
           name: packages

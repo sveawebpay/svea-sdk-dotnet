@@ -36,10 +36,10 @@ jobs:
   
        
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.9
+        uses: gittools/actions/gitversion/setup@v0.9.13
         with:
           versionSpec: '5.x.x'
  
@@ -48,10 +48,10 @@ jobs:
  
       - name: Use GitVersion
         id: gitversion # step id used as reference for output values
-        uses: gittools/actions/gitversion/execute@v0.9.6
+        uses: gittools/actions/gitversion/execute@v0.9.13
 
       - name: Set dev environment variables
-        uses: allenevans/set-env@v2.0.0
+        uses: allenevans/set-env@v2.2.0
         if: ${{ startsWith(github.ref, 'refs/heads/develop') }} || ${{ github.event_name == 'pull_request' }}
         with: 
           ENVIRONMENT: dev
@@ -59,7 +59,7 @@ jobs:
           NUGETVERSIONV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
       - name: Set uat environment variables
-        uses: allenevans/set-env@v2.0.0
+        uses: allenevans/set-env@v2.2.0
         if: ${{ startsWith(github.ref, 'refs/heads/release/') || startsWith(github.ref, 'refs/heads/hotfix/') || contains(github.ref, '-beta')}} 
         with: 
           ENVIRONMENT: uat
@@ -67,7 +67,7 @@ jobs:
           NUGETVERSIONV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}
 
       - name: Set pro environment variables
-        uses: allenevans/set-env@v2.0.0
+        uses: allenevans/set-env@v2.2.0
         if: ${{ startsWith(github.ref, 'refs/tags/') && !contains(github.ref, 'refs/tags/*-*') }} 
         with: 
           ENVIRONMENT: pro
@@ -92,7 +92,7 @@ jobs:
     
     steps:
       
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
@@ -111,7 +111,7 @@ jobs:
     needs: [variables, build]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
@@ -139,7 +139,7 @@ jobs:
     runs-on: ubuntu-20.04
     
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
        
       - name: Variable Substitution
         uses: microsoft/variable-substitution@v1
@@ -230,7 +230,7 @@ jobs:
 
 
       - name: Archive Sample.AspNetCore
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Sample.AspNetCore
           path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/samplesite
@@ -239,7 +239,7 @@ jobs:
         run: dotnet pack ${{ env.CsprojPath }} -p:PackageVersion=${{ needs.variables.outputs.NUGETVERSIONV2 }} -p:Version=${{ needs.variables.outputs.NUGETVERSIONV2 }} --configuration=${{ env.Configuration }} --output=artifacts
 
       - name: Archive nuget packages artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           # Artifact name
           name: packages
@@ -257,7 +257,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Download All artifacts
-        uses: actions/download-artifact@v2   
+        uses: actions/download-artifact@v3   
     
       # Deploy to Dev Azure Web apps
       - name: 'Run Azure webapp deploy to dev using publish profile credentials'

@@ -39,7 +39,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.9
+        uses: gittools/actions/gitversion/setup@v0.9.13
         with:
           versionSpec: '5.x.x'
  
@@ -48,7 +48,7 @@ jobs:
  
       - name: Use GitVersion
         id: gitversion # step id used as reference for output values
-        uses: gittools/actions/gitversion/execute@v0.9.6
+        uses: gittools/actions/gitversion/execute@v0.9.13
 
       - name: Set dev environment variables
         uses: allenevans/set-env@v2.0.0

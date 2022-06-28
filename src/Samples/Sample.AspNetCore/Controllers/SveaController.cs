@@ -33,6 +33,13 @@ namespace Sample.AspNetCore.Controllers
             _sveaClient = sveaClient;
         }
 
+
+        [HttpPost("shippingTaxCalculation")]
+        public ActionResult shippingTaxCalculation(ShippingOption shippingOption)
+        {
+            return Ok();
+        }
+
         [HttpPost("shipping")]
         public ActionResult Shipping(ShippingCallbackResponse shippingCallbackResponse)
         {

@@ -28,6 +28,22 @@ var shippingHandler = function (data) {
         document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: true } }));
         console.log(data.type);
         console.log(JSON.stringify(data.detail));
+
+        fetch('https://localhost:44345/api/svea/shippingTaxCalculation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data.detail),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
         document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: false } }));
     }
 }

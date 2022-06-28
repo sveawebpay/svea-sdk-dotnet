@@ -2,7 +2,7 @@
 @using OrderRowActions = Svea.WebPay.SDK.PaymentAdminApi.OrderRowActionType
 @using DeliveryActions = Svea.WebPay.SDK.PaymentAdminApi.DeliveryActionType
 @using System.Reflection;
-@model Sample.AspNetCore.Models.ViewModels.OrderViewModel
+@model Sample.AspNetCore.Models.ViewModels.OrderListViewModel
 
 @{
     ViewData["Title"] = "OrderDetails";
@@ -52,99 +52,113 @@ else if (TempData["ErrorMessage"] != null)
                     <hr />
                     <dl class="row">
                         <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => order.Id)
+                            @Html.DisplayNameFor(model => order.OrderId)
                         </dt>
                         <dd class="col-sm-4" automation="text-orderid">
-                            @Html.DisplayFor(model => order.Id)
+                            @Html.DisplayFor(model => order.OrderId)
                         </dd>
-                        <dt class="col-sm-2">
-                            Order rows
-                        </dt>
-                        <dd class="col-sm-4" automation="text-orderrowscount">
-                            @(order.OrderRows != null ? string.Join(",", order.OrderRows.Select(x => $"{(x.Quantity.InLowestMonetaryUnit / 100)} - {x.Name}")) : null)
-                        </dd>
-                        <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => order.OrderStatus)
-                        </dt>
-                        <dd class="col-sm-4" automation="text-orderstatus">
-                            @Html.DisplayFor(model => order.OrderStatus)
-                        </dd>
-                        <dt class="col-sm-2">
-                            @Html.DisplayNameFor(model => order.PaymentType)
-                        </dt>
-                        <dd class="col-sm-4" automation="text-paymenttype">
-                            @Html.DisplayFor(model => order.PaymentType)
-                        </dd>
+                        @if (order.IsLoaded)
+                        {
+                            <dt class="col-sm-2">
+                                Order rows
+                            </dt>
+
+                            <dd class="col-sm-4" automation="text-orderrowscount">
+                                @(order.Order.OrderRows != null ? string.Join(",", order.Order.OrderRows.Select(x => $"{(x.Quantity.InLowestMonetaryUnit / 100)} - {x.Name}")) : null)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => order.Order.OrderStatus)
+                            </dt>
+                            <dd class="col-sm-4" automation="text-orderstatus">
+                                @Html.DisplayFor(model => order.Order.OrderStatus)
+                            </dd>
+                            <dt class="col-sm-2">
+                                @Html.DisplayNameFor(model => order.Order.PaymentType)
+                            </dt>
+                            <dd class="col-sm-4" automation="text-paymenttype">
+                                @Html.DisplayFor(model => order.Order.PaymentType)
+                            </dd>
+                        }
+                        else
+                        {
+                            <dt class="col-sm-2">
+                                Order is not yet in PaymentAdmin. Please reload in a bit.
+                            </dt>
+                        }
+
                     </dl>
                 </div>
 
-                <table class="table" automation="table-order">
-                    <thead class="collapsible" automation="toggle-actions">
-                        <tr>
-                            <th>Actions</th>
-                            <th><div automation="toggle-actions">Expand</div><div automation="toggle-actions">Collapse</div></th>
-                        </tr>
-                    </thead>
-                    <tbody class="collapsible-content">
+                @if (order.IsLoaded)
+                {
+                    <table class="table" automation="table-order">
+                        <thead class="collapsible" automation="toggle-actions">
+                            <tr>
+                                <th>Actions</th>
+                                <th><div automation="toggle-actions">Expand</div><div automation="toggle-actions">Collapse</div></th>
+                            </tr>
+                        </thead>
+                        <tbody class="collapsible-content">
 
-                        @if (order.Actions != null)
-                        {
-                            var actions = typeof(Svea.WebPay.SDK.PaymentAdminApi.OrderActions).GetProperties()
-                              .Where(prop => prop.GetValue(order.Actions, null) != null)
-                              .Select(prop => prop.Name);
-
-                            foreach (var action in actions)
+                            @if (order.Order.Actions != null)
                             {
-                                var automationTagName = $"a-{action.ToLower()}";
+                                var actions = typeof(Svea.WebPay.SDK.PaymentAdminApi.OrderActions).GetProperties()
+                                .Where(prop => prop.GetValue(order.Order.Actions, null) != null)
+                                .Select(prop => prop.Name);
+
+                                foreach (var action in actions)
+                                {
+                                    var automationTagName = $"a-{action.ToLower()}";
 
 
-                                <tr>
-                                    <td>@action</td>
-                                    @switch (action)
-                                    {
-                                        case nameof(order.Actions.AddOrderRow):
-                                            <td>
-                                                <form asp-action="@nameof(order.Actions.AddOrderRow)" asp-controller="Payment" asp-route-paymentId="@order.Id" method="post">
-                                                    <span style="display:inline-block; margin-right: 1rem">Discount:</span>
-                                                    <input type="number" name="percentDiscountOrderRow" automation="input-addorderrowpercentdiscount" min="0" max="100" style="width:80px"/>
-                                                    <label for="percentDiscountOrderRow" style="margin-right: 1rem">% or</label>
-                                                    <input type="number" name="amountDiscountOrderRow" automation="input-addorderrowamountdiscount" min="0" style="width:80px"/>
-                                                    <label for="amountDiscountOrderRow" style="margin-right: 1rem">kr</label>
-                                                    <button type="submit" class="btn btn-sm btn-danger mx-2 mb-1" automation="@automationTagName">Execute</button>
-                                                </form>
-                                            </td>
-                                            break;
-                                        case nameof(order.Actions.AddOrderRows):
-                                            <td>
-                                                <form asp-action="@nameof(order.Actions.AddOrderRows)" asp-controller="Payment" asp-route-paymentId="@order.Id" method="post">
-                                                    <span style="display:inline-block; margin-right: 1rem">Discount:</span>
-                                                    <input type="number" name="percentDiscountOrderRows" automation="input-addorderrowspercentdiscount" min="0" max="100" style="width:80px"/>
-                                                    <label for="percentDiscountOrderRows" style="margin-right: 1rem">% or</label>
-                                                    <input type="number" name="amountDiscountOrderRows" automation="input-addorderrowsamountdiscount" min="0" style="width:80px"/>
-                                                    <label for="amountDiscountOrderRows" style="margin-right: 1rem">kr</label>
-                                                    <button type="submit" class="btn btn-sm btn-danger mx-2 mb-1" automation="@automationTagName">Execute</button>
-                                                </form>
-                                            </td>
-                                            break;
-                                        default:
-                                            <td>
-                                                <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Id" automation=@automationTagName>Execute</a>
-                                            </td>
-                                            break;
-                                    }
-                                </tr>
+                                    <tr>
+                                        <td>@action</td>
+                                        @switch (action)
+                                        {
+                                            case nameof(order.Order.Actions.AddOrderRow):
+                                                <td>
+                                                    <form asp-action="@nameof(order.Order.Actions.AddOrderRow)" asp-controller="Payment" asp-route-paymentId="@order.Order.Id" method="post">
+                                                        <span style="display:inline-block; margin-right: 1rem">Discount:</span>
+                                                        <input type="number" name="percentDiscountOrderRow" automation="input-addorderrowpercentdiscount" min="0" max="100" style="width:80px" />
+                                                        <label for="percentDiscountOrderRow" style="margin-right: 1rem">% or</label>
+                                                        <input type="number" name="amountDiscountOrderRow" automation="input-addorderrowamountdiscount" min="0" style="width:80px" />
+                                                        <label for="amountDiscountOrderRow" style="margin-right: 1rem">kr</label>
+                                                        <button type="submit" class="btn btn-sm btn-danger mx-2 mb-1" automation="@automationTagName">Execute</button>
+                                                    </form>
+                                                </td>
+                                                break;
+                                            case nameof(order.Order.Actions.AddOrderRows):
+                                                <td>
+                                                    <form asp-action="@nameof(order.Order.Actions.AddOrderRows)" asp-controller="Payment" asp-route-paymentId="@order.Order.Id" method="post">
+                                                        <span style="display:inline-block; margin-right: 1rem">Discount:</span>
+                                                        <input type="number" name="percentDiscountOrderRows" automation="input-addorderrowspercentdiscount" min="0" max="100" style="width:80px" />
+                                                        <label for="percentDiscountOrderRows" style="margin-right: 1rem">% or</label>
+                                                        <input type="number" name="amountDiscountOrderRows" automation="input-addorderrowsamountdiscount" min="0" style="width:80px" />
+                                                        <label for="amountDiscountOrderRows" style="margin-right: 1rem">kr</label>
+                                                        <button type="submit" class="btn btn-sm btn-danger mx-2 mb-1" automation="@automationTagName">Execute</button>
+                                                    </form>
+                                                </td>
+                                                break;
+                                            default:
+                                                <td>
+                                                    <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Order.Id" automation=@automationTagName>Execute</a>
+                                                </td>
+                                                break;
+                                        }
+                                    </tr>
+                                }
                             }
-                        }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                }
             </div>
 
-            @if (order.OrderRows != null && order.OrderRows.Count > 0)
+            @if (order.IsLoaded && order.Order.OrderRows != null && order.Order.OrderRows.Count > 0)
             {
                 <div>
                     <h5>Order Rows</h5>
 
-                    @foreach (var orderRow in order.OrderRows)
+                    @foreach (var orderRow in order.Order.OrderRows)
                     {
                         <div automation="div-orderrow">
                             <dl class="row">
@@ -192,8 +206,8 @@ else if (TempData["ErrorMessage"] != null)
                                     @if (orderRow.Actions != null)
                                     {
                                         var actions = typeof(Svea.WebPay.SDK.PaymentAdminApi.OrderRowActions).GetProperties()
-                                          .Where(prop => prop.GetValue(orderRow.Actions, null) != null)
-                                          .Select(prop => prop.Name);
+                                        .Where(prop => prop.GetValue(orderRow.Actions, null) != null)
+                                        .Select(prop => prop.Name);
 
                                         foreach (var action in actions)
                                         {
@@ -201,17 +215,17 @@ else if (TempData["ErrorMessage"] != null)
                                             <tr>
                                                 <td>@action</td>
                                                 <td>
-                                                    <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Id" asp-route-orderRowId="@orderRow.OrderRowId" automation=@automationTagName>Execute</a>
+                                                    <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Order.Id" asp-route-orderRowId="@orderRow.OrderRowId" automation=@automationTagName>Execute</a>
                                                 </td>
                                             </tr>
                                         }
 
-                                        if (order.AvailableActions.Contains(OrderActions.CanDeliverOrder.ToString()))
+                                        if (order.Order.AvailableActions.Contains(OrderActions.CanDeliverOrder.ToString()))
                                         {
                                             <tr>
                                                 <td>DeliverOrderRow</td>
                                                 <td>
-                                                    <form asp-action="DeliverOrderRow" asp-controller="Payment" asp-route-paymentId="@order.Id" asp-route-orderRowId="@orderRow.OrderRowId" method="post">
+                                                    <form asp-action="DeliverOrderRow" asp-controller="Payment" asp-route-paymentId="@order.Order.Id" asp-route-orderRowId="@orderRow.OrderRowId" method="post">
                                                         <input type="number" min="1" name="quantity" value="" automation="input-deliverorderrowquantity" />
                                                         <button type="submit" class="btn btn-sm btn-danger mx-2 mb-1" automation="a-deliverorderrow">Execute</button>
                                                     </form>
@@ -226,12 +240,12 @@ else if (TempData["ErrorMessage"] != null)
                 </div>
             }
 
-            @if (order.Deliveries != null && order.Deliveries.Count > 0)
+            @if (order.IsLoaded && order.Order.Deliveries != null && order.Order.Deliveries.Count > 0)
             {
                 <div>
                     <h5>Deliveries</h5>
 
-                    @foreach (var delivery in order.Deliveries)
+                    @foreach (var delivery in order.Order.Deliveries)
                     {
                         <div automation="div-delivery">
                             <dl class="row">
@@ -279,8 +293,8 @@ else if (TempData["ErrorMessage"] != null)
                                     @if (delivery.Actions != null)
                                     {
                                         var actions = typeof(Svea.WebPay.SDK.PaymentAdminApi.DeliveryActions).GetProperties()
-                                          .Where(prop => prop.GetValue(delivery.Actions, null) != null)
-                                          .Select(prop => prop.Name);
+                                        .Where(prop => prop.GetValue(delivery.Actions, null) != null)
+                                        .Select(prop => prop.Name);
 
                                         foreach (var action in actions)
                                         {
@@ -288,7 +302,7 @@ else if (TempData["ErrorMessage"] != null)
                                             <tr>
                                                 <td>@action</td>
                                                 <td>
-                                                    <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Id" asp-route-deliveryId="@delivery.Id" automation=@automationTagName>Execute</a>
+                                                    <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Order.Id" asp-route-deliveryId="@delivery.Id" automation=@automationTagName>Execute</a>
                                                 </td>
                                             </tr>
                                         }

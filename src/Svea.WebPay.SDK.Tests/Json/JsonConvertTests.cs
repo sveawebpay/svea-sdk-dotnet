@@ -1,16 +1,26 @@
 ﻿using System.Collections.Generic;
-using Svea.WebPay.SDK.PaymentAdminApi;
+
 using Xunit;
 
 namespace Svea.WebPay.SDK.Tests.Json
 {
+    using Svea.WebPay.SDK.CheckoutApi;
     using Svea.WebPay.SDK.Json;
     using Svea.WebPay.SDK.PaymentAdminApi.Response;
+    using Svea.WebPay.SDK.Tests.Helpers;
 
     using System.Text.Json;
 
+    using PaymentType = Svea.WebPay.SDK.PaymentAdminApi.PaymentType;
+
     public class JsonConvertTests
     {
+        [Fact]
+        public void CanDeserialize_DataResponseWithShippingObject()
+        {
+            var result = DataSample.CheckoutOrderWithShippingResponse;
+            var data = JsonSerializer.Deserialize<Data>(result, JsonSerialization.Settings);
+        }
 
         [Fact]
         public void CanDeserialize_OrderResponseObject()

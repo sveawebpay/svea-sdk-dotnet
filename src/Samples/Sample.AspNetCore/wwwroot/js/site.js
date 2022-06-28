@@ -20,20 +20,35 @@ var updateSettings = function(element) {
 };
 
 
-var shippingHandler = new function (data) {
+var shippingHandler = function (data) {
     var a = data;
     console.log('event: ' + data);
 
     if (data) {
         document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: true } }));
+        console.log(data.type);
+        console.log(JSON.stringify(data.detail));
 
+        fetch('https://localhost:44345/api/svea/shippingTaxCalculation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data.detail),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+        document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: false } }));
     }
 }
 
 
-
 $(function () {
-
-    document.addEventListener("sveaCheckout:shippingConfirmed", shippingHandler)
-
+    document.addEventListener("sveaCheckout:shippingConfirmed", shippingHandler);
 });

@@ -61,9 +61,16 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </summary>
         /// <remarks>Must be valid CampaignID.</remarks>
         /// </param>
+        /// <param name="webhookUri">
+        /// <summary>
+        /// URI of the webhook in order to be called by shipping services	
+        /// </summary>
+        /// <remarks>Data type: Url. Max length: 500</remarks>
+        /// </param>
         public MerchantSettings(Uri pushUri, Uri termsUri, Uri checkoutUri, Uri confirmationUri,
             Uri checkoutValidationCallBackUri = null, IList<long> activePartPaymentCampaigns = null,
-            long? promotedPartPaymentCampaign = null)
+            long? promotedPartPaymentCampaign = null,
+            Uri webhookUri = null)
         {
             PushUri = pushUri ?? throw new ArgumentNullException(nameof(pushUri));
             TermsUri = termsUri ?? throw new ArgumentNullException(nameof(termsUri));
@@ -72,6 +79,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             CheckoutValidationCallBackUri = checkoutValidationCallBackUri;
             ActivePartPaymentCampaigns = activePartPaymentCampaigns;
             PromotedPartPaymentCampaign = promotedPartPaymentCampaign;
+            WebhookUri = webhookUri;
         }
 
         /// <summary>
@@ -126,5 +134,11 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </summary>
         /// <remarks>Must be valid CampaignID.</remarks>
         public long? PromotedPartPaymentCampaign { get; }
+
+        /// <summary>
+        /// URI of the webhook in order to be called by shipping services	
+        /// </summary>
+        /// <remarks>Data type: Url. Max length: 500</remarks>
+        public Uri WebhookUri { get; }
     }
 }

@@ -12,7 +12,7 @@
         /// <param name="weight">Weight of the parcel in grams</param>
         /// <param name="tags"></param>
         /// <param name="fallbackOptions"></param>
-        public ShippingInformation(bool enforceFallback, bool enableShipping, int weight, Dictionary<string, string> tags, ShippingOption fallbackOptions)
+        public ShippingInformation(bool enforceFallback, bool enableShipping, double weight, Dictionary<string, string> tags, ShippingOption fallbackOptions)
         {
             EnforceFallback = enforceFallback;
             EnableShipping = enableShipping;
@@ -34,7 +34,7 @@
         /// <summary>
         /// Weight of the parcel in grams
         /// </summary>
-        public int Weight { get; }
+        public double Weight { get; }
 
         public Dictionary<string, string> Tags { get; }
 

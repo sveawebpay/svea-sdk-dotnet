@@ -2,18 +2,19 @@
 using Microsoft.Extensions.Options;
 using Sample.AspNetCore.Extensions;
 using Sample.AspNetCore.Models;
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Svea.WebPay.SDK;
 using Svea.WebPay.SDK.CheckoutApi;
+using Svea.WebPay.SDK.Exceptions;
+using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Threading.Tasks;
 using Cart = Sample.AspNetCore.Models.Cart;
 
 namespace Sample.AspNetCore.Controllers
 {
-    using Svea.WebPay.SDK.Exceptions;
-    using System.Globalization;
+
 
     public class CheckOutController : Controller
     {
@@ -42,12 +43,12 @@ namespace Sample.AspNetCore.Controllers
 
             var snippet = data.Gui.Snippet;
 
-            var SveaCheckoutSource = new SveaCheckoutSource
+            var sveaCheckoutSource = new SveaCheckoutSource
             {
                 Snippet = snippet
             };
 
-            return View("Checkout", SveaCheckoutSource);
+            return View("Checkout", sveaCheckoutSource);
         }
 
         public async Task<Svea.WebPay.SDK.CheckoutApi.Data> CreatePaymentOrder(bool requireBanKId = false, bool isInternational = false)
@@ -68,13 +69,12 @@ namespace Sample.AspNetCore.Controllers
                 var shippingFallback = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", "DHL Home Delivery", "dhl", Convert.ToInt64(_cartService.CalculateTotal()));
                 var shippingInformation = new ShippingInformation(false, true, 1000, null, null);
 
+                var shippingCallbackUri = new Uri(_merchantSettings.WebhookUri.ToString().Replace("{marketId}", _marketService.MarketId));
 
                 var paymentOrderRequest = new CreateOrderModel(region, currencyRequest, languageRequest, DateTime.Now.Ticks.ToString(),
-                    new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(pushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, checkoutValidationCallbackUri),
+                    new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(pushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, checkoutValidationCallbackUri, webhookUri: shippingCallbackUri),
                     new Svea.WebPay.SDK.CheckoutApi.Cart(orderItems), requireBanKId, null, null, null, null, shippingInformation);
-
-
-
+                
                 var data = await _sveaClient.Checkout.CreateOrder(paymentOrderRequest).ConfigureAwait(false);
 
                 return data;

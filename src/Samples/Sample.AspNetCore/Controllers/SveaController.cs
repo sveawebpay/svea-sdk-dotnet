@@ -33,6 +33,13 @@ namespace Sample.AspNetCore.Controllers
             _sveaClient = sveaClient;
         }
 
+        [HttpPost("shipping")]
+        public ActionResult Shipping(ShippingCallbackResponse shippingCallbackResponse)
+        {
+            return Ok();
+        }
+
+
         [HttpGet("validation/{orderId}")]
         public ActionResult Validation(long? orderId)
         {

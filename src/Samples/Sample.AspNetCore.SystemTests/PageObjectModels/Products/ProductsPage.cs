@@ -6,7 +6,7 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
 {
     using _ = ProductsPage;
 
-    [Wait(1, TriggerEvents.Init)]
+    [WaitSeconds(1, TriggerEvents.Init)]
     public class ProductsPage : BasePage<_>
     {
         [FindByXPath("table[2]")] public Table<ProductBasketItem, _> CartProducts { get; set; }
@@ -35,7 +35,7 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
 
             [FindByName("Quantity")] public NumberInput<_> Quantity { get; set; }
 
-            [Wait(0.5, TriggerEvents.AfterClick)]
+            [WaitSeconds(0.5, TriggerEvents.AfterClick)]
             [FindByXPath("button[1]")]
             public Button<_> Update { get; set; }
         }

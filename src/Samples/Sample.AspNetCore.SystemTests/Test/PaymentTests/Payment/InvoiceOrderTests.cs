@@ -29,7 +29,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Any(), 15, 3)
+                    x.Orders.Count() > 0, 15, 3)
 
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -82,7 +82,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Any(), 15, 3)
+                    x.Orders.Count() > 0, 15, 3)
 
                 // Deliver
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -136,7 +136,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Any(), 15, 3)
+                    x.Orders.Count() > 0, 15, 3)
 
                 // Deliver -> Credit
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -191,7 +191,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Any(), 15, 3)
+                        x.Orders.Count() > 0, 15, 3)
 
 
                     // Deliver -> Credit
@@ -247,7 +247,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Any(), 15, 3)
+                    x.Orders.Count() > 0, 15, 3)
 
                 // Cancel
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -296,7 +296,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Any(), 15, 3)
+                        x.Orders.Count() > 0, 15, 3)
 
                     // Cancel
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -355,7 +355,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Any(), 15, 3)
+                    x.Orders.Count() > 0, 15, 3)
 
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
                 .Orders.Last().OrderRows.Last().Table.Toggle.Click()
@@ -385,7 +385,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Any(), 15, 3)
+                        x.Orders.Count() > 0, 15, 3)
 
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -444,7 +444,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Any(), 15, 3)
+                        x.Orders.Count() > 0, 15, 3)
 
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -511,7 +511,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Any(), 15, 3)
+                        x.Orders.Count() > 0, 15, 3)
 
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 

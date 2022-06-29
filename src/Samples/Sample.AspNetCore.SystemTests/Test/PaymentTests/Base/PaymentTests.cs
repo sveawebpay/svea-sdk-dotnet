@@ -266,12 +266,12 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                 { 
                     if(paymentMethod == PaymentMethods.Option.Vipps)
                     {   
-                        x.Wait(1).Market.Click()
+                        x.WaitSeconds(1).Market.Click()
                         .Markets[m => m.Content.Value == "NO"].Click();
                     }
                     else
                     {
-                        x.Wait(1).Market.Click()
+                        x.WaitSeconds(1).Market.Click()
                         .Markets[m => m.Content.Value == "SE"].Click();
                     }
                 })

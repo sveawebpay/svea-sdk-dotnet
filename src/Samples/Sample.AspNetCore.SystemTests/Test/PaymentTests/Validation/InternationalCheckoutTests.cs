@@ -24,14 +24,14 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 SelectProducts(products, PaymentMethods.Option.Card)
                     .InternationalCheckout.ClickAndGo()
                     .SveaFrame.SwitchTo<SveaPaymentFramePage>()
-                    .International.Should.Within(20).BeVisible()
+                    .International.Should.WithinSeconds(20).BeVisible()
                     .International.Country.Should.Contain("United States of America")
                     .Entity.Should.Not.BeVisible()
                     .SwitchToRoot<ProductsPage>()
                     .Header.Products.ClickAndGo<ProductsPage>()
                     .AnonymousCheckout.ClickAndGo()
                     .SveaFrame.SwitchTo<SveaPaymentFramePage>()
-                    .Entity.Should.Within(20).BeVisible()
+                    .Entity.Should.WithinSeconds(20).BeVisible()
                     .International.Should.Not.BeVisible();
             });
         }

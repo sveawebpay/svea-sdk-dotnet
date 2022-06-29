@@ -8,8 +8,8 @@ namespace Sample.AspNetCore.SystemTests.Services
 {
     public static class FluentExtensions
     {
-        private static readonly Regex RegexAmount = new Regex(@"(\d+[,.]*[\d]*) *(\w+)");
-        private static readonly Regex RegexNumericalValue = new Regex(@"\d+[,.]*[\d]*");
+        private static readonly Regex RegexAmount = new(@"(\d+[,.]*[\d]*) *(\w+)");
+        private static readonly Regex RegexNumericalValue = new(@"\d+[,.]*[\d]*");
 
         public static TOwner StoreAmount<TOwner>(this UIComponent<TOwner> component, out string amount, string characterToRemove = null)
             where TOwner : PageObject<TOwner>
@@ -61,25 +61,25 @@ namespace Sample.AspNetCore.SystemTests.Services
             return component.Owner;
         }
 
-        public static TOwner ContainAmount<TOwner>(this IDataVerificationProvider<string, TOwner> should, string expected, string format = "{0:N2}") where TOwner : PageObject<TOwner>
-        {
-            var actual = should.DataProvider.Value.Replace(" ", "");
+        //public static TOwner ContainAmount<TOwner>(this IDataVerificationProvider<string, TOwner> should, string expected, string format = "{0:N2}") where TOwner : PageObject<TOwner>
+        //{
+        //    var actual = should.DataProvider.Value.Replace(" ", "");
 
-            var actualResult = RegexAmount.Match(actual);
-            string actualValue = actualResult.Groups[1].Value;
-            string actualCurrency = actualResult.Groups[2].Value;
+        //    var actualResult = RegexAmount.Match(actual);
+        //    string actualValue = actualResult.Groups[1].Value;
+        //    string actualCurrency = actualResult.Groups[2].Value;
 
-            var actualAmount = $"{string.Format(format, Convert.ToDecimal(actualValue.Replace(",", "."), new CultureInfo("en-US")))} {actualCurrency}";
+        //    var actualAmount = $"{string.Format(format, Convert.ToDecimal(actualValue.Replace(",", "."), new CultureInfo("en-US")))} {actualCurrency}";
 
-            var expectedResult = RegexAmount.Match(expected);
-            string expectedValue = expectedResult.Groups[1].Value;
-            string expectedCurrency = expectedResult.Groups[2].Value;
+        //    var expectedResult = RegexAmount.Match(expected);
+        //    string expectedValue = expectedResult.Groups[1].Value;
+        //    string expectedCurrency = expectedResult.Groups[2].Value;
 
-            var expectedAmount = $"{string.Format(format, Convert.ToDecimal(expectedValue.Replace(",", "."), new CultureInfo("en-US")))} {expectedCurrency}";
+        //    var expectedAmount = $"{string.Format(format, Convert.ToDecimal(expectedValue.Replace(",", "."), new CultureInfo("en-US")))} {expectedCurrency}";
 
-            Assert.AreEqual(expectedAmount, actualAmount);
+        //    Assert.AreEqual(expectedAmount, actualAmount);
 
-            return should.Owner;
-        }
+        //    return should.Owner;
+        //}
     }
 }

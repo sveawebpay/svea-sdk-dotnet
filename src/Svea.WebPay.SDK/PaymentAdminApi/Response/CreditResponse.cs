@@ -7,7 +7,7 @@
         public CreditResponse() { }
 
         [JsonConstructor]
-        internal CreditResponse(CreditResponseObject creditResponseObject)
+        public CreditResponse(CreditResponseObject creditResponseObject)
         {
             CreditId = creditResponseObject.CreditId;
         }

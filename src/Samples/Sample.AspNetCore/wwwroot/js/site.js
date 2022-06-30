@@ -14,29 +14,33 @@ for (i = 0; i < coll.length; i++) {
 }
 
 var updateSettings = function(element) {
-    var form = element.closest('form');
+    let form = element.closest('form');
     form.find('[type="hidden"]:first').val(element.html());
     form.submit();
 };
 
-
 var shippingHandler = function (data) {
-    var a = data;
     console.log('event: ' + data);
 
-    if (data) {
-        document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: true } }));
-        console.log(data.type);
-        console.log(JSON.stringify(data.detail));
+    if (data.detail) {
+        document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: true } }));;
 
-        fetch('https://localhost:44345/api/svea/shippingTaxCalculation', {
+        let iframeUrl = $('iframe#svea-checkout-iframe').attr('src');
+        let params = (new URL(iframeUrl)).searchParams;
+        let orderId = params.get('orderId');
+
+        data.detail.orderId = orderId;
+
+        fetch('/api/svea/shippingTaxCalculation', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data.detail),
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log(response);
+            })
             .then(data => {
                 console.log('Success:', data);
             })
@@ -47,7 +51,6 @@ var shippingHandler = function (data) {
         document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: false } }));
     }
 }
-
 
 $(function () {
     document.addEventListener("sveaCheckout:shippingConfirmed", shippingHandler);

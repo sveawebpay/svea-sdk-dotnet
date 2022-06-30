@@ -3,7 +3,7 @@ using Svea.WebPay.SDK.PaymentAdminApi;
 using System.Linq;
 using Xunit;
 using PaymentOrderRow = Svea.WebPay.SDK.PaymentAdminApi.Models.OrderRow;
-using CheckoutOrderRow = Svea.WebPay.SDK.CheckoutApi.OrderRowResponse;
+using CheckoutOrderRow = Svea.WebPay.SDK.CheckoutApi.OrderRow;
 
 namespace Svea.WebPay.SDK.Tests.Helpers
 {

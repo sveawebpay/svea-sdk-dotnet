@@ -14,15 +14,16 @@
         public void ShouldCalculateShippingOrderRows_AsExpected(IList<OrderRow> orderRows, ShippingOption shippingOption, decimal expected)
         {
             var cart = new Cart(orderRows);
-            var shippingOrderRows = cart.CalculateShippingOrderRows(shippingOption);
+                        cart.CalculateShippingOrderRows(shippingOption);
             long taxSum = 0;
-            foreach (var shippingOrderRow in shippingOrderRows)
+            var shippingRows = cart.Items.Where(x => x.RowType == RowType.ShippingFee.ToString()).ToList();
+            foreach (var shippingOrderRow in shippingRows)
             {
                 var tax = shippingOrderRow.UnitPrice.InLowestMonetaryUnit * (shippingOrderRow.VatPercent / 100)/100;
                 taxSum += tax.InLowestMonetaryUnit;
             }
 
-            var actual = shippingOrderRows.Sum(x => (x.UnitPrice.InLowestMonetaryUnit * (x.VatPercent / 100))/100);
+            var actual = shippingRows.Sum(x => (x.UnitPrice.InLowestMonetaryUnit * (x.VatPercent / 100))/100);
             Assert.Equal(expected, taxSum/100M);
         }
 
@@ -33,8 +34,8 @@
             var orderRow3 = new OrderRow("articleNumber2", "name2", new MinorUnit(2), new MinorUnit(350), new MinorUnit(0), new MinorUnit(12), "pcs", null, 2);
             var orderRow4 = new OrderRow("articleNumber", "name", new MinorUnit(5), new MinorUnit(350), new MinorUnit(0), new MinorUnit(25), "pcs", null, 4);
 
-            var shippingOption1 = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", "DHL Home Delivery", "dhl", 100);
-            var shippingOption2 = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", "DHL Home Delivery", "dhl", 50);
+            var shippingOption1 = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", 1, "DHL Home Delivery", "dhl", 100, "", "", "");
+            var shippingOption2 = new ShippingOption("875fb2cd-a570-4afb-8a66-177d3d613f81", 1, "DHL Home Delivery", "dhl", 50, "", "", "");
 
             var allData = new List<object[]>
             {

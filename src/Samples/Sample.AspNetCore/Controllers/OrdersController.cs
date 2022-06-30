@@ -93,11 +93,11 @@ namespace Sample.AspNetCore.Controllers
             foreach (var order in orders)
             {
                 var orderViewModel = new OrderViewModel(order.OrderId);
-                if (!string.IsNullOrWhiteSpace(order.SveaOrderId))
+                if (order.SveaOrderId != 0)
                 {
                     try
                     {
-                        orderViewModel.Order = await this._sveaClient.PaymentAdmin.GetOrder(long.Parse(order.SveaOrderId)).ConfigureAwait(false);
+                        orderViewModel.Order = await this._sveaClient.PaymentAdmin.GetOrder(order.SveaOrderId).ConfigureAwait(false);
                         orderViewModel.IsLoaded = true;
                     }
                     catch (Exception e)

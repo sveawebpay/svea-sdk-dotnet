@@ -12,6 +12,6 @@ namespace Sample.AspNetCore.Models
         public int OrderId { get; set; }
 
         [Key]
-        public string SveaOrderId { get; set; }
+        public long SveaOrderId { get; set; }
     }
 }

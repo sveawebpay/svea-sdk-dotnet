@@ -302,6 +302,7 @@ else if (TempData["ErrorMessage"] != null)
                                             <tr>
                                                 <td>@action</td>
                                                 <td>
+
                                                     <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Order.Id" asp-route-deliveryId="@delivery.Id" automation=@automationTagName>Execute</a>
                                                 </td>
                                             </tr>

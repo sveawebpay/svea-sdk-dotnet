@@ -35,8 +35,13 @@ namespace Sample.AspNetCore.Controllers
 
 
         [HttpPost("shippingTaxCalculation")]
-        public ActionResult shippingTaxCalculation(ShippingOption shippingOption)
+        public async Task<ActionResult> shippingTaxCalculation(ShippingOption shippingOption)
         {
+            var order = await _sveaClient.Checkout.GetOrder(shippingOption.OrderId).ConfigureAwait(false);
+            order.Cart.CalculateShippingOrderRows(shippingOption);
+
+            await _sveaClient.Checkout.UpdateOrder(order.OrderId, new UpdateOrderModel(order.Cart));
+
             return Ok();
         }
 
@@ -64,14 +69,14 @@ namespace Sample.AspNetCore.Controllers
                     var order = await _sveaClient.Checkout.GetOrder(orderId.Value).ConfigureAwait(false);
                     if (order != null && order.Status == CheckoutOrderStatus.Final)
                     {
-                        _cartService.SveaOrderId = order.OrderId.ToString();
+                        _cartService.SveaOrderId = order.OrderId;
                         _cartService.Update();
 
                         var products = _cartService.CartLines.Select(p => p.Product);
 
                         _context.Products.AttachRange(products);
 
-                        var existing = _context.Orders.Find(order.OrderId.ToString());
+                        var existing = _context.Orders.Find(order.OrderId);
                         if (existing != null)
                         {
                             return Ok();

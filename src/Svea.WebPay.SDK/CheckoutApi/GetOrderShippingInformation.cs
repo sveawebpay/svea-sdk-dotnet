@@ -13,7 +13,7 @@
         /// <param name="tags"></param>
         /// <param name="fallbackOptions"></param>
         /// <param name="shippingProvider"></param>
-        public GetOrderShippingInformation(bool enforceFallback, bool enableShipping, double weight, Dictionary<string, string> tags, ShippingOption fallbackOptions, ShippingProvider shippingProvider)
+        public GetOrderShippingInformation(bool enforceFallback, bool enableShipping, double weight, Dictionary<string, string> tags, FallbackOption fallbackOptions, ShippingProvider shippingProvider)
             : base(enforceFallback, enableShipping, weight, tags, fallbackOptions)
         {
             ShippingProvider = shippingProvider;

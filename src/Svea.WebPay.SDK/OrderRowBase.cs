@@ -48,5 +48,11 @@
         /// </summary>
         /// <remarks>Max length: 4. Min length: 0.</remarks>
         public string Unit { get; internal set; }
+
+        /// <summary>
+        /// The row number the row will have in the Webpay system
+        /// </summary>
+        public int RowNumber { get; internal set; }
+
     }
 }

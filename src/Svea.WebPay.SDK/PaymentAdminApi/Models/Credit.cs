@@ -11,7 +11,7 @@
         /// <param name="actions">A list of possible actions on the credit.</param>
         /// <param name="amount">Credited amount. Minor currency.</param>
         /// <param name="orderRows">List of order rows.</param>
-        internal Credit(IList<string> actions, MinorUnit amount, IList<OrderRowResponseObject> orderRows)
+        public Credit(IList<string> actions, MinorUnit amount, IList<OrderRowResponseObject> orderRows)
         {
             Actions = actions;
             Amount = amount;

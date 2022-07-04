@@ -54,5 +54,10 @@
         /// </summary>
         public int RowNumber { get; internal set; }
 
+        /// <summary>
+        /// Is used just to distinguish ShippingFee item from the order items. It is a string and can be one of "Row" or "ShippingFee"	
+        /// </summary>
+        public string RowType { get; internal set; }
+
     }
 }

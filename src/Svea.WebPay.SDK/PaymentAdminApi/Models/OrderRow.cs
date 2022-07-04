@@ -20,6 +20,7 @@
             Unit = orderRowResponse.Unit;
             IsCancelled = orderRowResponse.IsCancelled;
             AvailableActions = orderRowResponse.Actions;
+            RowType = orderRowResponse.RowType;
         }
 
         public IList<string> AvailableActions { get; }

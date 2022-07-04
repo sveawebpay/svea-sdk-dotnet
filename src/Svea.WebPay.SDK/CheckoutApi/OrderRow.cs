@@ -159,7 +159,7 @@
         /// </param>
         [JsonConstructor]
         public OrderRow(string articleNumber, string name, MinorUnit quantity, MinorUnit unitPrice, MinorUnit discountPercent, MinorUnit discountAmount,
-           MinorUnit vatPercent, string unit, string temporaryReference, int rowNumber, string merchantData = null)
+           MinorUnit vatPercent, string unit, string temporaryReference, int rowNumber, string merchantData = null, string rowType = "Row")
         {
             ArticleNumber = articleNumber;
             Unit = unit;
@@ -221,6 +221,9 @@
             {
                 throw new ArgumentOutOfRangeException(nameof(merchantData), "Can only be 0-255 characters.");
             }
+
+            RowType = rowType;
+
         }
 
 
@@ -237,10 +240,7 @@
         /// <remarks>Max length: 255. Optional. Cleaned up from Checkout database after 45 days.</remarks>
         public string MerchantData { get; }
 
-        /// <summary>
-        /// Is used just to distinguish ShippingFee item from the order items. It is a string and can be one of "Row" or "ShippingFee"	
-        /// </summary>
-        public string RowType { get; }
+    
 
     }
 }

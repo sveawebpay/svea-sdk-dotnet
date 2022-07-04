@@ -36,5 +36,9 @@
         /// Price of the parcel, NOT minor currency!
         /// </summary>
         public long Price { get; }
+
+        public object Addons { get; } //TODO: Add this
+        public object Fields { get; }  //TODO: Add this
+
     }
 }

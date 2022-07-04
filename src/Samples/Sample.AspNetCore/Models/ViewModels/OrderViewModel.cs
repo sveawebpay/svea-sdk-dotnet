@@ -4,12 +4,12 @@
 
     public class OrderViewModel
     {
-        public OrderViewModel(int orderId)
+        public OrderViewModel(long orderId)
         {
             OrderId = orderId;
         }
 
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
         public bool IsLoaded { get; set; }
         public Order Order { get; set; }
     }

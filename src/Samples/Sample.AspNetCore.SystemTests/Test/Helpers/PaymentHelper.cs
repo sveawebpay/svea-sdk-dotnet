@@ -12,7 +12,11 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
         {
             return page
             .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
+            .PaymentMethods.Card.Focus()
             .PaymentMethods.Card.Click()
+            .WaitSeconds(1)
+            .Submit.IsVisible.WaitTo.BeTrue()
+            .Submit.Focus()
             .Submit.ClickAndGo<CardPaymentPage>()
             .CardNumber.IsVisible.WaitTo.BeTrue()
             .Do(x =>
@@ -35,6 +39,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.DirektBank.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.DirektBank.Click()
                 .PaymentMethods.DirektBank.Nordea.Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -43,6 +48,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Invoice.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Invoice.Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -85,6 +91,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.PaymentPlan.Click()
                 .PaymentMethods.PaymentPlan.Options[1].Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -93,6 +100,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Account.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Account.Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -109,6 +117,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Swish.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Swish.Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -117,6 +126,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Vipps.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Vipps.Click()
+                .WaitSeconds(1)
                 .Submit.ClickAndGo<VippsPaymentPage>()
                 .Next.Click()
                 .SwitchToRoot<SveaPaymentFramePage>();

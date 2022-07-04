@@ -1,5 +1,6 @@
 ﻿using Atata;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Payment;
+using Sample.AspNetCore.SystemTests.PageObjectModels.Payment.Blocks;
 
 namespace Sample.AspNetCore.SystemTests.PageObjectModels
 {
@@ -18,6 +19,12 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
         public InternationalIdentificationBlock<_> International { get; private set; }
 
         public DetailsB2CAnonymousBlock<_> B2CAnonymous { get; private set; }
+
+        public AddShippingBlock<_> AddShippingBlock { get; private set; }
+
+        public EditShippingBlock<_> EditShippingBlock { get; private set; }
+
+        public SelectShippingBlock<_> SelectShippingBlock { get; private set; }
 
         public PaymentMethodsBlock<_> PaymentMethods { get; private set; }
 

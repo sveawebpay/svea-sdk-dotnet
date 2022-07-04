@@ -51,6 +51,10 @@ namespace Sample.AspNetCore.SystemTests.Services
         public static string NorwegianCity => "Oslo";
         public static string NorwegianPhoneNumber => "17054512";
 
+        public static string ShippingStreetAddress = "Roslagsgatan 10";
+        public static string ShippingZipCode = "113 51";
+        public static string ShippingCity = "Stockholm";
+
 
         public static string Description(int length = 30)
         {

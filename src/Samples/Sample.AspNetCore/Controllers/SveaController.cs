@@ -45,6 +45,7 @@ namespace Sample.AspNetCore.Controllers
             return Ok();
         }
 
+        //TODO: Test callback
         [HttpPost("shipping")]
         public ActionResult Shipping(ShippingCallbackResponse shippingCallbackResponse)
         {

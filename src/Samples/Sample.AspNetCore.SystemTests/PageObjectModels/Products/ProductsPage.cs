@@ -24,6 +24,9 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
         [FindByAutomation("button-checkout-international")]
         public Link<PaymentPage, _> InternationalCheckout { get; set; }
 
+        [FindByAutomation("button-checkout-shipping")]
+        public Link<PaymentPage, _> ShippingCheckout { get; set; }
+
         [FindByXPath("table[2]//tfoot[1]//td[2]")]
         public Text<_> TotalAmount { get; set; }
 

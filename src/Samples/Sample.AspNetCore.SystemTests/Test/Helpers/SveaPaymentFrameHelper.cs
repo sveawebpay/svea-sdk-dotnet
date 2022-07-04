@@ -6,7 +6,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 {
     public static class SveaPaymentFrameHelper
     {
-        public static SveaPaymentFramePage IdentifyEntity(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
+        public static SveaPaymentFramePage IdentifyEntity(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, bool enableShipping = false)
         {
             page.Entity.IsVisible.WaitTo.BeTrue();
 
@@ -22,11 +22,31 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                             
                             if(paymentMethod != PaymentMethods.Option.Vipps)
                             {
-                                return page.ProceedWithSwedishPrivateIdentification().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                                return page.ProceedWithSwedishPrivateIdentification().Do(x =>
+                                {
+                                    if (enableShipping)
+                                    {
+                                        x.AddShippingBlock.IsVisible.WaitTo.BeTrue();
+                                    }
+                                    else
+                                    {
+                                        x.PaymentMethods.IsVisible.WaitTo.BeTrue();
+                                    }
+                                });
                             }
                             else
                             {
-                                return page.ProceedWithNorwegianPrivateIdentification().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                                return page.ProceedWithNorwegianPrivateIdentification().Do(x =>
+                                {
+                                    if (enableShipping)
+                                    {
+                                        x.AddShippingBlock.IsVisible.WaitTo.BeTrue();
+                                    }
+                                    else
+                                    {
+                                        x.PaymentMethods.IsVisible.WaitTo.BeTrue();
+                                    }
+                                });
                             }
 
                         case Checkout.Option.Anonymous:
@@ -45,6 +65,35 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                             return page.ProceedWithCompanyAnonymous().PaymentMethods.IsVisible.WaitTo.BeTrue();
                     }
             }
+        }
+
+        public static SveaPaymentFramePage EditShipping(this SveaPaymentFramePage page)
+        {
+            return page.AddShippingBlock.IsVisible.WaitTo.BeTrue()
+                .AddShippingBlock.Expand.Click()
+                .EditShippingBlock.NewAddress.IsVisible.WaitTo.BeTrue()
+                .EditShippingBlock.NewAddress.Click()
+                .WaitSeconds(2)
+                .EditShippingBlock.FirstName.Set(TestDataService.SwedishFirstName)
+                .EditShippingBlock.LastName.Set(TestDataService.SwedishLastName)
+                .EditShippingBlock.StreetAddress.Set(TestDataService.ShippingStreetAddress)
+                .EditShippingBlock.ZipCode.Set(TestDataService.ShippingZipCode)
+                .Do(x =>
+                {
+                    if(x.EditShippingBlock.City.Value.Length == 0)
+                    {
+                        x.EditShippingBlock.City.Set(TestDataService.ShippingCity);
+                    }
+                })
+                .EditShippingBlock.Submit.Focus()
+                .EditShippingBlock.Submit.Click()
+                .SelectShippingBlock.Option.Items.ElementAt(2).Click()
+                .WaitSeconds(2)
+                .SelectShippingBlock.DoorCode.Set(TestDataService.SwedishZipCode)
+                .SelectShippingBlock.Instructions.Set("Test")
+                .WaitSeconds(2)
+                .SelectShippingBlock.Submit.Focus()
+                .SelectShippingBlock.Submit.Click();
         }
 
         public static SveaPaymentFramePage Pay(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, string amount = null)

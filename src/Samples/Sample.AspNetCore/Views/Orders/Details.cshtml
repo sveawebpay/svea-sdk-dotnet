@@ -55,7 +55,7 @@ else if (TempData["ErrorMessage"] != null)
                             @Html.DisplayNameFor(model => order.OrderId)
                         </dt>
                         <dd class="col-sm-4" automation="text-orderid">
-                            @Html.DisplayFor(model => order.OrderId)
+                            @Html.DisplayFor(model => order.Order.Id)
                         </dd>
                         @if (order.IsLoaded)
                         {
@@ -302,7 +302,6 @@ else if (TempData["ErrorMessage"] != null)
                                             <tr>
                                                 <td>@action</td>
                                                 <td>
-
                                                     <a class="btn btn-primary" asp-controller="Payment" asp-action=@action asp-route-paymentId="@order.Order.Id" asp-route-deliveryId="@delivery.Id" automation=@automationTagName>Execute</a>
                                                 </td>
                                             </tr>

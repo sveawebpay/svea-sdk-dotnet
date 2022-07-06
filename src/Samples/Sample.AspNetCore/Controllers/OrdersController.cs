@@ -87,29 +87,22 @@ namespace Sample.AspNetCore.Controllers
                 orders = await this.context.Orders.ToListAsync();
             }
       
-
             var orderViewModels = new List<OrderViewModel>();
-
             foreach (var order in orders)
             {
-                var orderViewModel = new OrderViewModel(order.SveaOrderId);
-                if (order.SveaOrderId != 0)
+                var orderViewModel = new OrderViewModel(order.OrderId);
+                if (!string.IsNullOrWhiteSpace(order.SveaOrderId))
                 {
                     try
                     {
-                        orderViewModel.Order = await this._sveaClient.PaymentAdmin.GetOrder(order.SveaOrderId).ConfigureAwait(false);
+                        orderViewModel.Order = await this._sveaClient.PaymentAdmin.GetOrder(long.Parse(order.SveaOrderId)).ConfigureAwait(false);
                         orderViewModel.IsLoaded = true;
                     }
-                    catch (Exception)
-                    {
-                    }
+                    catch {}
 
                     orderViewModels.Add(orderViewModel);
-
-
                 }
             }
-          
 
             return View(new OrderListViewModel
             {

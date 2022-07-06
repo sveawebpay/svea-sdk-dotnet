@@ -70,14 +70,14 @@ namespace Sample.AspNetCore.Controllers
                     var order = await _sveaClient.Checkout.GetOrder(orderId.Value).ConfigureAwait(false);
                     if (order != null && order.Status == CheckoutOrderStatus.Final)
                     {
-                        _cartService.SveaOrderId = order.OrderId;
+                        _cartService.SveaOrderId = order.OrderId.ToString();
                         _cartService.Update();
 
                         var products = _cartService.CartLines.Select(p => p.Product);
 
                         _context.Products.AttachRange(products);
 
-                        var existing = _context.Orders.Find(order.OrderId);
+                        var existing = _context.Orders.Find(order.OrderId.ToString());
                         if (existing != null)
                         {
                             return Ok();

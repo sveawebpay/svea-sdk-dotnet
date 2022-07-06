@@ -17,7 +17,7 @@ namespace Sample.AspNetCore.Models
             private set => CartLineCollection = value.ToList();
         }
 
-        public long SveaOrderId { get; set; }
+        public string SveaOrderId { get; set; }
         public bool Vat { get; set; }
         public bool IsInternational { get; set; }
 

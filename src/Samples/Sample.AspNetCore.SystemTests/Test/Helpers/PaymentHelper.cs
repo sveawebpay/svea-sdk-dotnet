@@ -1,4 +1,5 @@
 ﻿using Atata;
+using OpenQA.Selenium;
 using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Payment;
 using Sample.AspNetCore.SystemTests.Services;
@@ -8,24 +9,49 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 {
     public static class PaymentHelper
     {
-        public static SveaPaymentFramePage PayWithCard(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage PayWithCard(this SveaPaymentFramePage page, bool switchFrame = false)
         {
             return page
             .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
             .PaymentMethods.Card.Click()
-            .Submit.ClickAndGo<CardPaymentPage>()
-            .CardNumber.IsVisible.WaitTo.BeTrue()
             .Do(x =>
             {
-                if (x.DebitCard.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }))
+                if (!switchFrame)
                 {
-                    x.DebitCard.Click();
+                    x
+                    .Submit.ClickAndGo<CardPaymentPage>()
+                    .CardNumber.IsVisible.WaitTo.BeTrue()
+                    .Do(x =>
+                    {
+                        if (x.DebitCard.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }))
+                        {
+                            x.DebitCard.Click();
+                        }
+                    })
+                    .CardNumber.Set(TestDataService.CreditCardNumber)
+                    .Expiry.Set(TestDataService.CreditCardExpiratioDate)
+                    .Cvc.Set(TestDataService.CreditCardCvc)
+                    .Submit.Click();
+                }
+                else
+                {
+                    x
+                    .Submit.Click()
+                    .SwitchToFrame<CardPaymentPage>(By.TagName("iframe"))
+                   .CardNumber.IsVisible.WaitTo.BeTrue()
+                   .Do(x =>
+                   {
+                       if (x.DebitCard.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }))
+                       {
+                           x.DebitCard.Click();
+                       }
+                   })
+                   .CardNumber.Set(TestDataService.CreditCardNumber)
+                   .Expiry.Set(TestDataService.CreditCardExpiratioDate)
+                   .Cvc.Set(TestDataService.CreditCardCvc)
+                   .Submit.Click();
                 }
             })
-            .CardNumber.Set(TestDataService.CreditCardNumber)
-            .Expiry.Set(TestDataService.CreditCardExpiratioDate)
-            .Cvc.Set(TestDataService.CreditCardCvc)
-            .Submit.Click()
             .SwitchToRoot<SveaPaymentFramePage>();
         }
 
@@ -52,7 +78,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.Trustly.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Trustly.Click()
                 .Submit.ClickAndGo<TrustlyPaymentPage>()
-                .Banks[0].IsVisible.WaitTo.BeTrue()
+                .Banks[0].IsVisible.WaitTo.Within(15).BeTrue()
                 .Banks[0].Click()
                 .Next.IsVisible.WaitTo.Within(60).BeTrue()
                 .Next.Click()

@@ -59,7 +59,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .International.ZipCode.Set(TestDataService.SwedishZipCode)
                     .International.City.Set(TestDataService.SwedishCity)
                     .Submit.Click()
-                    .Pay(Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Card, null)
+                    .Pay(Checkout.Option.Anonymous, Entity.Option.Private, PaymentMethods.Option.Card, null, switchFrame: true)
                     .PageUrl.Should.Within(TimeSpan.FromSeconds(60)).Contain("thankyou")
                     .SwitchToRoot<ThankYouPage>()
                     .ThankYou.IsVisible.WaitTo.BeTrue();

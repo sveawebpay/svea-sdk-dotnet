@@ -87,21 +87,26 @@ namespace Sample.AspNetCore.Controllers
                 orders = await this.context.Orders.ToListAsync();
             }
       
-
-            var paymentOrderResponses = new List<Svea.WebPay.SDK.PaymentAdminApi.Models.Order>();
-
+            var orderViewModels = new List<OrderViewModel>();
             foreach (var order in orders)
             {
+                var orderViewModel = new OrderViewModel(order.OrderId);
                 if (!string.IsNullOrWhiteSpace(order.SveaOrderId))
                 {
-                    paymentOrderResponses.Add(await this._sveaClient.PaymentAdmin.GetOrder(long.Parse(order.SveaOrderId)).ConfigureAwait(false));
+                    try
+                    {
+                        orderViewModel.Order = await this._sveaClient.PaymentAdmin.GetOrder(long.Parse(order.SveaOrderId)).ConfigureAwait(false);
+                        orderViewModel.IsLoaded = true;
+                    }
+                    catch {}
+
+                    orderViewModels.Add(orderViewModel);
                 }
             }
-          
 
-            return View(new OrderViewModel
+            return View(new OrderListViewModel
             {
-                PaymentOrders = paymentOrderResponses,
+                PaymentOrders = orderViewModels
             });
         }
 

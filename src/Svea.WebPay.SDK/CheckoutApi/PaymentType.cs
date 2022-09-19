@@ -100,6 +100,10 @@
         /// <summary>
         /// Trustly
         /// </summary>
-        TRUSTLY
+        TRUSTLY,
+
+        LEASINGMANUAL,
+
+        MOBILEPAY
     }
 }

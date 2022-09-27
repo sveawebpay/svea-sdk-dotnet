@@ -1,4 +1,5 @@
 ﻿using Atata;
+using OpenQA.Selenium;
 using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.PageObjectModels.Payment;
 using Sample.AspNetCore.SystemTests.Services;
@@ -14,6 +15,28 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
             .PaymentMethods.Card.Click()
             .Submit.ClickAndGo<CardPaymentPage>()
+            .CardNumber.IsVisible.WaitTo.BeTrue()
+            .Do(x =>
+            {
+                if (x.DebitCard.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }))
+                {
+                    x.DebitCard.Click();
+                }
+            })
+            .CardNumber.Set(TestDataService.CreditCardNumber)
+            .Expiry.Set(TestDataService.CreditCardExpiratioDate)
+            .Cvc.Set(TestDataService.CreditCardCvc)
+            .Submit.Click()
+            .SwitchToRoot<SveaPaymentFramePage>();
+        }
+
+        public static SveaPaymentFramePage PayWithCardEmbedded(this SveaPaymentFramePage page)
+        {
+            return page
+            .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
+            .PaymentMethods.Card.Click()
+            .Submit.Click()
+            .SwitchToFrame<CardPaymentFramePage>(By.CssSelector("iframe"))
             .CardNumber.IsVisible.WaitTo.BeTrue()
             .Do(x =>
             {
@@ -52,10 +75,13 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.Trustly.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Trustly.Click()
                 .Submit.ClickAndGo<TrustlyPaymentPage>()
-                .Banks[0].IsVisible.WaitTo.BeTrue()
-                .Banks[0].Click()
+                .Bank.Click()
                 .Next.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
                 .Next.Click()
+                .WaitSeconds(1)
+                .Next.IsVisible.WaitTo.BeTrue()
+                .Next.Focus()
+                .Press(Keys.Space)
                 .Do(x => { 
                     if(checkout == Checkout.Option.Anonymous)
                     {
@@ -66,16 +92,17 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .SecurityCodeOption.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
                 .SecurityCodeOption.Click()
                 .Next.Click()
-                .MessageCode.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
+                .Code.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
                 .MessageCode.StoreValue(out string code)
                 .Code.Set(code)
                 .Next.Click()
-                .AccountOptions.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
+                .CheckingAccount.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
+                .CheckingAccount.Click()
                 .Next.Click()
-                .MessageCode.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
+                .Code.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
                 .MessageCode.StoreValue(out code)
                 .Code.Set(code)
-                .Next.Click()
+                .Confirm.Click()
                 .SwitchToRoot<SveaPaymentFramePage>();
         }
 
@@ -120,6 +147,31 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Submit.ClickAndGo<VippsPaymentPage>()
                 .Next.Click()
                 .SwitchToRoot<SveaPaymentFramePage>();
+        }
+        public static SveaPaymentFramePage PayWithLeasing(this SveaPaymentFramePage page)
+        {
+            return page
+                .PaymentMethods.Leasing.IsVisible.WaitTo.BeTrue()
+                .PaymentMethods.Leasing.Click()
+                .Leasing.SixtyMonths.Click()
+                .Leasing.Continue.Click()
+                .Leasing.Email.Set(TestDataService.CompanyEmail)
+                .Submit.Click()
+                .Leasing.ManualConfirmation.WaitTo.WithinSeconds(10).BeVisible()
+                .Leasing.Confirm.Click();
+        }
+
+        public static SveaPaymentFramePage PayWithMobilePay(this SveaPaymentFramePage page)
+        {
+            return page
+                .PaymentMethods.Leasing.IsVisible.WaitTo.BeTrue()
+                .PaymentMethods.Leasing.Click()
+                .Leasing.SixtyMonths.Click()
+                .Leasing.Continue.Click()
+                .Leasing.Email.Set(TestDataService.CompanyEmail)
+                .Submit.Click()
+                .Leasing.ManualConfirmation.WaitTo.WithinSeconds(10).BeVisible()
+                .Leasing.Confirm.Click();
         }
     }
 }

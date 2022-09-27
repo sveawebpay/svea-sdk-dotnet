@@ -16,5 +16,8 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
 
         [FindByName("phoneNumber")]
         public TelInput<TOwner> Phone { get; private set; }
+
+        [FindByName("creditAgreement")]
+        public Clickable<TOwner> CreditAgreement { get; private set; }
     }
 }

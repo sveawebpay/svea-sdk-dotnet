@@ -12,6 +12,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Entity.IsPrivate.Click()
                 .B2CIdentification.Email.Set(TestDataService.Email)
                 .B2CIdentification.ZipCode.Set(TestDataService.SwedishZipCode)
+                
                 .Submit.Click()
                 .Do(x =>
                 {
@@ -44,11 +45,31 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 });
         }
 
+        public static SveaPaymentFramePage ProceedWithFinnishPrivateIdentification(this SveaPaymentFramePage page)
+        {
+            return page
+                .Entity.IsPrivate.Click()
+                .B2CIdentification.Email.Set(TestDataService.Email)
+                .B2CIdentification.ZipCode.Set(TestDataService.FinnishZipCode)
+                .B2CIdentification.CreditAgreement.Click()
+                .Submit.Click()
+                .Do(x =>
+                {
+                    if (x.B2CIdentification.PersonalNumber.Exists(new SearchOptions { IsSafely = true }))
+                    {
+                        x
+                        .B2CIdentification.Phone.Set(TestDataService.FinnishPhoneNumber)
+                        .B2CIdentification.PersonalNumber.Set(TestDataService.FinnishPersonalNumber)
+                        .Submit.Click();
+                    }
+                });
+        }
+
         public static SveaPaymentFramePage ProceedWithCompanyIdentification(this SveaPaymentFramePage page)
         {
             return page
                 .Entity.IsCompany.Click()
-                .B2BIdentification.Email.Set(TestDataService.Email)
+                .B2BIdentification.Email.Set(TestDataService.CompanyEmail)
                 .B2BIdentification.OrganizationNumber.Set(TestDataService.OrganizationNumber)
                 .Submit.Click()
                 .Do(x =>

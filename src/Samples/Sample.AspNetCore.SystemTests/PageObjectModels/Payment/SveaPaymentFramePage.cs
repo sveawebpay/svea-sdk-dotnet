@@ -20,6 +20,7 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
         public DetailsB2CAnonymousBlock<_> B2CAnonymous { get; private set; }
 
         public PaymentMethodsBlock<_> PaymentMethods { get; private set; }
+        public LeasingPaymentBlock<_> Leasing { get; private set; }
 
         [WaitSeconds(1, TriggerEvents.BeforeClick)]
         [FindByCss("button[data-testid='anonymous-toggle']")]
@@ -35,5 +36,7 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
 
         [FindByCss("div[data-testid='bankid-dialog']")]
         public Control<_> BankId{ get; private set; }
+
+        public Frame<CardPaymentFramePage, _> CardPaymentFramePage { get; set; }
     }
 }

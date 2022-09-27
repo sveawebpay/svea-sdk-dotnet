@@ -14,6 +14,7 @@
         PaymentPlan,
         Trustly,
         Swish,
-        Vipps
+        Vipps,
+        MobilePay
     }
 }

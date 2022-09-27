@@ -37,6 +37,10 @@
         /// <summary>
         /// Vipps order
         /// </summary>
-        Vipps
+        Vipps,
+
+        Leasing,
+
+        MobilePay
     }
 }

@@ -97,7 +97,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
 				// Validate deliveries info
 				.Orders.Last().Deliveries.Count.Should.Equal(1)
-				.Orders.Last().Deliveries.First().Status.Should.BeNull();
+				.Orders.Last().Deliveries.First().Status.Should.BeNullOrEmpty();
 
 			// Assert sdk/api response
 			var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -155,7 +155,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
 				// Validate deliveries info
 				.Orders.Last().Deliveries.Count.Should.Equal(1)
-				.Orders.Last().Deliveries.First().Status.Should.BeNull();
+				.Orders.Last().Deliveries.First().Status.Should.BeNullOrEmpty();
 
 			// Assert sdk/api response
 			var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);

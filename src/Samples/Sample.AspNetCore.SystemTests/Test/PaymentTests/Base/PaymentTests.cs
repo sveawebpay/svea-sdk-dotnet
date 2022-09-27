@@ -89,14 +89,20 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                         .Header.Products.ClickAndGo();
                     }
 
-                    if(paymentMethod == PaymentMethods.Option.Vipps)
+                    switch(paymentMethod)
                     {
-                        x.Market.Click();
-                        x.Markets[m => m.Content.Value == "NO"].Click();
-                        x.Country.Click();
-                        x.Countries[m => m.Content.Value == "NO"].Click();
+                        case PaymentMethods.Option.Vipps:
+                            x.Market.Click();
+                            x.Markets[m => m.Content.Value == "NO"].Click();
+                            x.Country.Click();
+                            x.Countries[m => m.Content.Value == "NO"].Click();
+                            break;
+                        case PaymentMethods.Option.MobilePay:
+                            x.Market.Click();
+                            x.Markets[m => m.Content.Value == "FI"].Click();
+                            break;
                     }
-
+                    
                     foreach(var product in products)
                     {
                         product.Name = null;
@@ -211,6 +217,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     page
                         .PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue()
                         .PaymentMethods.PaymentPlan.Click()
+                        .WaitSeconds(1)
                         .PaymentMethods.PaymentPlan.Options[1].Click()
                         .Submit.Click()
                         .BankId.Should.BeVisible();
@@ -229,9 +236,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             return page;
         }
 
-        protected ThankYouPage GoToThankYouPage(Product[] products, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
+        protected ThankYouPage GoToThankYouPage(Product[] products, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, bool requireBankId = false)
         {
-            var page = GoToSveaPaymentFrame(products, requireBankId: false, isInternational: false, paymentMethod);
+            var page = GoToSveaPaymentFrame(products, requireBankId: requireBankId, isInternational: false, paymentMethod);
 
             try
             {
@@ -259,20 +266,26 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             }
         }
 
-        protected OrdersPage GoToOrdersPage(Product[] products, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
+        protected OrdersPage GoToOrdersPage(Product[] products, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, bool requireBankId = false)
         {
-            return GoToThankYouPage(products, checkout, entity, paymentMethod)
+            return GoToThankYouPage(products, checkout, entity, paymentMethod, requireBankId)
                 .Do(x => 
-                { 
-                    if(paymentMethod == PaymentMethods.Option.Vipps)
-                    {   
-                        x.WaitSeconds(1).Market.Click()
-                        .Markets[m => m.Content.Value == "NO"].Click();
-                    }
-                    else
+                {
+                    switch (paymentMethod)
                     {
-                        x.WaitSeconds(1).Market.Click()
-                        .Markets[m => m.Content.Value == "SE"].Click();
+                        case PaymentMethods.Option.Vipps:
+                            x.WaitSeconds(1).Market.Click()
+                            .Markets[m => m.Content.Value == "NO"].Click();
+                            break;
+                        case PaymentMethods.Option.MobilePay:
+                            x.WaitSeconds(1).Market.Click()
+                            .Markets[m => m.Content.Value == "FI"].Click();
+                            break;
+                        default:
+                            x.WaitSeconds(1).Market.Click()
+                            .Markets[m => m.Content.Value == "SE"].Click();
+                            break;
+
                     }
                 })
                 .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 25, retryInterval: 3)
@@ -294,7 +307,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             {
                 data.Add(new[]
                    {
-                    new Product { Quantity = 4, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
+                    new Product { Quantity = 8, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
                 });
             }    
             else

@@ -90,7 +90,8 @@ namespace Sample.AspNetCore.Controllers
             var orderViewModels = new List<OrderViewModel>();
             foreach (var order in orders)
             {
-                var orderViewModel = new OrderViewModel(order.OrderId);
+                var orderId = int.Parse(order.SveaOrderId);
+                var orderViewModel = new OrderViewModel(orderId);
                 if (!string.IsNullOrWhiteSpace(order.SveaOrderId))
                 {
                     try

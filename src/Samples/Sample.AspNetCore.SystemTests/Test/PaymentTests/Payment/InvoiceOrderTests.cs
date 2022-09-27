@@ -217,7 +217,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
-                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.CompanyEmail));
                 Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Invoice)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
@@ -319,7 +319,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
-                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.CompanyEmail));
                 Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Invoice)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
@@ -400,7 +400,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                     // Validate order rows info
                     .Orders.Last().OrderRows.Should.HaveCount(1)
-                    .Orders.Last().OrderRows.First().Quantity.Should.Equal("2.00")
+                    .Orders.Last().OrderRows.First().Quantity.Should.Equal("6.00")
 
                     //// Validate deliveries info
                     .Orders.Last().Deliveries.Count.Should.Equal(1)

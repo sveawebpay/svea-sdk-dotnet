@@ -76,7 +76,7 @@ namespace Sample.AspNetCore.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError("Callback failed", e);
+                _logger.LogError( e, "Callback failed");
                 return Ok();
             }
         }

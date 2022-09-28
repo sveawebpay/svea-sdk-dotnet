@@ -164,7 +164,7 @@ namespace Svea.WebPay.SDK
                     }
                     catch (HttpRequestException e)
                     {
-                        var ex = new HttpRequestException($"Resource object was not returned: {e.Message}");
+                        var ex = new HttpRequestException($"Resource object was not returned: {e.Message}", inner: e);
                         _logger.LogError(ex, ex.Message);
 
                         throw ex;

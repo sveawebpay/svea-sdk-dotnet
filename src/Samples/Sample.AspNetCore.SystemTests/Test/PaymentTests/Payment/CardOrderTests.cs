@@ -48,7 +48,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
-                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.CompanyEmail));
                 Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));
@@ -90,14 +90,14 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .Orders.Last().OrderRows.Should.HaveCount(0)
 
                     // Validate deliveries info
-                    .Orders.Last().Deliveries.First().Status.Should.BeNull();
+                    .Orders.Last().Deliveries.First().Status.Should.BeNullOrEmpty();
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
 
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
-                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.CompanyEmail));
                 Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
@@ -254,7 +254,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
-                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.CompanyEmail));
                 Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Cancelled)));
@@ -348,7 +348,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
                 Assert.That(response.IsCompany, Is.True);
-                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.Email));
+                Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.CompanyEmail));
                 Assert.That(response.OrderAmount.InLowestMonetaryUnit, Is.EqualTo(_amount * 100));
                 Assert.That(response.PaymentType.ToString(), Is.EqualTo(nameof(PaymentType.Card)));
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Open)));

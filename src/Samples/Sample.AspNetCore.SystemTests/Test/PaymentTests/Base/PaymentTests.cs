@@ -37,10 +37,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
         public void OneTimeSetUp()
         {
             var config = new ConfigurationBuilder()
-             .AddJsonFile("appsettings.json")
-             .AddUserSecrets("6343ea20-120b-4075-a141-c8154cad1d14")
-             .AddEnvironmentVariables()
-             .Build();
+                .AddJsonFile("appsettings.json")
+                .AddUserSecrets("6343ea20-120b-4075-a141-c8154cad1d14")
+                .AddEnvironmentVariables()
+                .Build();
 
             var handler = new HttpClientHandler
             {
@@ -76,7 +76,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
         }
 
         protected ProductsPage SelectProducts(
-            Product[] products, 
+            Product[] products,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
         {
             _amount = 0;
@@ -91,15 +91,21 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                         .Header.Products.ClickAndGo();
                     }
 
-                    if(paymentMethod == PaymentMethods.Option.Vipps)
+                    switch (paymentMethod)
                     {
-                        x.Market.Click();
-                        x.Markets[m => m.Content.Value == "NO"].Click();
-                        x.Country.Click();
-                        x.Countries[m => m.Content.Value == "NO"].Click();
+                        case PaymentMethods.Option.Vipps:
+                            x.Market.Click();
+                            x.Markets[m => m.Content.Value == "NO"].Click();
+                            x.Country.Click();
+                            x.Countries[m => m.Content.Value == "NO"].Click();
+                            break;
+                        case PaymentMethods.Option.MobilePay:
+                            x.Market.Click();
+                            x.Markets[m => m.Content.Value == "FI"].Click();
+                            break;
                     }
 
-                    foreach(var product in products)
+                    foreach (var product in products)
                     {
                         product.Name = null;
                     }
@@ -110,7 +116,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                         {
                             product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasAmountDiscount == !string.IsNullOrWhiteSpace(y.AmountDiscount.Value)].Name.Value;
                         }
-                        else if(product.HasPercentDiscount)
+                        else if (product.HasPercentDiscount)
                         {
                             product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasPercentDiscount == !string.IsNullOrWhiteSpace(y.PercentDiscount.Value)].Name.Value;
                         }
@@ -118,7 +124,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                         {
                             product.Name = x.Products.Rows[y => !products.Any(p => p.Name == y.Name.Value) && product.HasAmountDiscount == !string.IsNullOrWhiteSpace(y.AmountDiscount.Value) && product.HasPercentDiscount == !string.IsNullOrWhiteSpace(y.PercentDiscount.Value)].Name.Value;
                         }
-                        
+
                         x
                         .Products.Rows[y => y.Name.Value == product.Name].AddToCart.ClickAndGo<ProductsPage>()
                         .Products.Rows[y => y.Name.Value == product.Name].Price.StoreNumericalValue(out var price, characterToRemove: " ")
@@ -137,8 +143,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                         product.Currency = currency;
 
                         double discount = 0;
-                        
-                        if(!string.IsNullOrEmpty(amountDiscount.ToString()) && amountDiscount != 0)
+
+                        if (!string.IsNullOrEmpty(amountDiscount.ToString()) && amountDiscount != 0)
                         {
                             discount = double.Parse(amountDiscount.ToString());
                         }
@@ -181,7 +187,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     .ShippingCheckout.ClickAndGo()
                     .SveaFrame;
             }
-            else 
+            else
             {
                 frame = SelectProducts(products, paymentMethod)
                     .AnonymousCheckout.ClickAndGo()
@@ -196,9 +202,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
         }
 
         protected SveaPaymentFramePage GoToBankId(
-            Product[] products, 
-            Checkout.Option checkout = Checkout.Option.Identification, 
-            Entity.Option entity = Entity.Option.Private, 
+            Product[] products,
+            Checkout.Option checkout = Checkout.Option.Identification,
+            Entity.Option entity = Entity.Option.Private,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
         {
             var page = GoToSveaPaymentFrame(products, requireBankId: true, isInternational: false, false, paymentMethod);
@@ -214,7 +220,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     .IdentifyEntity(checkout, entity, paymentMethod);
             }
 
-            switch(paymentMethod)
+            switch (paymentMethod)
             {
                 case PaymentMethods.Option.Invoice:
                     page
@@ -228,6 +234,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     page
                         .PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue()
                         .PaymentMethods.PaymentPlan.Click()
+                        .WaitSeconds(1)
                         .PaymentMethods.PaymentPlan.Options[1].Click()
                         .Submit.Click()
                         .BankId.Should.BeVisible();
@@ -251,22 +258,23 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Checkout.Option checkout = Checkout.Option.Identification,
             Entity.Option entity = Entity.Option.Private,
             bool enableShipping = false,
-            PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
+            PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card,
+            bool requireBankId = false)
         {
-            var page = GoToSveaPaymentFrame(products, requireBankId: false, isInternational: false, enableShipping, paymentMethod);
+            var page = GoToSveaPaymentFrame(products, requireBankId, isInternational: false, enableShipping, paymentMethod);
 
             try
             {
                 page.IdentifyEntity(checkout, entity, paymentMethod, enableShipping);
             }
-            catch(StaleElementReferenceException)
+            catch (StaleElementReferenceException)
             {
                 page.RefreshPage()
                     .SwitchToFrame<SveaPaymentFramePage>(By.Id("svea-checkout-iframe"))
                     .IdentifyEntity(checkout, entity, paymentMethod);
             }
 
-            if(enableShipping)
+            if (enableShipping)
             {
                 page.EditShipping();
             }
@@ -287,24 +295,31 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
         }
 
         protected OrdersPage GoToOrdersPage(
-            Product[] products, 
-            Checkout.Option checkout = Checkout.Option.Identification, 
-            Entity.Option entity = Entity.Option.Private, 
+            Product[] products,
+            Checkout.Option checkout = Checkout.Option.Identification,
+            Entity.Option entity = Entity.Option.Private,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card,
-            bool enableShipping = false)
+            bool enableShipping = false,
+            bool requireBankId = false)
         {
-            return GoToThankYouPage(products, checkout, entity, enableShipping, paymentMethod)
-                .Do(x => 
-                { 
-                    if(paymentMethod == PaymentMethods.Option.Vipps)
-                    {   
-                        x.WaitSeconds(1).Market.Click()
-                        .Markets[m => m.Content.Value == "NO"].Click();
-                    }
-                    else
+            return GoToThankYouPage(products, checkout, entity, enableShipping, paymentMethod, requireBankId)
+                .Do(x =>
+                {
+                    switch (paymentMethod)
                     {
-                        x.WaitSeconds(1).Market.Click()
-                        .Markets[m => m.Content.Value == "SE"].Click();
+                        case PaymentMethods.Option.Vipps:
+                            x.WaitSeconds(1).Market.Click()
+                            .Markets[m => m.Content.Value == "NO"].Click();
+                            break;
+                        case PaymentMethods.Option.MobilePay:
+                            x.WaitSeconds(1).Market.Click()
+                            .Markets[m => m.Content.Value == "FI"].Click();
+                            break;
+                        default:
+                            x.WaitSeconds(1).Market.Click()
+                            .Markets[m => m.Content.Value == "SE"].Click();
+                            break;
+
                     }
                 })
                 .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 25, retryInterval: 3)
@@ -312,9 +327,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
         }
 
         protected static IEnumerable TestData(
-            bool singleProduct = true, 
-            bool hasAmountDiscount = false, 
-            bool hasPercentDiscount = false, 
+            bool singleProduct = true,
+            bool hasAmountDiscount = false,
+            bool hasPercentDiscount = false,
             bool manySameArticle = false)
         {
             var data = new List<object>();
@@ -326,13 +341,13 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     new Product { Quantity = 1, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
                 });
             }
-            else if(manySameArticle)
+            else if (manySameArticle)
             {
                 data.Add(new[]
                    {
-                    new Product { Quantity = 4, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
+                    new Product { Quantity = 8, HasAmountDiscount = hasAmountDiscount, HasPercentDiscount = hasPercentDiscount }
                 });
-            }    
+            }
             else
                 data.Add(new[]
                 {

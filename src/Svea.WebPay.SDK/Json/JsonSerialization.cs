@@ -9,7 +9,8 @@
         {
             Settings = new JsonSerializerOptions
             {
-                IgnoreNullValues = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                //IgnoreNullValues = true,
                 PropertyNameCaseInsensitive = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 WriteIndented = true,

@@ -2,3 +2,4 @@
 bin
 .vs
 /src/Svea.WebPay.SDK.Extensions
+packages

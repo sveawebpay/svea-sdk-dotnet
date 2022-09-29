@@ -5,6 +5,7 @@
         public enum Option
         {
             Card,
+            CardEmbedded,
             Invoice,
             DirektBank,
             Trustly,
@@ -13,6 +14,8 @@
             BlackFriday,
             Swish,
             Vipps,
+            Leasing,
+            MobilePay,
         }
     }
 }

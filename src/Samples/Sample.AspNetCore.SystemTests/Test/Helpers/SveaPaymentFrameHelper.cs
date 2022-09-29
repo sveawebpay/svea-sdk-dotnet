@@ -34,6 +34,10 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                                     }
                                 });
                             }
+                            else if(paymentMethod == PaymentMethods.Option.MobilePay)
+                            {
+                                return page.ProceedWithFinnishPrivateIdentification().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            }
                             else
                             {
                                 return page.ProceedWithNorwegianPrivateIdentification().Do(x =>
@@ -102,6 +106,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             {
                 default:
                 case PaymentMethods.Option.Card:
+                case PaymentMethods.Option.CardEmbedded:
                     page.PaymentMethods.Card.IsVisible.WaitTo.BeTrue().PaymentMethods.Card.Click();
                     break;
 
@@ -136,6 +141,14 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 case PaymentMethods.Option.Vipps:
                     page.PaymentMethods.Vipps.IsVisible.WaitTo.BeTrue().PaymentMethods.Vipps.Click();
                     break;
+
+                case PaymentMethods.Option.Leasing:
+                    page.PaymentMethods.Leasing.IsVisible.WaitTo.BeTrue().PaymentMethods.Leasing.Click();
+                    break;
+
+                case PaymentMethods.Option.MobilePay:
+                    page.PaymentMethods.MobilePay.IsVisible.WaitTo.BeTrue().PaymentMethods.MobilePay.Click();
+                    break;
             }
 
             //page
@@ -144,7 +157,8 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
             if (entity == Entity.Option.Company && checkout == Checkout.Option.Identification)
             {
-                page.PaymentMethods.Reference.Set(TestDataService.Reference);
+                page.WaitSeconds(1)
+                    .PaymentMethods.Reference.Set(TestDataService.Reference);
             }
 
             switch (paymentMethod)
@@ -152,6 +166,9 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 default:
                 case PaymentMethods.Option.Card:
                     return page.PayWithCard();
+
+                case PaymentMethods.Option.CardEmbedded:
+                    return page.PayWithCardEmbedded();
 
                 case PaymentMethods.Option.DirektBank:
                     return page.PayWithDirektBank();
@@ -176,6 +193,12 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
                 case PaymentMethods.Option.Vipps:
                     return page.PayWithVipps();
+
+                case PaymentMethods.Option.Leasing:
+                    return page.PayWithLeasing();
+
+                case PaymentMethods.Option.MobilePay:
+                    return page.PayWithMobilePay();
             }
         }
     }

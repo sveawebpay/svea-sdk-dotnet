@@ -153,7 +153,7 @@ namespace Svea.WebPay.SDK
                         {
                             if (taskResponse is object)
                             {
-                                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(configureAwait);
+                                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken.Token).ConfigureAwait(configureAwait);
                             }
 
                             taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri, configureAwait).ConfigureAwait(configureAwait);

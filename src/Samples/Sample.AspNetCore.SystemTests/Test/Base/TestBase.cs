@@ -33,11 +33,10 @@ namespace Sample.AspNetCore.SystemTests.Test.Base
                 UseVerificationTimeout(TimeSpan.FromSeconds(3)).
                 UseElementFindTimeout(TimeSpan.FromSeconds(15)).
                 UseWaitingTimeout(TimeSpan.FromSeconds(30)).
-                AddNUnitTestContextLogging().
+                LogConsumers.AddNUnitTestContext().
                 WithMinLevel(LogLevel.Trace).
-                TakeScreenshotOnNUnitError().
-                    AddScreenshotFileSaving().
-                        WithFolderPath(() => $@"Logs\{AtataContext.BuildStart:yyyy-MM-dd HH_mm_ss}").
+                ScreenshotConsumers.AddFile().
+                        WithDirectoryPath(() => $@"Logs\{AtataContext.BuildStart:yyyy-MM-dd HH_mm_ss}").
                         WithFileName(screenshotInfo => $"{AtataContext.Current.TestName} - {screenshotInfo.PageObjectFullName}").
                 UseTestName(() => $"[{_driverAlias}]{TestContext.CurrentContext.Test.Name}");
 #endif

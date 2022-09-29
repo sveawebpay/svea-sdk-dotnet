@@ -19,7 +19,10 @@ env:
   Configuration: Release 
   SlnPath: ./src/Svea.WebPay.SDK.sln
   CsprojPath: ./src/Svea.WebPay.SDK/Svea.WebPay.SDK.csproj
-  dotnetCoreVersion: 3.1.101
+  dotnetVersion: |
+    3.1.101
+    5.x
+    6.x
   AZURE_WEBAPP_PACKAGE_PATH: '.'
 
 
@@ -94,10 +97,10 @@ jobs:
       
       - uses: actions/checkout@v3
       
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: ${{ env.dotnetCoreVersion }}
+          dotnet-version: ${{ env.dotnetVersion }}
  
       - name: Install dependencies
         run: dotnet restore ${{ env.SlnPath }}
@@ -113,10 +116,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: ${{ env.dotnetCoreVersion }}
+          dotnet-version: ${{ env.dotnetVersion }}
           source-url: https://nuget.pkg.github.com/sveawebpay/index.json
         env:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
@@ -160,10 +163,10 @@ jobs:
           MerchantSettings.ConfirmationUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/checkout/thankyou
           MerchantSettings.CheckoutValidationCallbackUri: https://svea-webpay-sdk-001-${{ needs.variables.outputs.ENVIRONMENT }}.azurewebsites.net/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: ${{ env.dotnetCoreVersion }}       
+          dotnet-version: ${{ env.dotnetVersion }}       
 
       - name: Install dependencies
         run: dotnet restore ${{ env.SlnPath }}

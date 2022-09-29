@@ -25,6 +25,12 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         [FindByCss("*[data-testid='vipps-view']")]
         public Clickable<TOwner> Vipps { get; private set; }
 
+        [FindByCss("*[data-testid='leasing-view']")]
+        public Clickable<TOwner> Leasing { get; private set; }
+
+        [FindByCss("*[data-testid='mobilepay-view']")]
+        public Clickable<TOwner> MobilePay { get; private set; }
+
         public PaymentPlanItem<TOwner> PaymentPlan { get; private set; }
 
         [FindByCss("*[data-testid='account-credit-view']")]

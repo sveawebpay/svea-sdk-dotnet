@@ -27,7 +27,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 .RefreshPageUntil(x => x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") && 
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) && 
-                    x.Orders.Any(), 15, 3)
+                    x.Orders.Count() > 0, 15, 3)
 
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -41,7 +41,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Status.Should.BeNull();
+                .Orders.Last().Deliveries.First().Status.Should.BeNullOrEmpty();
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -79,7 +79,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Any(), 15, 3)
+                    x.Orders.Count() > 0, 15, 3)
 
                 // Credit
                 .Orders.Last().Order.OrderId.StoreValue(out var orderId)
@@ -96,7 +96,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 
                 // Validate deliveries info
                 .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Status.Should.BeNull();
+                .Orders.Last().Deliveries.First().Status.Should.BeNullOrEmpty();
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);

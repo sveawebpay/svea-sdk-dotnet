@@ -49,6 +49,12 @@ else if (TempData["ErrorMessage"] != null)
             <div automation="div-order">
                 <div>
                     <h2>Order #@count</h2>
+
+                    @if (!string.IsNullOrWhiteSpace(order.ShippingStatus))
+                    {
+                        <h3>Shipping status @order.ShippingStatus</h3>
+                    }
+
                     <hr />
                     <dl class="row">
                         <dt class="col-sm-2">

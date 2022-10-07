@@ -35,20 +35,38 @@ namespace Sample.AspNetCore.Controllers
 
 
         [HttpPost("shippingTaxCalculation")]
-        public async Task<ActionResult> shippingTaxCalculation(ShippingOption shippingOption)
+        public async Task<ActionResult> ShippingTaxCalculation(ShippingOption shippingOption)
         {
             var order = await _sveaClient.Checkout.GetOrder(shippingOption.OrderId).ConfigureAwait(false);
             order.Cart.CalculateShippingOrderRows(shippingOption);
 
-            await _sveaClient.Checkout.UpdateOrder(order.OrderId, new UpdateOrderModel(order.Cart));
+            await _sveaClient.Checkout.UpdateOrder(order.OrderId, new UpdateOrderModel(order.Cart, null, order.ShippingInformation));
 
             return Ok();
         }
 
-        //TODO: Test callback
         [HttpPost("shipping")]
-        public ActionResult Shipping(ShippingCallbackResponse shippingCallbackResponse)
+        public async Task<ActionResult> Shipping(ShippingCallbackResponse shippingCallbackResponse)
         {
+            var order = await _sveaClient.Checkout.GetOrder(shippingCallbackResponse.OrderId).ConfigureAwait(false);
+
+            if (order != null && order.Status == CheckoutOrderStatus.Final)
+            {
+                _cartService.ShippingStatus = shippingCallbackResponse.Type;
+                _cartService.Update();
+
+                var dbOrder = _context.Orders.FirstOrDefault(x => x.SveaOrderId == order.OrderId.ToString());
+                if (dbOrder == null)
+                {
+                    return Problem(); //TODO: Check if we can try again somehow if order is null
+                }
+
+                dbOrder.ShippingStatus = _cartService.ShippingStatus;
+
+                await _context.SaveChangesAsync(true);
+            }
+
+
             return Ok();
         }
 
@@ -68,6 +86,7 @@ namespace Sample.AspNetCore.Controllers
                 if (orderId.HasValue)
                 {
                     var order = await _sveaClient.Checkout.GetOrder(orderId.Value).ConfigureAwait(false);
+
                     if (order != null && order.Status == CheckoutOrderStatus.Final)
                     {
                         _cartService.SveaOrderId = order.OrderId.ToString();
@@ -86,9 +105,11 @@ namespace Sample.AspNetCore.Controllers
                         _context.Orders.Add(new Order
                         {
                             SveaOrderId = _cartService.SveaOrderId,
-                            Lines = _cartService.CartLines.ToList()
+                            Lines = _cartService.CartLines.ToList(),
+                            ShippingStatus = _cartService.ShippingStatus
                         });
-                        _context.SaveChanges(true);
+                        
+                        await _context.SaveChangesAsync(true);
                     }
                 }
 
@@ -96,7 +117,7 @@ namespace Sample.AspNetCore.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError( e, "Callback failed");
+                _logger.LogError(e, "Callback failed");
                 return Ok();
             }
         }

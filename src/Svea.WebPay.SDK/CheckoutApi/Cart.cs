@@ -14,7 +14,6 @@ namespace Svea.WebPay.SDK.CheckoutApi
 
         public void CalculateShippingOrderRows(IShippingOption shippingOption)
         {
-
             var totalSum = Items.Sum(x => x.Quantity * x.UnitPrice - x.DiscountAmount);
             var taxGroup = Items.GroupBy(x => x.VatPercent);
 

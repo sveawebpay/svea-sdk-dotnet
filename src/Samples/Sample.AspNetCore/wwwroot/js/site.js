@@ -25,12 +25,6 @@ var shippingHandler = function (data) {
     if (data.detail) {
         document.dispatchEvent(new CustomEvent("sveaCheckout:setIsLoading", { detail: { isLoading: true } }));;
 
-        let iframeUrl = $('iframe#svea-checkout-iframe').attr('src');
-        let params = (new URL(iframeUrl)).searchParams;
-        let orderId = params.get('orderId');
-
-        data.detail.orderId = orderId;
-
         fetch('/api/svea/shippingTaxCalculation', {
                 method: 'POST',
                 headers: {

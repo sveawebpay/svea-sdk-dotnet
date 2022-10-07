@@ -100,7 +100,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .SelectShippingBlock.Submit.Click();
         }
 
-        public static SveaPaymentFramePage Pay(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, string amount = null)
+        public static SveaPaymentFramePage Pay(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, string amount = null, bool switchFrame = false)
         {
             switch (paymentMethod)
             {
@@ -165,7 +165,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             {
                 default:
                 case PaymentMethods.Option.Card:
-                    return page.PayWithCard();
+                    return page.PayWithCard(switchFrame);
 
                 case PaymentMethods.Option.CardEmbedded:
                     return page.PayWithCardEmbedded();

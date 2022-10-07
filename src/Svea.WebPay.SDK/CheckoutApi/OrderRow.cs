@@ -223,10 +223,7 @@
             }
 
             RowType = rowType;
-
         }
-
-
 
         /// <summary>
         /// Can be used when creating or updating an order. The returned rows will have their corresponding temporaryreference as they were given in the indata.
@@ -239,8 +236,5 @@
         /// </summary>
         /// <remarks>Max length: 255. Optional. Cleaned up from Checkout database after 45 days.</remarks>
         public string MerchantData { get; }
-
-    
-
     }
 }

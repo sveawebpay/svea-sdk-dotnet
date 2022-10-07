@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace Sample.AspNetCore.Models
 {
+    using Svea.WebPay.SDK.CheckoutApi;
+
     using System.Text.Json.Serialization;
 
     public class Cart
@@ -20,6 +22,7 @@ namespace Sample.AspNetCore.Models
         public string SveaOrderId { get; set; }
         public bool Vat { get; set; }
         public bool IsInternational { get; set; }
+        public string ShippingStatus { get; set; }
 
 
         public virtual void AddItem(Product product, int quantity)

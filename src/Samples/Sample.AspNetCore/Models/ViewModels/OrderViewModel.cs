@@ -12,5 +12,6 @@
         public long OrderId { get; set; }
         public bool IsLoaded { get; set; }
         public Order Order { get; set; }
+        public string ShippingStatus { get; set; }
     }
 }

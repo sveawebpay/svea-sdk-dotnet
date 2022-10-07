@@ -98,6 +98,7 @@ namespace Sample.AspNetCore.Controllers
                     {
                         orderViewModel.Order = await this._sveaClient.PaymentAdmin.GetOrder(long.Parse(order.SveaOrderId)).ConfigureAwait(false);
                         orderViewModel.IsLoaded = true;
+                        orderViewModel.ShippingStatus = order.ShippingStatus;
                     }
                     catch {}
 

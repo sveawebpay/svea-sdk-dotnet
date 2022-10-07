@@ -66,24 +66,24 @@
             Assert.Equal("223•••••35", shippingOption?.Fields[2].Value);
         }
 
-        [Fact]
-        public void ShippingCallbackDescriptionJson_Should_DeserializeToObject()
-        {
-            var json = @"{
-                         ""type"": ""type"",
-                         ""orderId"": 8773833,
-                        ""description"": {
-                          ""tmsReference"": ""8773833"",
-                          ""selectedShippingOption"": {
-                            ""id"": ""ASWH2"",
-                            ""carrier"": ""DHL Home Delivery New""
-                          }
-                         }
-                        }";
+        //[Fact]
+        //public void ShippingCallbackDescriptionJson_Should_DeserializeToObject()
+        //{
+        //    var json = @"{
+        //                 ""type"": ""type"",
+        //                 ""orderId"": 8773833,
+        //                ""description"": {
+        //                  ""tmsReference"": ""8773833"",
+        //                  ""selectedShippingOption"": {
+        //                    ""id"": ""ASWH2"",
+        //                    ""carrier"": ""DHL Home Delivery New""
+        //                  }
+        //                 }
+        //                }";
 
-            var desc = JsonSerializer.Deserialize<ShippingCallbackResponse>(json, JsonSerialization.Settings);
+        //    var desc = JsonSerializer.Deserialize<ShippingCallbackResponse>(json, JsonSerialization.Settings);
 
-        }
+        //}
 
     }
 }

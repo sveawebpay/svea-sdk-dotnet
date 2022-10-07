@@ -5,16 +5,14 @@ namespace Svea.WebPay.SDK.CheckoutApi
 
     public class ShippingCallbackDescription
     {
-        public ShippingCallbackDescription(string tmsReference, ShippingOptionResponse selectedShippingOption)
+        internal ShippingCallbackDescription(string tmsReference, ShippingOptionResponse selectedShippingOption)
         {
             TmsReference = tmsReference;
             SelectedShippingOption = selectedShippingOption;
         }
-
-        [JsonPropertyName("tmsReference")]
+        
         public string TmsReference { get; }
-
-        [JsonPropertyName("selectedShippingOption")]
+        
         public ShippingOptionResponse SelectedShippingOption { get; }
     }
 }

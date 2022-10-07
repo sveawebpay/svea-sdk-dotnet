@@ -1,5 +1,7 @@
 ﻿namespace Svea.WebPay.SDK.CheckoutApi
 {
+    using System.Text.Json.Serialization;
+
     public class ShippingCallbackResponse
     {
         public ShippingCallbackResponse(string type, string description, long orderId)

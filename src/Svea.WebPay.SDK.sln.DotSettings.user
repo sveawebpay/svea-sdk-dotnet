@@ -1,7 +1,0 @@
-﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=56c5021b_002Dab30_002D4926_002Da772_002D076b732a90c9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ShippingOptionJson_Should_DeserializeToObject" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::3E545D48-3A3E-4B33-BCE3-9E7BC5BAEA96::net6.0::Svea.WebPay.SDK.Tests.UnitTests.ShippingOptionTests.ShippingOptionJson_Should_DeserializeToObject&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::3E545D48-3A3E-4B33-BCE3-9E7BC5BAEA96::net6.0::Svea.WebPay.SDK.Tests.UnitTests.ShippingOptionTests.ShippingCallbackDescriptionJson_Should_DeserializeToObject&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

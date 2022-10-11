@@ -5,6 +5,7 @@ namespace Sample.AspNetCore.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+
     using Sample.AspNetCore.Data;
     using Sample.AspNetCore.Models;
 
@@ -45,27 +46,28 @@ namespace Sample.AspNetCore.Controllers
             return Ok();
         }
 
-        [HttpPost("shipping")]
-        public async Task<ActionResult> Shipping(ShippingCallbackResponse shippingCallbackResponse)
+        [HttpPost("shippingvalidation")]
+        public async Task<ActionResult> ShippingValidation(ShippingCallbackResponse shippingCallbackResponse)
         {
             var order = await _sveaClient.Checkout.GetOrder(shippingCallbackResponse.OrderId).ConfigureAwait(false);
 
             if (order != null && order.Status == CheckoutOrderStatus.Final)
             {
+                var existingOrder = _context.Orders.FirstOrDefault(x => x.SveaOrderId == order.OrderId.ToString());
+                if (existingOrder == null)
+                {
+                    return Problem(); 
+                }
+
+                _cartService.ShippingDescription = shippingCallbackResponse.Description;
                 _cartService.ShippingStatus = shippingCallbackResponse.Type;
                 _cartService.Update();
 
-                var dbOrder = _context.Orders.FirstOrDefault(x => x.SveaOrderId == order.OrderId.ToString());
-                if (dbOrder == null)
-                {
-                    return Problem(); //TODO: Check if we can try again somehow if order is null
-                }
-
-                dbOrder.ShippingStatus = _cartService.ShippingStatus;
+                existingOrder.ShippingStatus = _cartService.ShippingStatus;
+                existingOrder.ShippingDescription = _cartService.ShippingDescription;
 
                 await _context.SaveChangesAsync(true);
             }
-
 
             return Ok();
         }

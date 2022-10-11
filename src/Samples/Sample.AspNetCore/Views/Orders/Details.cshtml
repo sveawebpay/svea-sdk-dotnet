@@ -50,11 +50,9 @@ else if (TempData["ErrorMessage"] != null)
                 <div>
                     <h2>Order #@count</h2>
 
-                    @if (!string.IsNullOrWhiteSpace(order.ShippingStatus))
-                    {
-                        <h3>Shipping status @order.ShippingStatus</h3>
-                    }
+                 
 
+                  
                     <hr />
                     <dl class="row">
                         <dt class="col-sm-2">
@@ -84,6 +82,23 @@ else if (TempData["ErrorMessage"] != null)
                             <dd class="col-sm-4" automation="text-paymenttype">
                                 @Html.DisplayFor(model => order.Order.PaymentType)
                             </dd>
+
+                            @if (!string.IsNullOrWhiteSpace(order.ShippingStatus))
+                            {
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => order.ShippingStatus)
+                                </dt>
+                                <dd class="col-sm-4" automation="text-paymenttype">
+                                    @Html.DisplayFor(model => order.ShippingStatus)
+                                </dd>
+
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => order.ShippingDescription)
+                                </dt>
+                                <dd class="col-sm-4" automation="text-paymenttype">
+                                    @Html.DisplayFor(model => order.ShippingDescription)
+                                </dd>
+                            }
                         }
                         else
                         {

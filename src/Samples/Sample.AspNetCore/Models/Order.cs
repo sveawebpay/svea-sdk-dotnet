@@ -12,7 +12,10 @@ public class Order
 
     [BindNever]
     public string ShippingStatus { get; set; }
-        
+
+    [BindNever]
+    public string ShippingDescription { get; set; }
+
     [Key]
     public string SveaOrderId { get; set; }
 }

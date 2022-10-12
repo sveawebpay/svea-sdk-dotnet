@@ -44,6 +44,10 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
         [FindByCss("div[data-testid='bankid-dialog']")]
         public Control<_> BankId{ get; private set; }
 
+        [FindByCss("button[data-testid='confirm-button']")]
+        public Button<_> ConfirmBankId { get; private set; }
+
+
         public Frame<CardPaymentFramePage, _> CardPaymentFramePage { get; set; }
     }
 }

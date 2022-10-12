@@ -13,6 +13,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
         {
             return page
             .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
+            .WaitSeconds(1)
             .PaymentMethods.Card.Focus()
             .PaymentMethods.Card.Click()
             .Do(x =>
@@ -93,8 +94,17 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Invoice.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Invoice.Click()
-                .WaitSeconds(1)
-                .Submit.Click();
+                .WaitSeconds(2)
+                .Submit.Focus()
+                .Submit.Click()
+                .WaitSeconds(5)
+                .Do(x =>
+                {
+                    if (page.BankId.IsVisible)
+                    {
+                        page.ConfirmBankId.Click();
+                    }
+                });
         }
 
         public static SveaPaymentFramePage PayWithTrustly(this SveaPaymentFramePage page, Checkout.Option checkout)

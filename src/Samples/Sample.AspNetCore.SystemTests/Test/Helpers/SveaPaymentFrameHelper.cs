@@ -1,12 +1,15 @@
 ﻿using Atata;
+using OpenQA.Selenium;
 using Sample.AspNetCore.SystemTests.PageObjectModels;
 using Sample.AspNetCore.SystemTests.Services;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.Helpers
 {
     public static class SveaPaymentFrameHelper
     {
-        public static SveaPaymentFramePage IdentifyEntity(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, bool enableShipping = false)
+        public static SveaPaymentFramePage IdentifyEntity(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, Dictionary<string, string[]> shipping = null)
         {
             page.Entity.IsVisible.WaitTo.BeTrue();
 
@@ -24,7 +27,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                             {
                                 return page.ProceedWithSwedishPrivateIdentification().Do(x =>
                                 {
-                                    if (enableShipping)
+                                    if (shipping != null)
                                     {
                                         x.AddShippingBlock.IsVisible.WaitTo.BeTrue();
                                     }
@@ -42,7 +45,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                             {
                                 return page.ProceedWithNorwegianPrivateIdentification().Do(x =>
                                 {
-                                    if (enableShipping)
+                                    if (shipping != null)
                                     {
                                         x.AddShippingBlock.IsVisible.WaitTo.BeTrue();
                                     }
@@ -71,33 +74,128 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             }
         }
 
-        public static SveaPaymentFramePage EditShipping(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage EditShipping(this SveaPaymentFramePage page, Dictionary<string, string[]> shipping)
         {
             return page.AddShippingBlock.IsVisible.WaitTo.BeTrue()
                 .AddShippingBlock.Expand.Click()
                 .EditShippingBlock.NewAddress.IsVisible.WaitTo.BeTrue()
                 .EditShippingBlock.NewAddress.Click()
                 .WaitSeconds(2)
+                .EditShippingBlock.FirstName.Clear()
                 .EditShippingBlock.FirstName.Set(TestDataService.SwedishFirstName)
+                .EditShippingBlock.LastName.Clear()
                 .EditShippingBlock.LastName.Set(TestDataService.SwedishLastName)
+                .EditShippingBlock.StreetAddress.Clear()
                 .EditShippingBlock.StreetAddress.Set(TestDataService.ShippingStreetAddress)
+                .EditShippingBlock.ZipCode.Clear()
                 .EditShippingBlock.ZipCode.Set(TestDataService.ShippingZipCode)
+                .WaitSeconds(1)
                 .Do(x =>
                 {
-                    if(x.EditShippingBlock.City.Value.Length == 0)
+                    if (x.EditShippingBlock.City.Value.Length == 0)
                     {
                         x.EditShippingBlock.City.Set(TestDataService.ShippingCity);
                     }
                 })
                 .EditShippingBlock.Submit.Focus()
                 .EditShippingBlock.Submit.Click()
-                .SelectShippingBlock.Option.Items.ElementAt(2).Click()
+                .Do(x =>
+                {
+                    if (shipping.ContainsKey("carrier"))
+                    {
+                        var options = shipping["carrier"].ToList();
+
+                        foreach (var option in options)
+                        {
+                            if (options.IndexOf(option) != 0)
+                            {
+                                x
+                                .SelectShippingBlock.ChangeCarrier.Click()
+                                .WaitSeconds(1);
+                            }
+
+                            x.SelectShippingBlock.Options.WaitTo.WithinSeconds(15).Not.BeEmpty();
+
+                            x
+                            .SelectShippingBlock.Options.FirstOrDefault(x => x.Text.Content.Value.Contains(option)).Click()
+                            .WaitSeconds(1);
+                        }
+                    }
+                    
+                    if (shipping.ContainsKey("pickup"))
+                    {
+                        var pickups = shipping["pickup"].ToList();
+
+                        foreach (var pickup in pickups)
+                        {
+                            x.SelectShippingBlock.ChangePickupPlace.Click();
+                            x.WaitSeconds(1);
+
+                            var index = int.Parse(pickup);
+
+                            if(index == -1)
+                            {
+                                x.SelectShippingBlock.PickupList.Last().Click();
+                            }
+                            else
+                            {
+                                x.SelectShippingBlock.PickupList[index].Click();
+                            }
+
+                            x
+                            .WaitSeconds(1)
+                            .SelectShippingBlock.ConfirmChange.Focus()
+                            .Press(Keys.Space);
+                        }
+                    }
+                })
                 .WaitSeconds(2)
-                .SelectShippingBlock.DoorCode.Set(TestDataService.SwedishZipCode)
-                .SelectShippingBlock.Instructions.Set("Test")
-                .WaitSeconds(2)
-                .SelectShippingBlock.Submit.Focus()
-                .SelectShippingBlock.Submit.Click();
+                .Do(x =>
+                {
+                    switch (shipping["carrier"].Last())
+                    {
+                        default:
+                        case ShippingOptions.Bring:
+                            x
+                            .SelectShippingBlock.DoorCode.Set(TestDataService.DoorCode)
+                            .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
+                            .WaitSeconds(1)
+                            .SelectShippingBlock.Submit.Focus()
+                            .SelectShippingBlock.Submit.Click();
+                            break;
+
+                        case ShippingOptions.Plab:
+                            x
+                            .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
+                            .WaitSeconds(1)
+                            .SelectShippingBlock.DeliveryBefore12.Click()
+                            .WaitSeconds(1)
+                            .SelectShippingBlock.CallBeforeDelivery.Click()
+                            .WaitSeconds(1)
+                            .SelectShippingBlock.Submit.Focus()
+                            .SelectShippingBlock.Submit.Click();
+                            break;
+
+                        case ShippingOptions.Dhl:
+                            x
+                            .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
+                            .SelectShippingBlock.DoorCode.Set(TestDataService.DoorCode)
+                            .WaitSeconds(1)
+                            .SelectShippingBlock.Submit.Focus()
+                            .SelectShippingBlock.Submit.Click();
+                            break;
+
+                        case ShippingOptions.Budbee:
+                            x
+                            .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
+                            .SelectShippingBlock.Indoor.Click()
+                            .WaitSeconds(1)
+                            .SelectShippingBlock.Submit.Focus()
+                            .SelectShippingBlock.Submit.Click();
+                            break;
+                    }
+                })
+                ;
         }
 
         public static SveaPaymentFramePage Pay(this SveaPaymentFramePage page, Checkout.Option checkout = Checkout.Option.Identification, Entity.Option entity = Entity.Option.Private, PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card, string amount = null, bool switchFrame = false)

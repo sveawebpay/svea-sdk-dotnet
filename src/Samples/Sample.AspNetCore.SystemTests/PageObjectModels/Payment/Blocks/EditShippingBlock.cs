@@ -25,7 +25,7 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment.Blocks
 
         [FindByName("city")]
         public TextInput<TOwner> City { get; private set; }
-
+        
         [FindByCss("*[data-testid='submit-button']")]
         public Button<TOwner> Submit { get; private set; }
     }

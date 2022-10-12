@@ -164,7 +164,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Product[] products,
             bool requireBankId = false,
             bool isInternational = false,
-            bool enableShipping = false,
+            Dictionary<string, string[]> shipping = null,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
         {
             Frame<SveaPaymentFramePage, PaymentPage> frame;
@@ -181,7 +181,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     .InternationalCheckout.ClickAndGo()
                     .SveaFrame;
             }
-            else if (enableShipping)
+            else if (shipping != null)
             {
                 frame = SelectProducts(products, paymentMethod)
                     .ShippingCheckout.ClickAndGo()
@@ -207,7 +207,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Entity.Option entity = Entity.Option.Private,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
         {
-            var page = GoToSveaPaymentFrame(products, requireBankId: true, isInternational: false, false, paymentMethod);
+            var page = GoToSveaPaymentFrame(products, requireBankId: true, isInternational: false, null, paymentMethod);
 
             try
             {
@@ -257,15 +257,15 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Product[] products,
             Checkout.Option checkout = Checkout.Option.Identification,
             Entity.Option entity = Entity.Option.Private,
-            bool enableShipping = false,
+            Dictionary<string, string[]> shipping = null,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card,
             bool requireBankId = false)
         {
-            var page = GoToSveaPaymentFrame(products, requireBankId, isInternational: false, enableShipping, paymentMethod);
+            var page = GoToSveaPaymentFrame(products, requireBankId, isInternational: false, shipping, paymentMethod);
 
             try
             {
-                page.IdentifyEntity(checkout, entity, paymentMethod, enableShipping);
+                page.IdentifyEntity(checkout, entity, paymentMethod, shipping);
             }
             catch (StaleElementReferenceException)
             {
@@ -274,9 +274,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     .IdentifyEntity(checkout, entity, paymentMethod);
             }
 
-            if (enableShipping)
+            if (shipping != null)
             {
-                page.EditShipping();
+                page.EditShipping(shipping);
             }
 
             page.Pay(checkout, entity, paymentMethod, _amountStr);
@@ -299,10 +299,10 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Checkout.Option checkout = Checkout.Option.Identification,
             Entity.Option entity = Entity.Option.Private,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card,
-            bool enableShipping = false,
+            Dictionary<string, string[]> shipping = null,
             bool requireBankId = false)
         {
-            return GoToThankYouPage(products, checkout, entity, enableShipping, paymentMethod, requireBankId)
+            return GoToThankYouPage(products, checkout, entity, shipping, paymentMethod, requireBankId)
                 .Do(x =>
                 {
                     switch (paymentMethod)

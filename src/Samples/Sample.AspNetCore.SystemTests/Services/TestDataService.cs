@@ -43,6 +43,10 @@ namespace Sample.AspNetCore.SystemTests.Services
 
         public static string Reference => "Ref123";
 
+        public static string ShippingInstructions => "Test instructions";
+
+        public static string DoorCode => "1234";
+
 
         public static string NorwegianFirstName => "Ola";
         public static string NorwegianLastName => "Normann";

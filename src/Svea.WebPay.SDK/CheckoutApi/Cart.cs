@@ -12,7 +12,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
 
         public IList<OrderRow> Items { get; internal set; }
 
-        public void CalculateShippingOrderRows(IShippingOption shippingOption)
+        public void CalculateShippingOrderRows(ShippingOption shippingOption)
         {
             var totalSum = Items.Sum(x => x.Quantity * x.UnitPrice - x.DiscountAmount);
             var taxGroup = Items.GroupBy(x => x.VatPercent);
@@ -24,7 +24,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
                 var sumOnTaxValue = tax.Sum(x => x.Quantity * x.UnitPrice - x.DiscountAmount);
                 var percentageOnTaxValue = sumOnTaxValue / totalSum;
 
-                var shippingPrice = percentageOnTaxValue * shippingOption.Price;
+                var shippingPrice = percentageOnTaxValue * MinorUnit.FromLowestMonetaryUnit(shippingOption.ShippingFee);
 
                 var price = new MinorUnit(shippingPrice);
                 var discount = new MinorUnit(0);

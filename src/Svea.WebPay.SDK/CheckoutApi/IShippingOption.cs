@@ -1,10 +1,13 @@
-﻿namespace Svea.WebPay.SDK.CheckoutApi
+﻿using System.Collections.Generic;
+
+namespace Svea.WebPay.SDK.CheckoutApi
 {
     public interface IShippingOption
     {
         string Id { get; }
         string Carrier { get; }
         string Name { get; }
-        long Price { get; }
+        List<Addon> Addons { get; }
+        List<Field> Fields { get; }
     }
 }

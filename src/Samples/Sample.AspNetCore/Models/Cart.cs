@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace Sample.AspNetCore.Models
 {
-    using Svea.WebPay.SDK.CheckoutApi;
-
     using System.Text.Json.Serialization;
 
     public class Cart

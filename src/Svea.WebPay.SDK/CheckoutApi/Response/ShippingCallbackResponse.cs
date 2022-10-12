@@ -1,4 +1,4 @@
-﻿namespace Svea.WebPay.SDK.CheckoutApi
+﻿namespace Svea.WebPay.SDK.CheckoutApi.Response
 {
     using System.Text.Json.Serialization;
 
@@ -12,7 +12,9 @@
         }
 
         public string Type { get; }
+        
         public string Description { get; }
+
         public long OrderId { get; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Sample.AspNetCore.Models;
+
 public class Order
 {
     [BindNever] public ICollection<CartLine> Lines { get; set; }

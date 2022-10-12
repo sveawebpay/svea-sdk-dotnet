@@ -11,7 +11,7 @@ namespace Sample.AspNetCore.Controllers
 
     using Svea.WebPay.SDK;
     using Svea.WebPay.SDK.CheckoutApi;
-
+    using Svea.WebPay.SDK.CheckoutApi.Response;
     using System;
 
     using Cart = Models.Cart;
@@ -41,7 +41,7 @@ namespace Sample.AspNetCore.Controllers
             var order = await _sveaClient.Checkout.GetOrder(shippingOption.OrderId).ConfigureAwait(false);
             order.Cart.CalculateShippingOrderRows(shippingOption);
 
-            await _sveaClient.Checkout.UpdateOrder(order.OrderId, new UpdateOrderModel(order.Cart, null, order.ShippingInformation));
+            await _sveaClient.Checkout.UpdateOrder(order.OrderId, new UpdateOrderModel(order.Cart, null, order.ShippingInformation)).ConfigureAwait(false);
 
             return Ok();
         }
@@ -59,12 +59,8 @@ namespace Sample.AspNetCore.Controllers
                     return Problem(); 
                 }
 
-                _cartService.ShippingDescription = shippingCallbackResponse.Description;
-                _cartService.ShippingStatus = shippingCallbackResponse.Type;
-                _cartService.Update();
-
-                existingOrder.ShippingStatus = _cartService.ShippingStatus;
-                existingOrder.ShippingDescription = _cartService.ShippingDescription;
+                existingOrder.ShippingStatus = shippingCallbackResponse.Type;
+                existingOrder.ShippingDescription = shippingCallbackResponse.Description;
 
                 await _context.SaveChangesAsync(true);
             }

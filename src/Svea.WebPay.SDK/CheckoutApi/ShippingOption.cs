@@ -76,7 +76,7 @@
         /// <summary>
         /// Price of the parcel, NOT minor currency!
         /// </summary>
-        [Obsolete("OBSOLETE (Please use 'shippingFee' property instead!) Price of the parcel, NOT minor currency!")]
+        [Obsolete("OBSOLETE (Please use 'shippingFee' property instead!)")]
         public long Price { get; }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace Svea.WebPay.SDK.CheckoutApi
+﻿namespace Svea.WebPay.SDK.CheckoutApi.Response
 {
     public class CheckoutValidationCallbackResponse
     {

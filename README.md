@@ -49,7 +49,8 @@ Step 1:
     "TermsUri": "https://{Your domain}/terms",
     "CheckoutUri": "https://{Your domain}/CheckOut/LoadPaymentMenu",
     "ConfirmationUri": "https://{Your domain}/checkout/thankyou",
-    "CheckoutValidationCallbackUri": "https://{Your domain}/validation/{checkout.order.uri}"
+    "CheckoutValidationCallbackUri": "https://{Your domain}/validation/{checkout.order.uri}",
+    "WebhookUri": "https://{Your domain}/shippingvalidation" // Used for shipping callback
   }
 }
 
@@ -123,3 +124,30 @@ When executing theese actions **'Add order row'**, **'Add order rows'**, **'Deli
 for the specific action you have the option to specify a 'Polling timeout (TimeSpan)'. This will allow the SDK to poll the task until the timeout is reached or the task is done.
 Then the resource object will be returned. If not specified the SDK will try once if the Task has not finished the Task Uri will be returned and the polling needs to be done by the user.
 
+## 6. Shipping Module
+
+Shipping VAT calculations
+
+For VAT calculation callback the model **ShippingOption** can be used as parameter. Shipping VAT calculation can then be performed using **CalculateShippingOrderRows** on the **Cart**.
+
+Example
+
+```csharp
+
+        public async Task<ActionResult> ShippingTaxCalculation(ShippingOption shippingOption) 
+        {
+            // Get order
+            var order = await _sveaClient.Checkout.GetOrder(shippingOption.OrderId).ConfigureAwait(false);
+
+            // Calculate shipping VAT
+            order.Cart.CalculateShippingOrderRows(shippingOption);
+
+            // Update order
+            await _sveaClient.Checkout.UpdateOrder(order.OrderId, new UpdateOrderModel(order.Cart, null, order.ShippingInformation)).ConfigureAwait(false);
+        }
+
+```
+
+WebhookUri Callback / Shipping callback
+
+For validation of shipping callback the model **ShippingCallbackResponse** can be used as a parameter.

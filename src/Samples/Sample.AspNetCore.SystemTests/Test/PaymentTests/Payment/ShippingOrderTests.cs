@@ -20,7 +20,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         }
 
         [RetryWithException(2)]
-        [Test(Description = "8226")]
+        [Test(Description = "8226 - As a user I want to finalize a card purchase with the first shipping option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void OrderWithShippingOptionWithCard(Product[] products)
         {
@@ -76,7 +76,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         }
 
         [RetryWithException(2)]
-        [Test(Description = "8227")]
+        [Test(Description = "8227 - As a user I want to finalize a card purchase with the first shipping option, but change the place of delivery to the second option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void OrderWithShippingOptionAndChangePickupOptionWithCard(Product[] products)
         {
@@ -133,7 +133,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         }
 
         [RetryWithException(2)]
-        [Test(Description = "8228")]
+        [Test(Description = "8228 - As a user I want to finalize a card purchase with the first shipping option, but change the place of delivery to the last option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void OrderWithShippingOptionAndChangeToLastPickupOptionWithCard(Product[] products)
         {
@@ -191,7 +191,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         }
 
         [RetryWithException(2)]
-        [Test(Description = "8229")]
+        [Test(Description = "8229 - As a user I want to finalize an invoice purchase with the second shipping option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void OrderWithShippingOptionWithInvoice(Product[] products)
         {
@@ -248,7 +248,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         }
 
         [RetryWithException(2)]
-        [Test(Description = "8230")]
+        [Test(Description = "8230 - As a user I want to finalize an invoice purchase with the last shipping option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void OrderWithLastShippingOptionWithInvoice(Product[] products)
         {
@@ -306,7 +306,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         }
 
         [RetryWithException(2)]
-        [Test(Description = "8231")]
+        [Test(Description = "8231 - As a user I want to finalize an invoice purchase with the last shipping option, and change place of delivery to the last option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void OrderWithLastShippingOptionAndLastPickupOptionWithInvoice(Product[] products)
         {

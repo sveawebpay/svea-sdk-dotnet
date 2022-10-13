@@ -44,9 +44,9 @@ jobs:
           MerchantSettings.ConfirmationUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/checkout/thankyou
           MerchantSettings.CheckoutValidationCallbackUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
       
-       - name: 'Run Azure webapp deploy using publish profile credentials'
-         uses: azure/webapps-deploy@v2
-         with: 
+      - name: 'Run Azure webapp deploy using publish profile credentials'
+        uses: azure/webapps-deploy@v2
+        with: 
            app-name: ${{ secrets.AZURE_WEBAPP_NAME }} # Replace with your app name
-           publish-profile: ${{ secrets.AZURE_WEBAPP_DEV_PUBLISH_PROFILE }} # Define secret variable in repository settings as per action documentation
+           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} # Define secret variable in repository settings as per action documentation
            package: 'Sample.AspNetCore'

@@ -1,4 +1,4 @@
-name: Run unit and ui tests, deploy samplesite 
+name: Run unit and ui tests, deploy samplesite
 on:
   workflow_run:
     workflows: ["Dev", "Uat"]
@@ -131,8 +131,8 @@ jobs:
           name: packages
           path: packages
     
-       - name: Publish test package to GitHub Package Registry
-         run: dotnet nuget push "packages/*.nupkg" --api-key ${{secrets.GITHUB_TOKEN}} --source  https://nuget.pkg.github.com/sveawebpay/index.json --skip-duplicate
+      - name: Publish test package to GitHub Package Registry
+        run: dotnet nuget push "packages/*.nupkg" --api-key ${{secrets.GITHUB_TOKEN}} --source  https://nuget.pkg.github.com/sveawebpay/index.json --skip-duplicate
   
   publish_sample_site:
     needs: [test-unit-ui]

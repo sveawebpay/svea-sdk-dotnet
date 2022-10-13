@@ -15,8 +15,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.AspNetCore.SystemTes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{38DA8B44-EA0F-44E0-ADFD-DD61196EBB7D}"
 	ProjectSection(SolutionItems) = preProject
-		..\.github\workflows\build_test_publish.yml = ..\.github\workflows\build_test_publish.yml
+		..\.github\workflows\deploy_pro_package_samplesite.yml = ..\.github\workflows\deploy_pro_package_samplesite.yml
+		..\.github\workflows\dev.yml = ..\.github\workflows\dev.yml
+		..\.github\workflows\pro.yml = ..\.github\workflows\pro.yml
 		..\README.md = ..\README.md
+		..\.github\workflows\template_build.yml = ..\.github\workflows\template_build.yml
+		..\.github\workflows\template_publish_webapp.yml = ..\.github\workflows\template_publish_webapp.yml
+		..\.github\workflows\template_version.yml = ..\.github\workflows\template_version.yml
+		..\.github\workflows\test_deploy_samplesite.yml = ..\.github\workflows\test_deploy_samplesite.yml
+		..\.github\workflows\uat.yml = ..\.github\workflows\uat.yml
 	EndProjectSection
 EndProject
 Global

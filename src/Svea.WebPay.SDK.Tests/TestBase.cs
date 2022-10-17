@@ -27,7 +27,15 @@ namespace Svea.WebPay.SDK.Tests
 
         protected TestBase()
         {
-            var appRoot = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin", StringComparison.Ordinal));
+            var appRoot = "";
+            if (AppContext.BaseDirectory.IndexOf("bin", StringComparison.Ordinal) == -1)
+            {
+                appRoot = AppContext.BaseDirectory;
+            }
+            else
+            {
+                appRoot = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin", StringComparison.Ordinal));
+            }
 
             Configuration = TestHelper.GetApplicationConfiguration(appRoot);
 

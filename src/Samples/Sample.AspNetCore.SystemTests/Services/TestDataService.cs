@@ -21,8 +21,10 @@ namespace Sample.AspNetCore.SystemTests.Services
         public static string LoremIpsum =>
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis facilisis neque ut scelerisque. Morbi arcu purus, gravida sed velit nec, interdum egestas ante. Pellentesque dapibus nisl ultrices dolor placerat, eu lobortis mauris elementum. Curabitur placerat ante est. Fusce et massa est. Etiam quis lacus justo. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus nulla enim, ornare in facilisis quis, ornare nec erat. Nullam sit amet mi augue. Proin dignissim risus urna, sed pulvinar turpis sollicitudin quis. Proin pretium lacinia ullamcorper.";
 
-        public static string OrganizationNumber => "5590326186";
-
+        public static string OrganizationNumberLeasing => "5590326186";
+        
+        public static string OrganizationNumber => "5620202027";
+        
         public static string SwedishPersonalNumber => "194605092222";
 
         public static string SwedishPersonalNumberShort => "4605092222";

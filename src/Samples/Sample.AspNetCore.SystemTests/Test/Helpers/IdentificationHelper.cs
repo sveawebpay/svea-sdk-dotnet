@@ -65,12 +65,12 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 });
         }
 
-        public static SveaPaymentFramePage ProceedWithCompanyIdentification(this SveaPaymentFramePage page)
+        public static SveaPaymentFramePage ProceedWithCompanyIdentification(this SveaPaymentFramePage page, string org)
         {
             return page
                 .Entity.IsCompany.Click()
                 .B2BIdentification.Email.Set(TestDataService.CompanyEmail)
-                .B2BIdentification.OrganizationNumber.Set(TestDataService.OrganizationNumber)
+                .B2BIdentification.OrganizationNumber.Set(org)
                 .Submit.Click()
                 .Do(x =>
                 {

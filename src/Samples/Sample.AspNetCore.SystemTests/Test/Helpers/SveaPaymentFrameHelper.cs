@@ -66,7 +66,14 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                     {
                         default:
                         case Checkout.Option.Identification:
-                            return page.ProceedWithCompanyIdentification().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            if(paymentMethod == PaymentMethods.Option.Leasing)
+                            {
+                                return page.ProceedWithCompanyIdentification(TestDataService.OrganizationNumberLeasing).PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            }
+                            else
+                            {
+                                return page.ProceedWithCompanyIdentification(TestDataService.OrganizationNumber).PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            }
 
                         case Checkout.Option.Anonymous:
                             return page.ProceedWithCompanyAnonymous().PaymentMethods.IsVisible.WaitTo.BeTrue();

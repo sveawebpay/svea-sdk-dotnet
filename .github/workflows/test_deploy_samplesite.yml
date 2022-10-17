@@ -93,7 +93,7 @@ jobs:
           MerchantSettings:CheckoutUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/CheckOut/LoadPaymentMenu
           MerchantSettings:ConfirmationUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/checkout/thankyou
           MerchantSettings:CheckoutValidationCallbackUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
-          MerchantSettings:WebhookUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/shippingvalidation/{checkout.order.uri}/?marketId={marketId}
+          MerchantSettings:WebhookUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/shippingvalidation/?marketId={marketId}
       
       - name: Run SDK UI tests
         run: dotnet test Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.dll

@@ -95,16 +95,16 @@ jobs:
           MerchantSettings:CheckoutValidationCallbackUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
           MerchantSettings:WebhookUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/shippingvalidation/?marketId={marketId}
       
-      #- name: Run SDK UI tests
-      #  run: dotnet test Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.dll
-      #  env:
-      #    Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
-      #    Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
-      #    Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
-      #    Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
-      #    Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
-      #    Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
-      #    SampleWebsite:Url: https://localhost:5001
+      - name: Run SDK UI tests
+        run: dotnet test Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.dll
+        env:
+          Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
+          Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
+          Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
+          Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
+          Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
+          Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
+          SampleWebsite:Url: https://localhost:5001
 
       - name: Commit Action Status
         if: ${{ always() }}

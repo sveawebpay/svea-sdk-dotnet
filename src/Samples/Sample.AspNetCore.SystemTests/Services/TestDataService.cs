@@ -21,8 +21,10 @@ namespace Sample.AspNetCore.SystemTests.Services
         public static string LoremIpsum =>
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis facilisis neque ut scelerisque. Morbi arcu purus, gravida sed velit nec, interdum egestas ante. Pellentesque dapibus nisl ultrices dolor placerat, eu lobortis mauris elementum. Curabitur placerat ante est. Fusce et massa est. Etiam quis lacus justo. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Phasellus nulla enim, ornare in facilisis quis, ornare nec erat. Nullam sit amet mi augue. Proin dignissim risus urna, sed pulvinar turpis sollicitudin quis. Proin pretium lacinia ullamcorper.";
 
-        public static string OrganizationNumber => "5590326186";
-
+        public static string OrganizationNumberLeasing => "5590326186";
+        
+        public static string OrganizationNumber => "5620202027";
+        
         public static string SwedishPersonalNumber => "194605092222";
 
         public static string SwedishPersonalNumberShort => "4605092222";
@@ -43,6 +45,10 @@ namespace Sample.AspNetCore.SystemTests.Services
 
         public static string Reference => "Ref123";
 
+        public static string ShippingInstructions => "Test instructions";
+
+        public static string DoorCode => "1234";
+
 
         public static string NorwegianFirstName => "Ola";
         public static string NorwegianLastName => "Normann";
@@ -52,12 +58,17 @@ namespace Sample.AspNetCore.SystemTests.Services
         public static string NorwegianCity => "Oslo";
         public static string NorwegianPhoneNumber => "17054512";
 
+        public static string ShippingStreetAddress = "Roslagsgatan 10";
+        public static string ShippingZipCode = "113 51";
+        public static string ShippingCity = "Stockholm";
+
         
         public static string FinnishZipCode => "11111";
         public static string FinnishPhoneNumber => "43554343";
         public static string FinnishPersonalNumber => "290296-7808";
         
         
+
         public static string Description(int length = 30)
         {
             return LoremIpsum.Substring(0, length);

@@ -67,6 +67,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(6, actualOrder.Cart.Items[0].VatPercent);
         }
 
+
         [Fact]
         public void Order_Should_Serialize_AsExpected()
         {

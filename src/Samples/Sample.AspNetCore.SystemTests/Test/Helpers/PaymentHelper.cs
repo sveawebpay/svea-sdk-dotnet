@@ -13,6 +13,8 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
         {
             return page
             .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
+            .WaitSeconds(1)
+            .PaymentMethods.Card.Focus()
             .PaymentMethods.Card.Click()
             .Do(x =>
             {
@@ -83,6 +85,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.DirektBank.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.DirektBank.Click()
                 .PaymentMethods.DirektBank.Nordea.Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -91,7 +94,17 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Invoice.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Invoice.Click()
-                .Submit.Click();
+                .WaitSeconds(2)
+                .Submit.Focus()
+                .Submit.Click()
+                .WaitSeconds(5)
+                .Do(x =>
+                {
+                    if (page.BankId.IsVisible)
+                    {
+                        page.ConfirmBankId.Click();
+                    }
+                });
         }
 
         public static SveaPaymentFramePage PayWithTrustly(this SveaPaymentFramePage page, Checkout.Option checkout)
@@ -137,6 +150,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.PaymentPlan.Click()
                 .PaymentMethods.PaymentPlan.Options[1].Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -145,6 +159,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Account.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Account.Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -161,6 +176,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Swish.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Swish.Click()
+                .WaitSeconds(1)
                 .Submit.Click();
         }
 
@@ -169,6 +185,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Vipps.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Vipps.Click()
+                .WaitSeconds(1)
                 .Submit.ClickAndGo<VippsPaymentPage>()
                 .Next.Click()
                 .SwitchToRoot<SveaPaymentFramePage>();
@@ -181,8 +198,11 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Leasing.SixtyMonths.Click()
                 .Leasing.Continue.Click()
                 .Leasing.Email.Set(TestDataService.CompanyEmail)
-                .Submit.Click()
-                .Leasing.ManualConfirmation.WaitTo.WithinSeconds(10).BeVisible()
+                .WaitSeconds(1)
+                .PaymentMethods.Reference.Focus()
+                .Press(Keys.Tab)
+                .Press(Keys.Space)
+                .Leasing.ManualConfirmation.WaitTo.WithinSeconds(15).BeVisible()
                 .Leasing.Confirm.Click();
         }
 

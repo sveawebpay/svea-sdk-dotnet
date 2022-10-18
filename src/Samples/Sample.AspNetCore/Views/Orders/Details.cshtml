@@ -49,13 +49,17 @@ else if (TempData["ErrorMessage"] != null)
             <div automation="div-order">
                 <div>
                     <h2>Order #@count</h2>
+
+                 
+
+                  
                     <hr />
                     <dl class="row">
                         <dt class="col-sm-2">
                             @Html.DisplayNameFor(model => order.OrderId)
                         </dt>
                         <dd class="col-sm-4" automation="text-orderid">
-                            @Html.DisplayFor(model => order.OrderId)
+                            @Html.DisplayFor(model => order.Order.Id)
                         </dd>
                         @if (order.IsLoaded)
                         {
@@ -78,6 +82,23 @@ else if (TempData["ErrorMessage"] != null)
                             <dd class="col-sm-4" automation="text-paymenttype">
                                 @Html.DisplayFor(model => order.Order.PaymentType)
                             </dd>
+
+                            @if (!string.IsNullOrWhiteSpace(order.ShippingStatus))
+                            {
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => order.ShippingStatus)
+                                </dt>
+                                <dd class="col-sm-4" automation="text-shippingstatus">
+                                    @Html.DisplayFor(model => order.ShippingStatus)
+                                </dd>
+
+                                <dt class="col-sm-2">
+                                    @Html.DisplayNameFor(model => order.ShippingDescription)
+                                </dt>
+                                <dd class="col-sm-4" automation="text-shippingdescription">
+                                    @Html.DisplayFor(model => order.ShippingDescription)
+                                </dd>
+                            }
                         }
                         else
                         {

@@ -41,10 +41,13 @@ else if (TempData["ErrorMessage"] != null)
                 @Html.DisplayNameFor(model => model.Price)
             </th>
             <th>
-                Discount Amount
+                @Html.DisplayNameFor(model => model.DiscountAmount)
             </th>
             <th>
-                Discount Percent
+                @Html.DisplayNameFor(model => model.DiscountPercent)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VatPercentage)
             </th>
             <th></th>
         </tr>
@@ -60,6 +63,8 @@ else if (TempData["ErrorMessage"] != null)
                 <td>@((item.Price).ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")))</td>
                 <td>@(item.DiscountAmount != 0 ? item.DiscountAmount.ToString("c", CultureInfo.CreateSpecificCulture("sv-SE")) : null)</td>
                 <td>@(item.DiscountPercent != 0 ? item.DiscountPercent.ToString() + "%" : null)</td>
+                <td>@(item.VatPercentage != 0 ? item.VatPercentage.ToString() + "%" : null)</td>
+
                 <td><a class="btn btn-primary" automation="button-addtocart" asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.ProductId">Add to Cart</a></td>
             </tr>
         }

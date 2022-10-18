@@ -45,7 +45,8 @@ namespace Sample.AspNetCore.Models
                     Name = "Levis 512 Jeans",
                     Reference = "Ref3",
                     Price = 1000,
-                    DiscountAmount = 100
+                    DiscountAmount = 100,
+                    VatPercentage = 10
                 },
                 new Product
                 {
@@ -55,7 +56,8 @@ namespace Sample.AspNetCore.Models
                     Name = "Levis 520 Jeans",
                     Reference = "Ref4",
                     Price = 1000,
-                    DiscountPercent = 20
+                    DiscountPercent = 20,
+                    VatPercentage = 20
                 });
 
             context.SaveChanges();

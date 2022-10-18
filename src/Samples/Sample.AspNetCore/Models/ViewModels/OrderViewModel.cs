@@ -1,15 +1,17 @@
-﻿namespace Sample.AspNetCore.Models.ViewModels
-{
-    using Svea.WebPay.SDK.PaymentAdminApi.Models;
+﻿namespace Sample.AspNetCore.Models.ViewModels;
 
-    public class OrderViewModel
+using Svea.WebPay.SDK.PaymentAdminApi.Models;
+
+public class OrderViewModel
+{
+    public OrderViewModel(long orderId)
     {
-        public OrderViewModel(int orderId)
-        {
-            OrderId = orderId;
-        }
-        public int OrderId { get; set; }
-        public bool IsLoaded { get; set; }
-        public Order Order { get; set; }
+        OrderId = orderId;
     }
+
+    public long OrderId { get; set; }
+    public bool IsLoaded { get; set; }
+    public Order Order { get; set; }
+    public string ShippingStatus { get; set; }
+    public string ShippingDescription { get; set; }
 }

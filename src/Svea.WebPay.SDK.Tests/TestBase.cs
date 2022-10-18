@@ -10,6 +10,7 @@ namespace Svea.WebPay.SDK.Tests
 
     using Svea.WebPay.SDK.Tests.Helpers;
     using Svea.WebPay.SDK.Tests.Models;
+
     using System.Linq;
     using System.Net;
     using System.Threading;

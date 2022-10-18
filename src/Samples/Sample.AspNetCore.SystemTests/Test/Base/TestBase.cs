@@ -13,7 +13,6 @@ using System.Collections;
 
 namespace Sample.AspNetCore.SystemTests.Test.Base
 {
-    
     using static Drivers;
 
     [TestFixture(DriverAliases.Chrome)]

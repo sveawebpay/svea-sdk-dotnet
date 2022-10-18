@@ -738,6 +738,59 @@
             ""PeppolId"":null
         }";
 
+        public static string CheckoutOrderWithShippingResponse = @"
+            {
+            ""Gui"":
+            {
+                ""Layout"":""desktop"",
+                ""Snippet"":""\r\n<div id=\""svea-checkout-container\"" data-sco-sveacheckout=\""\"" data-sco-sveacheckout-locale=\""sv-SE\"" style=\""overflow-x: hidden; overflow-y: hidden;\"">\r\n    <noscript> Please <a href=\""http://enable-javascript.com\"">enable JavaScript</a>. </noscript>\r\n    <iframe id=\""svea-checkout-iframe\"" name=\""svea-checkout-iframe\"" data-sco-sveacheckout-iframeSrc=\""https://checkoutapistage.svea.com/b/index.html?orderId=2461925&authToken=SveaCheckout+aLs4Zd%2bOBynWBr%2bNGpSVsNE7Sts%3d&token=9D5B49C2B8553149868937DB288B3C7C&locale=sv-SE\"" scrolling=\""no\"" frameborder=\""0\"" style=\""display: none; width: 1px; min-width: 100%; max-width: 100%;\""></iframe>\r\n</div>\r\n\r\n<script type=\""text/javascript\"" src=\""https://checkoutapistage.svea.com/merchantscript/build/index.js?v=ce8e0b83c1ae01bae5769711c9a3f857\""></script>\r\n<script type=\""text/javascript\"">!function(e){var t=e.document,n=t.querySelectorAll(\""[data-sco-sveacheckout]\"");if(!n.length)throw new Error(\""No Svea checkout container exists on page\"");function c(){return!!e.scoInitializeInjectedInstances&&(e.scoInitializeInjectedInstances(),!0)}if(!c()){var i=0,o=function(){i+=1,c()||(i<150?e.setTimeout(o,20):[].slice.call(n).forEach(function(e){var n=t.createElement(\""div\"");n.innerHTML=\""Something went wrong, please refresh the page\"",e.appendChild(n)}))};e.setTimeout(o,20)}}(window);</script>\r\n\r\n""
+            },
+            ""MerchantSettings"":
+             {
+                ""CheckoutValidationCallBackUri"":""https://svea-sample.ngrok.io/api/svea/validation/{checkout.order.uri}/?marketId=SE"",
+                ""PushUri"":""https://svea-sample.ngrok.io/api/svea/push/{checkout.order.uri}/?marketId=SE"",
+                ""TermsUri"":""https://svea-sample.ngrok.io/terms"",
+                ""CheckoutUri"":""https://localhost:44345/CheckOut/LoadPaymentMenu"",
+                ""ConfirmationUri"":""https://localhost:44345/checkout/thankyou"",
+                ""ActivePartPaymentCampaigns"":[],
+                ""PromotedPartPaymentCampaign"":0}
+             ,""Cart"":
+             {
+                ""Items"":[
+                    {""ArticleNumber"":""Ref2"",""Name"":""Levis 501 Jeans"",""Quantity"":100,""UnitPrice"":119000,""DiscountPercent"":0,""DiscountAmount"":0,""VatPercent"":0,""Unit"":null,""TemporaryReference"":null,""RowNumber"":1,""MerchantData"":null,""ShippingInformation"":null,""RowType"":""Row""}]},
+                ""Customer"":null,
+                ""ShippingAddress"":null,
+                ""BillingAddress"":null,
+                ""Locale"":""sv-SE"",
+                ""Currency"":""SEK"",
+                ""CountryCode"":""SE"",
+                ""ClientOrderNumber"":""637919465008154201"",
+                ""OrderId"":8753028,
+                ""EmailAddress"":null,
+                ""PhoneNumber"":null,
+                ""PaymentType"":null,
+                ""Payment"":null,
+                ""Status"":""Created"",
+                ""CustomerReference"":null,
+                ""SveaWillBuyOrder"":null,
+                ""IdentityFlags"":null,
+                ""MerchantData"":null,
+                ""PeppolId"":null,
+                ""ShippingInformation"": 
+                {
+                    ""ShippingProvider"": {
+                        ""Name"": ""nShift"",
+                        ""ShipmentId"": """",
+                        ""ShippingOption"": null
+                    },
+                    ""EnforceFallback"":false,
+                    ""EnableShipping"":true,
+                    ""Weight"":1000.0,
+                    ""Tags"":null,
+                    ""FallbackOptions"":null
+                }
+            }";
+
         public static string CheckoutGetOrderResponse = @"
         {
             ""MerchantSettings"":

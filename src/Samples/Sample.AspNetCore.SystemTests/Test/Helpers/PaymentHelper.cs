@@ -198,11 +198,10 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Leasing.SixtyMonths.Click()
                 .Leasing.Continue.Click()
                 .Leasing.Email.Set(TestDataService.CompanyEmail)
-                .WaitSeconds(2)
-                .Submit.Focus()
-                .Submit.ScrollTo()
-                .ScrollDown()
-                .Submit.DoubleClick()
+                .WaitSeconds(1)
+                .PaymentMethods.Reference.Focus()
+                .Press(Keys.Tab)
+                .Press(Keys.Space)
                 .Leasing.ManualConfirmation.WaitTo.WithinSeconds(15).BeVisible()
                 .Leasing.Confirm.Click();
         }

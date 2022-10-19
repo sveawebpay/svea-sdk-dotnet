@@ -43,7 +43,7 @@ jobs:
           MerchantSettings.CheckoutUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/CheckOut/LoadPaymentMenu
           MerchantSettings.ConfirmationUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/checkout/thankyou
           MerchantSettings.CheckoutValidationCallbackUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
-          MerchantSettings:WebhookUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/api/svea/shippingvalidation/?marketId={marketId}
+          MerchantSettings.WebhookUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/api/svea/shippingvalidation/?marketId={marketId}
 
       - name: 'Run Azure webapp deploy using publish profile credentials'
         uses: azure/webapps-deploy@v2

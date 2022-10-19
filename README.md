@@ -6,6 +6,7 @@
 * [3. Configuration]
 * [4. Supported APIs]
 * [5. Polling of Tasks]
+* [6. Shipping Module]
 
 
 ## 1. Introduction
@@ -126,11 +127,11 @@ Then the resource object will be returned. If not specified the SDK will try onc
 
 ## 6. Shipping Module
 
-Shipping VAT calculations
+**Shipping VAT calculations**
 
 For VAT calculation callback the model **ShippingOption** can be used as parameter. Shipping VAT calculation can then be performed using **CalculateShippingOrderRows** on the **Cart**.
 
-Example
+**Example**
 
 ```csharp
 
@@ -148,6 +149,6 @@ Example
 
 ```
 
-WebhookUri Callback / Shipping callback
+**WebhookUri Callback / Shipping callback**
 
 For validation of shipping callback the model **ShippingCallbackResponse** can be used as a parameter.

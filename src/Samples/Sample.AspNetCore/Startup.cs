@@ -11,9 +11,12 @@ using Sample.AspNetCore.Models;
 
 namespace Sample.AspNetCore
 {
+    using Svea.WebPay.SDK.Json;
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.Json;
 
     using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -46,7 +49,7 @@ namespace Sample.AspNetCore
             services.AddTransient(s => merchantSettings);
             services.AddDbContext<StoreDbContext>(options => options.UseInMemoryDatabase("Products"));
             services.AddControllersWithViews();
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNameCaseInsensitive = true);
             services.AddDistributedMemoryCache();
 
             services.Configure<MerchantSettings>(Configuration.GetSection("MerchantSettings"));
@@ -54,18 +57,6 @@ namespace Sample.AspNetCore
             services.AddScoped(provider => SessionMarket.GetMarket(provider));
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
-
-            Console.WriteLine("Credentials");
-            Console.WriteLine(JsonSerializer.Serialize(credentialsSettings));
-            Console.WriteLine(JsonSerializer.Serialize(credentials));
-
-            Console.WriteLine("MerchantSettings");
-            Console.WriteLine(JsonSerializer.Serialize(merchantSettingsSettings));
-            Console.WriteLine(JsonSerializer.Serialize(merchantSettings));
-
-            Console.WriteLine("SveaApiUrls");
-            Console.WriteLine(JsonSerializer.Serialize(sveaApiUrlsSettings));
-            Console.WriteLine(JsonSerializer.Serialize(sveaApiUrls));
 
             var credential = credentials.FirstOrDefault();
             services.AddSveaClient(sveaApiUrls.CheckoutApiUri, sveaApiUrls.PaymentAdminApiUri, credential?.MerchantId, credential?.Secret);

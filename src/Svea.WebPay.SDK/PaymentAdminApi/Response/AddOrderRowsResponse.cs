@@ -2,7 +2,7 @@
 {
     using System.Text.Json.Serialization;
 
-    public class AddOrderRowsResponse
+    internal class AddOrderRowsResponse
     {
         public AddOrderRowsResponse() { }
         

@@ -2,7 +2,6 @@
 
 using Svea.WebPay.SDK.Exceptions;
 using Svea.WebPay.SDK.Json;
-using Svea.WebPay.SDK.PaymentAdminApi.Request;
 using Svea.WebPay.SDK.PaymentAdminApi.Response;
 
 using System;
@@ -20,7 +19,6 @@ using Task = System.Threading.Tasks.Task;
 namespace Svea.WebPay.SDK
 {
     using Svea.WebPay.SDK.PaymentAdminApi;
-    using System.Diagnostics;
 
     public class SveaHttpClient : ISveaHttpClient
     {
@@ -153,18 +151,18 @@ namespace Svea.WebPay.SDK
                         {
                             if (taskResponse is object)
                             {
-                                await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(configureAwait);
+                                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken.Token).ConfigureAwait(configureAwait);
                             }
 
                             taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri, configureAwait).ConfigureAwait(configureAwait);
-
-                        } while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
+                        } 
+                        while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
 
                         response.ResourceUri = taskResponse.ResourceUri;
                     }
                     catch (HttpRequestException e)
                     {
-                        var ex = new HttpRequestException($"Resource object was not returned: {e.Message}");
+                        var ex = new HttpRequestException($"Resource object was not returned: {e.Message}", inner: e);
                         _logger.LogError(ex, ex.Message);
 
                         throw ex;

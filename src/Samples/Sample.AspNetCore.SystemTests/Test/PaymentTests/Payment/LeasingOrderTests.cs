@@ -19,7 +19,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         [RetryWithException(2)]
         [Test(Description = "")]
         [TestCaseSource(nameof(TestData), new object[] { false, false, false, true })]
-        public void CreditWithVippsAsPrivateAsync(Product[] products)
+        public void CreditWithLeasingAsCompanyAsync(Product[] products)
         {
             Assert.DoesNotThrowAsync(async () =>
             {

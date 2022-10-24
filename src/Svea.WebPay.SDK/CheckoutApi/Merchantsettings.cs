@@ -49,6 +49,12 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </summary>
         /// <remarks>Data type: Url. Max length: 500.</remarks>
         /// </param>
+        /// <param name="webhookUri">
+        /// <summary>
+        /// URI of the webhook in order to be called by shipping services	
+        /// </summary>
+        /// <remarks>Data type: Url. Max length: 500</remarks>
+        /// </param>
         /// <param name="activePartPaymentCampaigns">
         /// <summary>
         /// List of valid CampaignIDs. If used, a list of available part payment campaign options will be filtered through the chosen list.
@@ -62,7 +68,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// <remarks>Must be valid CampaignID.</remarks>
         /// </param>
         public MerchantSettings(Uri pushUri, Uri termsUri, Uri checkoutUri, Uri confirmationUri,
-            Uri checkoutValidationCallBackUri = null, IList<long> activePartPaymentCampaigns = null,
+            Uri checkoutValidationCallBackUri = null, Uri webhookUri = null, IList<long> activePartPaymentCampaigns = null,
             long? promotedPartPaymentCampaign = null)
         {
             PushUri = pushUri ?? throw new ArgumentNullException(nameof(pushUri));
@@ -70,6 +76,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             CheckoutUri = checkoutUri ?? throw new ArgumentNullException(nameof(checkoutUri));
             ConfirmationUri = confirmationUri ?? throw new ArgumentNullException(nameof(confirmationUri));
             CheckoutValidationCallBackUri = checkoutValidationCallBackUri;
+            WebhookUri = webhookUri;
             ActivePartPaymentCampaigns = activePartPaymentCampaigns;
             PromotedPartPaymentCampaign = promotedPartPaymentCampaign;
         }
@@ -126,5 +133,11 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </summary>
         /// <remarks>Must be valid CampaignID.</remarks>
         public long? PromotedPartPaymentCampaign { get; }
+
+        /// <summary>
+        /// URI of the webhook in order to be called by shipping services	
+        /// </summary>
+        /// <remarks>Data type: Url. Max length: 500</remarks>
+        public Uri WebhookUri { get; }
     }
 }

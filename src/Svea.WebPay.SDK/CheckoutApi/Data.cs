@@ -1,7 +1,5 @@
 ﻿namespace Svea.WebPay.SDK.CheckoutApi
 {
-    using Svea.WebPay.SDK.Json;
-
     using System.Text.Json.Serialization;
 
     public class Data
@@ -106,9 +104,9 @@
         /// </summary>
         /// </param>
         [JsonConstructor]
-        public Data(MerchantSettings merchantSettings, CartResponse cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency, 
+        public Data(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency, 
             string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType? paymentType, 
-            CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId)
+            CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId, GetOrderShippingInformation shippingInformation)
         {
             MerchantSettings = merchantSettings;
             Cart = cart;
@@ -132,6 +130,7 @@
             MerchantData = merchantData;
             Payment = payment;
             PeppolId = peppolId;
+            ShippingInformation = shippingInformation;
         }
 
         /// <summary>
@@ -145,7 +144,7 @@
         /// Order rows.
         /// </summary>
         [JsonInclude]
-        public CartResponse Cart { get; }
+        public Cart Cart { get; }
 
         /// <summary>
         /// Identified customer of the order.
@@ -254,5 +253,8 @@
         /// </summary>
         [JsonInclude]
         public string PeppolId { get; }
+
+        [JsonInclude]
+        public GetOrderShippingInformation ShippingInformation { get; }
     }
 }

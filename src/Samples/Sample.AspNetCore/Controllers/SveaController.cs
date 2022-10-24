@@ -5,12 +5,13 @@ namespace Sample.AspNetCore.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
+
     using Sample.AspNetCore.Data;
     using Sample.AspNetCore.Models;
 
     using Svea.WebPay.SDK;
     using Svea.WebPay.SDK.CheckoutApi;
-
+    using Svea.WebPay.SDK.CheckoutApi.Response;
     using System;
 
     using Cart = Models.Cart;
@@ -33,6 +34,41 @@ namespace Sample.AspNetCore.Controllers
             _sveaClient = sveaClient;
         }
 
+
+        [HttpPost("shippingTaxCalculation")]
+        public async Task<ActionResult> ShippingTaxCalculation(ShippingOption shippingOption)
+        {
+            var order = await _sveaClient.Checkout.GetOrder(shippingOption.OrderId).ConfigureAwait(false);
+            order.Cart.CalculateShippingOrderRows(shippingOption);
+
+            await _sveaClient.Checkout.UpdateOrder(order.OrderId, new UpdateOrderModel(order.Cart, null, order.ShippingInformation)).ConfigureAwait(false);
+
+            return Ok();
+        }
+
+        [HttpPost("shippingvalidation")]
+        public async Task<ActionResult> ShippingValidation(ShippingCallbackResponse shippingCallbackResponse)
+        {
+            var order = await _sveaClient.Checkout.GetOrder(shippingCallbackResponse.OrderId).ConfigureAwait(false);
+
+            if (order != null && order.Status == CheckoutOrderStatus.Final)
+            {
+                var existingOrder = _context.Orders.FirstOrDefault(x => x.SveaOrderId == order.OrderId.ToString());
+                if (existingOrder == null)
+                {
+                    return Problem(); 
+                }
+
+                existingOrder.ShippingStatus = shippingCallbackResponse.Type;
+                existingOrder.ShippingDescription = shippingCallbackResponse.Description;
+
+                await _context.SaveChangesAsync(true);
+            }
+
+            return Ok();
+        }
+
+
         [HttpGet("validation/{orderId}")]
         public ActionResult Validation(long? orderId)
         {
@@ -48,6 +84,7 @@ namespace Sample.AspNetCore.Controllers
                 if (orderId.HasValue)
                 {
                     var order = await _sveaClient.Checkout.GetOrder(orderId.Value).ConfigureAwait(false);
+
                     if (order != null && order.Status == CheckoutOrderStatus.Final)
                     {
                         _cartService.SveaOrderId = order.OrderId.ToString();
@@ -66,9 +103,11 @@ namespace Sample.AspNetCore.Controllers
                         _context.Orders.Add(new Order
                         {
                             SveaOrderId = _cartService.SveaOrderId,
-                            Lines = _cartService.CartLines.ToList()
+                            Lines = _cartService.CartLines.ToList(),
+                            ShippingStatus = _cartService.ShippingStatus
                         });
-                        _context.SaveChanges(true);
+                        
+                        await _context.SaveChangesAsync(true);
                     }
                 }
 
@@ -76,7 +115,7 @@ namespace Sample.AspNetCore.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError( e, "Callback failed");
+                _logger.LogError(e, "Callback failed");
                 return Ok();
             }
         }

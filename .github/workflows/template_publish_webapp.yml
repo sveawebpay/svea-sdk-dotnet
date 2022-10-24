@@ -1,0 +1,53 @@
+name: Publish WebApp
+
+on:
+  workflow_call:
+    inputs:
+      Environment:
+        required: true
+        type: string
+      WorkflowRunId:
+        required: true
+        type: string
+  
+jobs:
+  publish_sample_site:
+    name: Publish sample site
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.Environment }}
+
+    steps:
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow_conclusion: success
+          run_id: ${{ inputs.WorkflowRunId }}
+          name: Sample.AspNetCore
+          path: Sample.AspNetCore
+
+      - name: Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+         # comma separated list of XML/JSON/YAML files in which tokens are to be substituted. Files names must be specified relative to the folder-path.
+           files: 'Sample.AspNetCore/appsettings.json'
+        env:
+          Credentials.0.MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID }}
+          Credentials.0.Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
+          Credentials.1.MerchantId: ${{ secrets.NORWAY_MERCHANT_ID }}
+          Credentials.1.Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
+          Credentials.2.MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
+          Credentials.2.Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
+          MerchantSettings.PushUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/api/svea/push/{checkout.order.uri}/?marketId={marketId}
+          MerchantSettings.TermsUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/terms
+          MerchantSettings.CheckoutUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/CheckOut/LoadPaymentMenu
+          MerchantSettings.ConfirmationUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/checkout/thankyou
+          MerchantSettings.CheckoutValidationCallbackUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
+          MerchantSettings.WebhookUri: https://svea-webpay-sdk-001-${{ inputs.Environment }}.azurewebsites.net/api/svea/shippingvalidation/?marketId={marketId}
+
+      - name: 'Run Azure webapp deploy using publish profile credentials'
+        uses: azure/webapps-deploy@v2
+        with: 
+           app-name: ${{ secrets.AZURE_WEBAPP_NAME }} # Replace with your app name
+           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }} # Define secret variable in repository settings as per action documentation
+           package: 'Sample.AspNetCore'

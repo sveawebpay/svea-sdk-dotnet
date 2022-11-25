@@ -34,7 +34,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 var response = await _sveaClientSweden.Checkout.GetOrder(long.Parse(_orderId)).ConfigureAwait(false);
 
                 Assert.That(response.Currency, Is.EqualTo("SEK"));
-                Assert.That(response.PaymentType, Is.EqualTo(PaymentType.LEASINGMANUAL));
+                Assert.That(response.PaymentType, Is.EqualTo(PaymentType.LEASING));
                 Assert.That(response.Payment.PaymentMethodType, Is.EqualTo(PaymentMethodType.Leasing));
                 Assert.That(response.EmailAddress.ToString(), Is.EqualTo(TestDataService.CompanyEmail));
                 Assert.That(response.Status, Is.EqualTo(CheckoutOrderStatus.Final));

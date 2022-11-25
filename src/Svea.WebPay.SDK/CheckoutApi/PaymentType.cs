@@ -102,7 +102,7 @@
         /// </summary>
         TRUSTLY,
 
-        LEASINGMANUAL,
+        LEASING,
 
         MOBILEPAY
     }

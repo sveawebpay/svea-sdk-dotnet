@@ -210,7 +210,7 @@ namespace Sample.AspNetCore.Controllers
                     var orderRowIds = paymentOrder.OrderRows.Select(row => (long)row.OrderRowId).ToList();
 
                     var response = await paymentOrder.Actions.DeliverOrder(
-                        new DeliveryRequest(orderRowIds), new PollingTimeout(15)).ConfigureAwait(false);
+                        new DeliveryRequest(orderRowIds, null, null, true), new PollingTimeout(15)).ConfigureAwait(false);
 
                     TempData["DeliverMessage"] = $"Order delivered -> {response.ResourceUri.AbsoluteUri}";
                 }

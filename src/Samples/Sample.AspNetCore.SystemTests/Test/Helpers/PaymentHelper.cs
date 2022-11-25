@@ -202,8 +202,17 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.Reference.Focus()
                 .Press(Keys.Tab)
                 .Press(Keys.Space)
-                .Leasing.ManualConfirmation.WaitTo.WithinSeconds(15).BeVisible()
-                .Leasing.Confirm.Click();
+                .Do(x =>
+                {
+                    x.WaitSeconds(10);
+
+                    if (x.Leasing.ManualConfirmation.IsVisible)
+                    {
+                        x
+                        .Leasing.ManualConfirmation.WaitTo.WithinSeconds(15).BeVisible()
+                        .Leasing.Confirm.Click();
+                    }
+                });
         }
 
         public static SveaPaymentFramePage PayWithMobilePay(this SveaPaymentFramePage page)

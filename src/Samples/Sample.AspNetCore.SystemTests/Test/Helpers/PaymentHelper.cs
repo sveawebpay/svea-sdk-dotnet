@@ -212,7 +212,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                     if (x.Leasing.ManualConfirmation.IsVisible)
                     {
                         x
-                        .Leasing.ManualConfirmation.WaitTo.WithinSeconds(15).BeVisible()
+                        .Leasing.ManualConfirmation.WaitTo.WithinSeconds(30).BeVisible()
                         .Leasing.Confirm.Click();
                     }
                 });

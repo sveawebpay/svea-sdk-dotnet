@@ -29,11 +29,11 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                                 {
                                     if (shipping != null)
                                     {
-                                        x.AddShippingBlock.IsVisible.WaitTo.BeTrue();
+                                        x.AddShippingBlock.IsVisible.WaitTo.WithinSeconds(30).BeTrue();
                                     }
                                     else
                                     {
-                                        x.PaymentMethods.IsVisible.WaitTo.BeTrue();
+                                        x.PaymentMethods.IsVisible.WaitTo.WithinSeconds(30).BeTrue();
                                     }
                                 });
                             }
@@ -47,17 +47,17 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                                 {
                                     if (shipping != null)
                                     {
-                                        x.AddShippingBlock.IsVisible.WaitTo.BeTrue();
+                                        x.AddShippingBlock.IsVisible.WaitTo.WithinSeconds(30).BeTrue();
                                     }
                                     else
                                     {
-                                        x.PaymentMethods.IsVisible.WaitTo.BeTrue();
+                                        x.PaymentMethods.IsVisible.WaitTo.WithinSeconds(30).BeTrue();
                                     }
                                 });
                             }
 
                         case Checkout.Option.Anonymous:
-                            return page.ProceedWithPrivateAnonymous().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            return page.ProceedWithPrivateAnonymous().PaymentMethods.IsVisible.WaitTo.WithinSeconds(30).BeTrue();
                     }
 
                 case Entity.Option.Company:
@@ -68,15 +68,15 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                         case Checkout.Option.Identification:
                             if(paymentMethod == PaymentMethods.Option.Leasing)
                             {
-                                return page.ProceedWithCompanyIdentification(TestDataService.OrganizationNumberLeasing).PaymentMethods.IsVisible.WaitTo.BeTrue();
+                                return page.ProceedWithCompanyIdentification(TestDataService.OrganizationNumberLeasing).PaymentMethods.IsVisible.WaitTo.WithinSeconds(30).BeTrue();
                             }
                             else
                             {
-                                return page.ProceedWithCompanyIdentification(TestDataService.OrganizationNumber).PaymentMethods.IsVisible.WaitTo.BeTrue();
+                                return page.ProceedWithCompanyIdentification(TestDataService.OrganizationNumber).PaymentMethods.IsVisible.WaitTo.WithinSeconds(30).BeTrue();
                             }
 
                         case Checkout.Option.Anonymous:
-                            return page.ProceedWithCompanyAnonymous().PaymentMethods.IsVisible.WaitTo.BeTrue();
+                            return page.ProceedWithCompanyAnonymous().PaymentMethods.IsVisible.WaitTo.WithinSeconds(30).BeTrue();
                     }
             }
         }
@@ -121,7 +121,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                                 .WaitSeconds(1);
                             }
 
-                            x.SelectShippingBlock.Options.WaitTo.WithinSeconds(15).Not.BeEmpty();
+                            x.SelectShippingBlock.Options.WaitTo.WithinSeconds(30).Not.BeEmpty();
 
                             x
                             .SelectShippingBlock.Options.FirstOrDefault(x => x.Text.Content.Value.Contains(option)).Click()
@@ -212,47 +212,47 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 default:
                 case PaymentMethods.Option.Card:
                 case PaymentMethods.Option.CardEmbedded:
-                    page.PaymentMethods.Card.IsVisible.WaitTo.BeTrue().PaymentMethods.Card.Click();
+                    page.PaymentMethods.Card.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.Card.Click();
                     break;
 
                 case PaymentMethods.Option.DirektBank:
-                    page.PaymentMethods.DirektBank.IsVisible.WaitTo.BeTrue().PaymentMethods.DirektBank.Click();
+                    page.PaymentMethods.DirektBank.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.DirektBank.Click();
                     break;
 
                 case PaymentMethods.Option.Invoice:
-                    page.PaymentMethods.Invoice.IsVisible.WaitTo.BeTrue().PaymentMethods.Invoice.Click();
+                    page.PaymentMethods.Invoice.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.Invoice.Click();
                     break;
 
                 case PaymentMethods.Option.Trustly:
-                    page.PaymentMethods.Trustly.IsVisible.WaitTo.BeTrue().PaymentMethods.Trustly.Click();
+                    page.PaymentMethods.Trustly.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.Trustly.Click();
                     break;
 
                 case PaymentMethods.Option.PaymentPlan:
-                    page.PaymentMethods.PaymentPlan.IsVisible.WaitTo.BeTrue().PaymentMethods.PaymentPlan.Click();
+                    page.PaymentMethods.PaymentPlan.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.PaymentPlan.Click();
                     break;
 
                 case PaymentMethods.Option.AccountCredit:
-                    page.PaymentMethods.Account.IsVisible.WaitTo.BeTrue().PaymentMethods.Account.Click();
+                    page.PaymentMethods.Account.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.Account.Click();
                     break;
 
                 case PaymentMethods.Option.BlackFriday:
-                    page.PaymentMethods.BlackFriday.IsVisible.WaitTo.BeTrue().PaymentMethods.BlackFriday.Click();
+                    page.PaymentMethods.BlackFriday.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.BlackFriday.Click();
                     break;
 
                 case PaymentMethods.Option.Swish:
-                    page.PaymentMethods.Swish.IsVisible.WaitTo.BeTrue().PaymentMethods.Swish.Click();
+                    page.PaymentMethods.Swish.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.Swish.Click();
                     break;
 
                 case PaymentMethods.Option.Vipps:
-                    page.PaymentMethods.Vipps.IsVisible.WaitTo.BeTrue().PaymentMethods.Vipps.Click();
+                    page.PaymentMethods.Vipps.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.Vipps.Click();
                     break;
 
                 case PaymentMethods.Option.Leasing:
-                    page.PaymentMethods.Leasing.IsVisible.WaitTo.BeTrue().PaymentMethods.Leasing.Click();
+                    page.PaymentMethods.Leasing.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.Leasing.Click();
                     break;
 
                 case PaymentMethods.Option.MobilePay:
-                    page.PaymentMethods.MobilePay.IsVisible.WaitTo.BeTrue().PaymentMethods.MobilePay.Click();
+                    page.PaymentMethods.MobilePay.IsVisible.WaitTo.WithinSeconds(30).BeTrue().PaymentMethods.MobilePay.Click();
                     break;
             }
 

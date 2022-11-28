@@ -97,11 +97,12 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .WaitSeconds(2)
                 .Submit.Focus()
                 .Submit.Click()
-                .WaitSeconds(5)
+                .WaitSeconds(10)
                 .Do(x =>
                 {
                     if (page.BankId.IsVisible)
                     {
+                        page.WaitSeconds(1);
                         page.ConfirmBankId.Click();
                     }
                 });
@@ -111,12 +112,14 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
         {
             return page
                 .PaymentMethods.Trustly.IsVisible.WaitTo.BeTrue()
+                .WaitSeconds(1)
                 .PaymentMethods.Trustly.Click()
                 .Submit.ClickAndGo<TrustlyPaymentPage>()
+                .WaitSeconds(1)
                 .Bank.Click()
                 .Next.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
                 .Next.Click()
-                .WaitSeconds(1)
+                .WaitSeconds(2)
                 .Next.IsVisible.WaitTo.BeTrue()
                 .Next.Focus()
                 .Press(Keys.Space)
@@ -202,8 +205,17 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .PaymentMethods.Reference.Focus()
                 .Press(Keys.Tab)
                 .Press(Keys.Space)
-                .Leasing.ManualConfirmation.WaitTo.WithinSeconds(15).BeVisible()
-                .Leasing.Confirm.Click();
+                .Do(x =>
+                {
+                    x.WaitSeconds(10);
+
+                    if (x.Leasing.ManualConfirmation.IsVisible)
+                    {
+                        x
+                        .Leasing.ManualConfirmation.WaitTo.WithinSeconds(30).BeVisible()
+                        .Leasing.Confirm.Click();
+                    }
+                });
         }
 
         public static SveaPaymentFramePage PayWithMobilePay(this SveaPaymentFramePage page)

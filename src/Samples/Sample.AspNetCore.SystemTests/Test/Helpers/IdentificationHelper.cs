@@ -92,6 +92,8 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Submit.Click()
                 .Do(x => 
                 {
+                    x.WaitSeconds(5);
+
                     if (x.NotYou.IsVisible)
                     {
                         x.NotYou.Click();

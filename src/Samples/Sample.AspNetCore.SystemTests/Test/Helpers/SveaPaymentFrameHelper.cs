@@ -84,8 +84,10 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
         public static SveaPaymentFramePage EditShipping(this SveaPaymentFramePage page, Dictionary<string, string[]> shipping)
         {
             return page.AddShippingBlock.IsVisible.WaitTo.BeTrue()
+                .WaitSeconds(2)
                 .AddShippingBlock.Expand.Click()
                 .EditShippingBlock.NewAddress.IsVisible.WaitTo.BeTrue()
+                .WaitSeconds(2)
                 .EditShippingBlock.NewAddress.Click()
                 .WaitSeconds(2)
                 .EditShippingBlock.FirstName.Clear()
@@ -96,7 +98,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .EditShippingBlock.StreetAddress.Set(TestDataService.ShippingStreetAddress)
                 .EditShippingBlock.ZipCode.Clear()
                 .EditShippingBlock.ZipCode.Set(TestDataService.ShippingZipCode)
-                .WaitSeconds(1)
+                .WaitSeconds(2)
                 .Do(x =>
                 {
                     if (x.EditShippingBlock.City.Value.Length == 0)
@@ -106,6 +108,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 })
                 .EditShippingBlock.Submit.Focus()
                 .EditShippingBlock.Submit.Click()
+                .WaitSeconds(2)
                 .Do(x =>
                 {
                     if (shipping.ContainsKey("carrier"))
@@ -117,8 +120,9 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                             if (options.IndexOf(option) != 0)
                             {
                                 x
+                                .WaitSeconds(2)
                                 .SelectShippingBlock.ChangeCarrier.Click()
-                                .WaitSeconds(1);
+                                .WaitSeconds(2);
                             }
 
                             x.SelectShippingBlock.Options.WaitTo.WithinSeconds(30).Not.BeEmpty();
@@ -135,8 +139,9 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
                         foreach (var pickup in pickups)
                         {
+                            x.WaitSeconds(2);
                             x.SelectShippingBlock.ChangePickupPlace.Click();
-                            x.WaitSeconds(1);
+                            x.WaitSeconds(2);
 
                             var index = int.Parse(pickup);
 
@@ -150,9 +155,10 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                             }
 
                             x
-                            .WaitSeconds(1)
+                            .WaitSeconds(2)
                             .SelectShippingBlock.ConfirmChange.Focus()
-                            .Press(Keys.Space);
+                            .Press(Keys.Space)
+                            .WaitSeconds(2);
                         }
                     }
                 })
@@ -164,41 +170,50 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                         default:
                         case ShippingOptions.Bring:
                             x
+                            .WaitSeconds(2)
                             .SelectShippingBlock.DoorCode.Set(TestDataService.DoorCode)
                             .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
-                            .WaitSeconds(1)
+                            .WaitSeconds(2)
                             .SelectShippingBlock.Submit.Focus()
-                            .SelectShippingBlock.Submit.Click();
+                            .SelectShippingBlock.Submit.Click()
+                            .WaitSeconds(2);
+
                             break;
 
                         case ShippingOptions.Plab:
                             x
+                            .WaitSeconds(2)
                             .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
-                            .WaitSeconds(1)
+                            .WaitSeconds(2)
                             .SelectShippingBlock.DeliveryBefore12.Click()
-                            .WaitSeconds(1)
+                            .WaitSeconds(2)
                             .SelectShippingBlock.CallBeforeDelivery.Click()
-                            .WaitSeconds(1)
+                            .WaitSeconds(2)
                             .SelectShippingBlock.Submit.Focus()
-                            .SelectShippingBlock.Submit.Click();
+                            .SelectShippingBlock.Submit.Click()
+                            .WaitSeconds(2);
                             break;
 
                         case ShippingOptions.Dhl:
                             x
+                            .WaitSeconds(2)
                             .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
                             .SelectShippingBlock.DoorCode.Set(TestDataService.DoorCode)
-                            .WaitSeconds(1)
+                            .WaitSeconds(2)
                             .SelectShippingBlock.Submit.Focus()
-                            .SelectShippingBlock.Submit.Click();
+                            .SelectShippingBlock.Submit.Click()
+                            .WaitSeconds(2);
                             break;
 
                         case ShippingOptions.Budbee:
                             x
+                            .WaitSeconds(2)
                             .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
                             .SelectShippingBlock.Indoor.Click()
-                            .WaitSeconds(1)
+                            .WaitSeconds(2)
                             .SelectShippingBlock.Submit.Focus()
-                            .SelectShippingBlock.Submit.Click();
+                            .SelectShippingBlock.Submit.Click()
+                            .WaitSeconds(2);
                             break;
                     }
                 })

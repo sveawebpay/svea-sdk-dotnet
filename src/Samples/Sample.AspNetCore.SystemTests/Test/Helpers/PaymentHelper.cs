@@ -193,6 +193,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Next.Click()
                 .SwitchToRoot<SveaPaymentFramePage>();
         }
+        
         public static SveaPaymentFramePage PayWithLeasing(this SveaPaymentFramePage page)
         {
             return page

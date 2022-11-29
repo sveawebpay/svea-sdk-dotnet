@@ -117,8 +117,9 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                             if (options.IndexOf(option) != 0)
                             {
                                 x
+                                .WaitSeconds(2)
                                 .SelectShippingBlock.ChangeCarrier.Click()
-                                .WaitSeconds(1);
+                                .WaitSeconds(2);
                             }
 
                             x.SelectShippingBlock.Options.WaitTo.WithinSeconds(30).Not.BeEmpty();
@@ -135,6 +136,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
                         foreach (var pickup in pickups)
                         {
+                            x.WaitSeconds(1);
                             x.SelectShippingBlock.ChangePickupPlace.Click();
                             x.WaitSeconds(1);
 
@@ -152,7 +154,8 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                             x
                             .WaitSeconds(1)
                             .SelectShippingBlock.ConfirmChange.Focus()
-                            .Press(Keys.Space);
+                            .Press(Keys.Space)
+                            .WaitSeconds(1);
                         }
                     }
                 })
@@ -164,6 +167,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                         default:
                         case ShippingOptions.Bring:
                             x
+                            .WaitSeconds(1)
                             .SelectShippingBlock.DoorCode.Set(TestDataService.DoorCode)
                             .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
                             .WaitSeconds(1)
@@ -173,6 +177,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
                         case ShippingOptions.Plab:
                             x
+                            .WaitSeconds(1)
                             .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
                             .WaitSeconds(1)
                             .SelectShippingBlock.DeliveryBefore12.Click()
@@ -185,6 +190,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
                         case ShippingOptions.Dhl:
                             x
+                            .WaitSeconds(1)
                             .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
                             .SelectShippingBlock.DoorCode.Set(TestDataService.DoorCode)
                             .WaitSeconds(1)
@@ -194,6 +200,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
 
                         case ShippingOptions.Budbee:
                             x
+                            .WaitSeconds(1)
                             .SelectShippingBlock.Instructions.Set(TestDataService.ShippingInstructions)
                             .SelectShippingBlock.Indoor.Click()
                             .WaitSeconds(1)

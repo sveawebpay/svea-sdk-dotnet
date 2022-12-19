@@ -14,6 +14,8 @@
 
         ACCOUNT,
 
+        SWISH_PF,
+
         SWISH,
 
         VIPPS,

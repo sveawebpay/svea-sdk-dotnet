@@ -105,7 +105,7 @@
         /// </param>
         [JsonConstructor]
         public Data(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency, 
-            string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType? paymentType, 
+            string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, string paymentType, 
             CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId, GetOrderShippingInformation shippingInformation)
         {
             MerchantSettings = merchantSettings;
@@ -122,7 +122,7 @@
             OrderId = orderId;
             EmailAddress = emailAddress;
             PhoneNumber = phoneNumber;
-            PaymentType = paymentType ?? CheckoutApi.PaymentType.Unknown;
+            PaymentType = paymentType;
             Status = status;
             CustomerReference = customerReference;
             SveaWillBuyOrder = sveaWillBuyOrder;
@@ -212,7 +212,7 @@
         /// The final payment method for the order. Will only have a value when the order is finalized, otherwise unknown.
         /// </summary>
         [JsonInclude]
-        public PaymentType? PaymentType { get;  }
+        public string PaymentType { get; }
 
         /// <summary>
         /// The current state of the order

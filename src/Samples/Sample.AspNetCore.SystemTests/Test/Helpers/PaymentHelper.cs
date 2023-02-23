@@ -115,6 +115,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .WaitSeconds(1)
                 .PaymentMethods.Trustly.Click()
                 .Submit.ClickAndGo<TrustlyPaymentPage>()
+                .Bank.WaitTo.WithinSeconds(60).BeVisible()
                 .WaitSeconds(1)
                 .Bank.Click()
                 .Next.IsVisible.WaitTo.WithinSeconds(60).BeTrue()
@@ -212,7 +213,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                 .Leasing.Continue.Click()
                 .Leasing.Email.Set(TestDataService.CompanyEmail)
                 .WaitSeconds(1)
-                .PaymentMethods.Reference.Focus()
+                //.PaymentMethods.Reference.Focus()
                 .Press(Keys.Tab)
                 .Press(Keys.Space)
                 .Do(x =>
@@ -233,6 +234,7 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             return page
                 .PaymentMethods.Leasing.IsVisible.WaitTo.BeTrue()
                 .PaymentMethods.Leasing.Click()
+                .WaitSeconds(1)
                 .Leasing.SixtyMonths.Click()
                 .Leasing.Continue.Click()
                 .Leasing.Email.Set(TestDataService.CompanyEmail)

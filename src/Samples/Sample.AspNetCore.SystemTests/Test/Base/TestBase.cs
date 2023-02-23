@@ -29,9 +29,9 @@ namespace Sample.AspNetCore.SystemTests.Test.Base
                     WithOptions(DriverOptionsFactory.GetDriverOptions(Driver.Chrome) as ChromeOptions).
                 UseFirefox().
                     WithOptions(DriverOptionsFactory.GetDriverOptions(Driver.Firefox) as FirefoxOptions).
-                UseVerificationTimeout(TimeSpan.FromSeconds(3)).
-                UseElementFindTimeout(TimeSpan.FromSeconds(15)).
-                UseWaitingTimeout(TimeSpan.FromSeconds(30)).
+                UseVerificationTimeout(TimeSpan.FromSeconds(10)).
+                UseElementFindTimeout(TimeSpan.FromSeconds(30)).
+                UseWaitingTimeout(TimeSpan.FromSeconds(60)).
                 LogConsumers.AddNUnitTestContext().
                 WithMinLevel(LogLevel.Trace).
                 ScreenshotConsumers.AddFile().

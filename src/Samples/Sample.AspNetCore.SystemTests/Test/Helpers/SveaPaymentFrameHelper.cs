@@ -271,13 +271,23 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
                     break;
             }
 
-            if (entity == Entity.Option.Company && checkout == Checkout.Option.Identification)
+            if (entity == Entity.Option.Company && checkout == Checkout.Option.Identification && paymentMethod == PaymentMethods.Option.Invoice)
             {
                 page.WaitSeconds(1)
+                    .PaymentMethods.AddReference.Click()
+                    .InvoiceReference.Dropdown.Click()
+                    .Press(Keys.Down)
+                    .Press(Keys.Enter)
+					.InvoiceReference.Reference.Set(TestDataService.Reference)
+                    .InvoiceReference.Save.Click();
+			}
+			else if (entity == Entity.Option.Company && checkout == Checkout.Option.Identification && paymentMethod == PaymentMethods.Option.Invoice)
+			{
+                page.WaitSeconds(1)
                     .PaymentMethods.Reference.Set(TestDataService.Reference);
-            }
+			}
 
-            switch (paymentMethod)
+			switch (paymentMethod)
             {
                 default:
                 case PaymentMethods.Option.Card:

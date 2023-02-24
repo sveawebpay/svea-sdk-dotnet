@@ -29,21 +29,22 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Count() > 0, 15, 3)
+                    x.Orders.Count() > 0 &&
+                    x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
-                .Orders.Last().Order.OrderId.StoreValue(out var orderId)
+                .Orders.First().Order.OrderId.StoreValue(out var orderId)
 
                 // Validate order info
-                .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Open))
-                .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
+                .Orders.First().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Open))
+                .Orders.First().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
 
                 // Validate order row info
-                .Orders.Last().OrderRows.Count.Should.Equal(1)
-                .Orders.Last().OrderRows.First().Name.Should.Equal(products[0].Name)
-                .Orders.Last().OrderRows.First().IsCancelled.Should.EqualIgnoringCase(false.ToString())
+                .Orders.First().OrderRows.Count.Should.Equal(1)
+                .Orders.First().OrderRows.First().Name.Should.Equal(products[0].Name)
+                .Orders.First().OrderRows.First().IsCancelled.Should.EqualIgnoringCase(false.ToString())
 
                 // Validate deliveries info
-                .Orders.Last().Deliveries.Should.HaveCount(0);
+                .Orders.First().Deliveries.Should.HaveCount(0);
 
 
             // Assert sdk/api response
@@ -82,23 +83,24 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Count() > 0, 15, 3)
+                    x.Orders.Count() > 0 &&
+                    x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
                 // Deliver
-                .Orders.Last().Order.OrderId.StoreValue(out var orderId)
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.DeliverOrder.ClickAndGo()
+                .Orders.First().Order.OrderId.StoreValue(out var orderId)
+                .Orders.First().Order.Table.Toggle.Click()
+                .Orders.First().Order.Table.DeliverOrder.ClickAndGo()
 
                 // Validate order info
-                .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
-                .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
+                .Orders.First().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
+                .Orders.First().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
 
                 // Validate order rows info
-                .Orders.Last().OrderRows.Should.HaveCount(0)
+                .Orders.First().OrderRows.Should.HaveCount(0)
 
                 // Validate deliveries info
-                .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Status.Should.Equal("Sent");
+                .Orders.First().Deliveries.Count.Should.Equal(1)
+                .Orders.First().Deliveries.First().Status.Should.Equal("Sent");
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -136,25 +138,26 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Count() > 0, 15, 3)
+                    x.Orders.Count() > 0 &&
+                    x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
                 // Deliver -> Credit
-                .Orders.Last().Order.OrderId.StoreValue(out var orderId)
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.DeliverOrder.ClickAndGo()
-                .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                .Orders.Last().Deliveries.First().Table.CreditOrderRows.ClickAndGo()
+                .Orders.First().Order.OrderId.StoreValue(out var orderId)
+                .Orders.First().Order.Table.Toggle.Click()
+                .Orders.First().Order.Table.DeliverOrder.ClickAndGo()
+                .Orders.First().Deliveries.First().Table.Toggle.Click()
+                .Orders.First().Deliveries.First().Table.CreditOrderRows.ClickAndGo()
 
                 // Validate order info
-                .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
-                .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
+                .Orders.First().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
+                .Orders.First().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
 
                 // Validate order rows info
-                .Orders.Last().OrderRows.Should.HaveCount(0)
+                .Orders.First().OrderRows.Should.HaveCount(0)
 
                 // Validate deliveries info
-                .Orders.Last().Deliveries.Count.Should.Equal(1)
-                .Orders.Last().Deliveries.First().Status.Should.Equal("Sent");
+                .Orders.First().Deliveries.Count.Should.Equal(1)
+                .Orders.First().Deliveries.First().Status.Should.Equal("Sent");
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -191,26 +194,26 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
-
+                        x.Orders.Count() > 0 &&
+                        x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
                     // Deliver -> Credit
-                    .Orders.Last().Order.OrderId.StoreValue(out var orderId)
-                    .Orders.Last().Order.Table.Toggle.Click()
-                    .Orders.Last().Order.Table.DeliverOrder.ClickAndGo()
-                    .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                    .Orders.Last().Deliveries.First().Table.CreditOrderRows.ClickAndGo()
+                    .Orders.First().Order.OrderId.StoreValue(out var orderId)
+                    .Orders.First().Order.Table.Toggle.Click()
+                    .Orders.First().Order.Table.DeliverOrder.ClickAndGo()
+                    .Orders.First().Deliveries.First().Table.Toggle.Click()
+                    .Orders.First().Deliveries.First().Table.CreditOrderRows.ClickAndGo()
 
                     // Validate order info
-                    .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
-                    .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
+                    .Orders.First().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Delivered))
+                    .Orders.First().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
 
                     // Validate order rows info
-                    .Orders.Last().OrderRows.Should.HaveCount(0)
+                    .Orders.First().OrderRows.Should.HaveCount(0)
 
                     // Validate deliveries info
-                    .Orders.Last().Deliveries.Count.Should.Equal(1)
-                    .Orders.Last().Deliveries.First().Status.Should.Equal("Sent");
+                    .Orders.First().Deliveries.Count.Should.Equal(1)
+                    .Orders.First().Deliveries.First().Status.Should.Equal("Sent");
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -247,23 +250,24 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Count() > 0, 15, 3)
+                    x.Orders.Count() > 0 &&
+                    x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
                 // Cancel
-                .Orders.Last().Order.OrderId.StoreValue(out var orderId)
-                .Orders.Last().Order.Table.Toggle.Click()
-                .Orders.Last().Order.Table.CancelOrder.ClickAndGo()
+                .Orders.First().Order.OrderId.StoreValue(out var orderId)
+                .Orders.First().Order.Table.Toggle.Click()
+                .Orders.First().Order.Table.CancelOrder.ClickAndGo()
 
                 // Validate order info
-                .RefreshPageUntil(x => x.Orders.Last().Order.OrderStatus.Value == nameof(OrderStatus.Cancelled), 10, 3)
-                .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
+                .RefreshPageUntil(x => x.Orders.First().Order.OrderStatus.Value == nameof(OrderStatus.Cancelled), 10, 3)
+                .Orders.First().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
 
                 // Validate order row info
-                .Orders.Last().OrderRows.First().Name.Should.Equal(products[0].Name)
-                .Orders.Last().OrderRows.First().IsCancelled.Should.EqualIgnoringCase(true.ToString())
+                .Orders.First().OrderRows.First().Name.Should.Equal(products[0].Name)
+                .Orders.First().OrderRows.First().IsCancelled.Should.EqualIgnoringCase(true.ToString())
 
                 // Validate deliveries info
-                .Orders.Last().Deliveries.Should.HaveCount(0);
+                .Orders.First().Deliveries.Should.HaveCount(0);
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -296,23 +300,24 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
                     // Cancel
-                    .Orders.Last().Order.OrderId.StoreValue(out var orderId)
-                    .Orders.Last().Order.Table.Toggle.Click()
-                    .Orders.Last().Order.Table.CancelOrder.ClickAndGo()
+                    .Orders.First().Order.OrderId.StoreValue(out var orderId)
+                    .Orders.First().Order.Table.Toggle.Click()
+                    .Orders.First().Order.Table.CancelOrder.ClickAndGo()
 
                     // Validate order info
-                    .RefreshPageUntil(x => x.Orders.Last().Order.OrderStatus.Value == nameof(OrderStatus.Cancelled), 10, 3)
-                    .Orders.Last().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
+                    .RefreshPageUntil(x => x.Orders.First().Order.OrderStatus.Value == nameof(OrderStatus.Cancelled), 10, 3)
+                    .Orders.First().Order.PaymentType.Should.Equal(nameof(PaymentType.Invoice))
 
                     // Validate order rows info
-                    .Orders.Last().OrderRows.First().Name.Should.Equal(products[0].Name)
-                    .Orders.Last().OrderRows.First().IsCancelled.Should.EqualIgnoringCase(true.ToString())
+                    .Orders.First().OrderRows.First().Name.Should.Equal(products[0].Name)
+                    .Orders.First().OrderRows.First().IsCancelled.Should.EqualIgnoringCase(true.ToString())
 
                     // Validate deliveries info
-                    .Orders.Last().Deliveries.Should.HaveCount(0);
+                    .Orders.First().Deliveries.Should.HaveCount(0);
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -355,19 +360,20 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                     x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                    x.Orders.Count() > 0, 15, 3)
+                    x.Orders.Count() > 0 &&
+                    x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
-                .Orders.Last().Order.OrderId.StoreValue(out var orderId)
-                .Orders.Last().OrderRows.Last().Table.Toggle.Click()
-                .Orders.Last().OrderRows.Last().Table.UpdateRow.ClickAndGo<OrdersPage>()
-                .RefreshPageUntil(x => x.Orders.Last().OrderRows.Last().Name.Value.Contains("Updated"), 10, 3)
-                .Orders.Last().OrderRows.Last().Table.Toggle.Click()
-                .Orders.Last().OrderRows.Last().Name.Should.Contain("Updated")
-                .Orders.Last().OrderRows.First().Table.Toggle.Click()
-                .Orders.Last().OrderRows.First().Table.UpdateRow.ClickAndGo<OrdersPage>()
+                .Orders.First().Order.OrderId.StoreValue(out var orderId)
+                .Orders.First().OrderRows.Last().Table.Toggle.Click()
+                .Orders.First().OrderRows.Last().Table.UpdateRow.ClickAndGo<OrdersPage>()
                 .RefreshPageUntil(x => x.Orders.First().OrderRows.Last().Name.Value.Contains("Updated"), 10, 3)
-                .Orders.Last().OrderRows.First().Table.Toggle.Click()
-                .Orders.Last().OrderRows.First().Name.Should.Contain("Updated");
+                .Orders.First().OrderRows.Last().Table.Toggle.Click()
+                .Orders.First().OrderRows.Last().Name.Should.Contain("Updated")
+                .Orders.First().OrderRows.First().Table.Toggle.Click()
+                .Orders.First().OrderRows.First().Table.UpdateRow.ClickAndGo<OrdersPage>()
+                .RefreshPageUntil(x => x.Orders.First().OrderRows.Last().Name.Value.Contains("Updated"), 10, 3)
+                .Orders.First().OrderRows.First().Table.Toggle.Click()
+                .Orders.First().OrderRows.First().Name.Should.Contain("Updated");
             });
         }
 
@@ -385,28 +391,29 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
-                    .Orders.Last().Order.OrderId.StoreValue(out var orderId)
+                    .Orders.First().Order.OrderId.StoreValue(out var orderId)
 
                     // Deliver 1
-                    .Orders.Last().OrderRows.First().Table.Toggle.Click()
-                    .Orders.Last().OrderRows.First().Table.DeliverOrderRowQuantity.Set(2)
-                    .Orders.Last().OrderRows.First().Table.DeliverOrderRow.ClickAndGo()
+                    .Orders.First().OrderRows.First().Table.Toggle.Click()
+                    .Orders.First().OrderRows.First().Table.DeliverOrderRowQuantity.Set(2)
+                    .Orders.First().OrderRows.First().Table.DeliverOrderRow.ClickAndGo()
 
                     // Credit Order Row With Fee
-                    .Orders.Last().Deliveries.First().Table.Toggle.Click()
-                    .Orders.Last().Deliveries.First().Table.CreditOrderRowsWithFee.ClickAndGo()
+                    .Orders.First().Deliveries.First().Table.Toggle.Click()
+                    .Orders.First().Deliveries.First().Table.CreditOrderRowsWithFee.ClickAndGo()
 
                     // Validate order rows info
-                    .Orders.Last().OrderRows.Should.HaveCount(1)
-                    .Orders.Last().OrderRows.First().Quantity.Should.Equal("6.00")
+                    .Orders.First().OrderRows.Should.HaveCount(1)
+                    .Orders.First().OrderRows.First().Quantity.Should.Equal("6.00")
 
                     //// Validate deliveries info
-                    .Orders.Last().Deliveries.Count.Should.Equal(1)
-                    .Orders.Last().Deliveries.First().Status.Should.Equal("Sent")
-                    .Orders.Last().Deliveries.First().DeliveryAmount.Should.Equal(int.Parse((products.First().UnitPrice * 2).ToString()).ToString())
-                    .Orders.Last().Deliveries.First().CreditedAmount.Should.Equal((int.Parse((products.First().UnitPrice * 2).ToString()) - 200).ToString());
+                    .Orders.First().Deliveries.Count.Should.Equal(1)
+                    .Orders.First().Deliveries.First().Status.Should.Equal("Sent")
+                    .Orders.First().Deliveries.First().DeliveryAmount.Should.Equal(int.Parse((products.First().UnitPrice * 2).ToString()).ToString())
+                    .Orders.First().Deliveries.First().CreditedAmount.Should.Equal((int.Parse((products.First().UnitPrice * 2).ToString()) - 200).ToString());
 
             // Assert sdk/api response
             var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -444,25 +451,26 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
-                    .Orders.Last().Order.OrderId.StoreValue(out var orderId)
+                    .Orders.First().Order.OrderId.StoreValue(out var orderId)
 
                     // Add order row 1
-                    .Orders.Last().Order.Table.Toggle.Click()
-                    .Orders.Last().Order.Table.AddOrderRowPercentDiscount.Set(20)
-                    .Orders.Last().Order.Table.AddOrderRow.ClickAndGo()
+                    .Orders.First().Order.Table.Toggle.Click()
+                    .Orders.First().Order.Table.AddOrderRowPercentDiscount.Set(20)
+                    .Orders.First().Order.Table.AddOrderRow.ClickAndGo()
 
                     // Validate order rows info
-                    .Orders.Last().OrderRows.Should.HaveCount(3)
+                    .Orders.First().OrderRows.Should.HaveCount(3)
 
                     // Add order row 2
-                    .Orders.Last().Order.Table.Toggle.Click()
-                    .Orders.Last().Order.Table.AddOrderRowAmountDiscount.Set(100)
-                    .Orders.Last().Order.Table.AddOrderRow.ClickAndGo()
+                    .Orders.First().Order.Table.Toggle.Click()
+                    .Orders.First().Order.Table.AddOrderRowAmountDiscount.Set(100)
+                    .Orders.First().Order.Table.AddOrderRow.ClickAndGo()
 
                     // Validate order rows info
-                    .Orders.Last().OrderRows.Should.HaveCount(4);
+                    .Orders.First().OrderRows.Should.HaveCount(4);
 
                 // Assert sdk/api response
                 var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);
@@ -511,18 +519,19 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     .RefreshPageUntil(x =>
                         x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.First().GetContent(ContentSource.TextContent).Contains(nameof(OrderStatus.Delivered)), 30, 5)
 
-                    .Orders.Last().Order.OrderId.StoreValue(out var orderId)
+                    .Orders.First().Order.OrderId.StoreValue(out var orderId)
 
                     // Add order row 1
-                    .Orders.Last().Order.Table.Toggle.Click()
-                    .Orders.Last().Order.Table.AddOrderRowsPercentDiscount.Set(20)
-                    .Orders.Last().Order.Table.AddOrderRowsAmountDiscount.Set(100)
-                    .Orders.Last().Order.Table.AddOrderRows.ClickAndGo()
+                    .Orders.First().Order.Table.Toggle.Click()
+                    .Orders.First().Order.Table.AddOrderRowsPercentDiscount.Set(20)
+                    .Orders.First().Order.Table.AddOrderRowsAmountDiscount.Set(100)
+                    .Orders.First().Order.Table.AddOrderRows.ClickAndGo()
 
                     // Validate order rows info
-                    .Orders.Last().OrderRows.Should.HaveCount(4);
+                    .Orders.First().OrderRows.Should.HaveCount(4);
 
                 // Assert sdk/api response
                 var response = await _sveaClientSweden.PaymentAdmin.GetOrder(long.Parse(orderId)).ConfigureAwait(false);

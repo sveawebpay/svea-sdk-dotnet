@@ -50,9 +50,6 @@ else if (TempData["ErrorMessage"] != null)
                 <div>
                     <h2>Order #@count</h2>
 
-                 
-
-                  
                     <hr />
                     <dl class="row">
                         <dt class="col-sm-2">
@@ -103,7 +100,7 @@ else if (TempData["ErrorMessage"] != null)
                         else
                         {
                             <dt class="col-sm-2">
-                                Order is not yet in PaymentAdmin. Please reload in a bit.
+                                Order (id: @order.OrderId) is not yet in PaymentAdmin. Please reload in a bit.
                             </dt>
                         }
 

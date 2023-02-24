@@ -164,8 +164,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Product[] products,
             bool requireBankId = false,
             bool isInternational = false,
-            Dictionary<string, string[]> shipping = null,
-            PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
+            PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card,
+            Dictionary<string, string[]> shipping = null)
         {
             Frame<SveaPaymentFramePage, PaymentPage> frame;
 
@@ -198,7 +198,9 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
             _orderId = match?.Groups?.Count > 1 ? match.Groups[1].Value : null;
 
-            return frame.SwitchTo<SveaPaymentFramePage>(); ;
+            Console.WriteLine($"order id: {_orderId}");
+
+            return frame.SwitchTo<SveaPaymentFramePage>();
         }
 
         protected SveaPaymentFramePage GoToBankId(
@@ -207,7 +209,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Entity.Option entity = Entity.Option.Private,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card)
         {
-            var page = GoToSveaPaymentFrame(products, requireBankId: true, isInternational: false, null, paymentMethod);
+            var page = GoToSveaPaymentFrame(products, requireBankId: true, isInternational: false, paymentMethod, null);
 
             try
             {
@@ -257,11 +259,11 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Product[] products,
             Checkout.Option checkout = Checkout.Option.Identification,
             Entity.Option entity = Entity.Option.Private,
-            Dictionary<string, string[]> shipping = null,
             PaymentMethods.Option paymentMethod = PaymentMethods.Option.Card,
+            Dictionary<string, string[]> shipping = null,
             bool requireBankId = false)
         {
-            var page = GoToSveaPaymentFrame(products, requireBankId, isInternational: false, shipping, paymentMethod);
+            var page = GoToSveaPaymentFrame(products, requireBankId, isInternational: false, paymentMethod, shipping);
 
             try
             {
@@ -279,12 +281,17 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                 page.EditShipping(shipping);
             }
 
-            page.Pay(checkout, entity, paymentMethod, _amountStr);
+            page.Pay(checkout, entity, paymentMethod, _amountStr).WaitSeconds(1);
 
+            if (page.ConfirmBankId.Exists(new SearchOptions { Timeout = TimeSpan.FromSeconds(3), IsSafely = true }))
+            {
+                page.ConfirmBankId.Click();
+            }
+            
             try
             {
                 return page
-                    .PageUrl.Should.Within(TimeSpan.FromSeconds(60)).Contain("thankyou")
+                    .PageUrl.Should.Within(TimeSpan.FromSeconds(80)).Contain("thankyou")
                     .SwitchToRoot<ThankYouPage>()
                     .ThankYou.IsVisible.WaitTo.BeTrue();
             }
@@ -302,7 +309,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
             Dictionary<string, string[]> shipping = null,
             bool requireBankId = false)
         {
-            return GoToThankYouPage(products, checkout, entity, shipping, paymentMethod, requireBankId)
+            return GoToThankYouPage(products, checkout, entity, paymentMethod, shipping, requireBankId)
                 .Do(x =>
                 {
                     switch (paymentMethod)
@@ -322,7 +329,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
 
                     }
                 })
-                .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 25, retryInterval: 3)
+                .RefreshPageUntil(x => x.Header.Orders.IsVisible.Value == true, timeout: 60, retryInterval: 5)
                 .Header.Orders.ClickAndGo();
         }
 

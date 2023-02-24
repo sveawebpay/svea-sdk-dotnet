@@ -27,7 +27,10 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels
         public SelectShippingBlock<_> SelectShippingBlock { get; private set; }
 
         public PaymentMethodsBlock<_> PaymentMethods { get; private set; }
-        public LeasingPaymentBlock<_> Leasing { get; private set; }
+
+        public InvoiceReferenceBlock<_> InvoiceReference { get; private set; }
+
+		public LeasingPaymentBlock<_> Leasing { get; private set; }
 
         [WaitSeconds(1, TriggerEvents.BeforeClick)]
         [FindByCss("button[data-testid='anonymous-toggle']")]

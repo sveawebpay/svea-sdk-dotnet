@@ -39,8 +39,10 @@ namespace Sample.AspNetCore.SystemTests.PageObjectModels.Payment
         [FindByCss("*[data-testid='totalAmount']")]
         public H1<TOwner> TotalAmount { get; private set; }
 
-        [FindByName("orderReference")]
-        public TextInput<TOwner> Reference { get; private set; }
+        [FindByCss("*[data-testid='billing-reference-add-button']")]
+        public Button<TOwner> AddReference { get; private set; }
 
-    }
+		[FindByName("orderReference")]
+		public TextInput<TOwner> Reference { get; private set; }
+	}
 }

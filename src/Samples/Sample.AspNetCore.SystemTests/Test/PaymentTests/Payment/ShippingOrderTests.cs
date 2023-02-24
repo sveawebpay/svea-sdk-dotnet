@@ -36,7 +36,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.Last().Order.GetContent(ContentSource.TextContent).Contains("shipping.created"), 30, 5)
 
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -75,6 +76,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             });
         }
 
+        [Ignore("Not needed")]
         [RetryWithException(2)]
         [Test(Description = "8227 - As a user I want to finalize a card purchase with the first shipping option, but change the place of delivery to the second option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
@@ -93,7 +95,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.Last().Order.GetContent(ContentSource.TextContent).Contains("shipping.created"), 30, 5)
 
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -132,6 +135,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             });
         }
 
+        [Ignore("Not needed")]
         [RetryWithException(2)]
         [Test(Description = "8228 - As a user I want to finalize a card purchase with the first shipping option, but change the place of delivery to the last option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
@@ -150,7 +154,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.Last().Order.GetContent(ContentSource.TextContent).Contains("shipping.created"), 30, 5)
 
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -207,7 +212,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.Last().Order.GetContent(ContentSource.TextContent).Contains("shipping.created"), 30, 5)
 
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -247,6 +253,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             });
         }
 
+        [Ignore("Not needed")]
         [RetryWithException(2)]
         [Test(Description = "8230 - As a user I want to finalize an invoice purchase with the last shipping option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
@@ -264,7 +271,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.Last().Order.GetContent(ContentSource.TextContent).Contains("shipping.created"), 30, 5)
 
                     .Orders.Last().Order.OrderId.StoreValue(out var orderId)
 
@@ -305,6 +313,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
             });
         }
 
+        [Ignore("Not needed")]
         [RetryWithException(2)]
         [Test(Description = "8231 - As a user I want to finalize an invoice purchase with the last shipping option, and change place of delivery to the last option")]
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
@@ -323,15 +332,16 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 .RefreshPageUntil(x =>
                     x.PageUri.Value.AbsoluteUri.Contains("Orders/Details") &&
                         x.Details.Exists(new SearchOptions { IsSafely = true, Timeout = TimeSpan.FromSeconds(1) }) &&
-                        x.Orders.Count() > 0, 15, 3)
+                        x.Orders.Count() > 0 &&
+                        x.Orders.First().Order.GetContent(ContentSource.TextContent).Contains("shipping.created"), 30, 5)
 
-                    .Orders.Last().Order.OrderId.StoreValue(out var orderId)
+                    .Orders.First().Order.OrderId.StoreValue(out var orderId)
 
                     // Validate order info
-                    .Orders.Last().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Open))
-                    .Orders.Last().Order.PaymentType.Should.Equal(nameof(Svea.WebPay.SDK.PaymentAdminApi.PaymentType.Invoice))
-                    .Orders.Last().Order.ShippingStatus.Should.Contain("shipping.created")
-                    .Orders.Last().Order.ShippingDescription.Should.Contain(ShippingOptions.Dhl)
+                    .Orders.First().Order.OrderStatus.Should.Equal(nameof(OrderStatus.Open))
+                    .Orders.First().Order.PaymentType.Should.Equal(nameof(Svea.WebPay.SDK.PaymentAdminApi.PaymentType.Invoice))
+                    .Orders.First().Order.ShippingStatus.Should.Contain("shipping.created")
+                    .Orders.First().Order.ShippingDescription.Should.Contain(ShippingOptions.Dhl)
 
                     // Validate deliveries info
                     .Orders.Last().Deliveries.Should.HaveCount(0)

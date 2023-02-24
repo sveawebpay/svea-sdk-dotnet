@@ -86,7 +86,7 @@ namespace Sample.AspNetCore.Controllers
             {
                 orders = await this.context.Orders.ToListAsync();
             }
-      
+            
             var orderViewModels = new List<OrderViewModel>();
             foreach (var order in orders)
             {

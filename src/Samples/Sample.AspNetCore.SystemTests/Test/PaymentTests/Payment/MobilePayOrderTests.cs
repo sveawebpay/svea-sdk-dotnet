@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Sample.AspNetCore.SystemTests.Test.Base;
 using Sample.AspNetCore.SystemTests.Test.Helpers;
 using System;
-using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 {
@@ -20,7 +19,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
         [TestCaseSource(nameof(TestData), new object[] { true, false, false, false })]
         public void CreditWithVippsAsPrivateAsync(Product[] products)
         {
-            Assert.DoesNotThrowAsync(async () =>
+            Assert.DoesNotThrow( () =>
             {
                 GoToOrdersPage(products, Helpers.Checkout.Option.Identification, Entity.Option.Private, PaymentMethods.Option.MobilePay, requireBankId: true)
 

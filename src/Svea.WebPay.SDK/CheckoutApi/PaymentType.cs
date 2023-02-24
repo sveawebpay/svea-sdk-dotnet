@@ -16,6 +16,9 @@
 
         SWISH,
 
+        SWISH_PF,
+
+
         VIPPS,
 
         /// <summary>

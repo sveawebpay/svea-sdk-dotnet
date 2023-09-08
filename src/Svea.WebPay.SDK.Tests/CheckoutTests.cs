@@ -119,7 +119,77 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Null(order.MerchantData);
             Assert.Null(order.PeppolId);
         }
+        
+        [Fact]
+        public void Completed_ZeroSum_Order_Should_Serialize_AsExpected()
+        {
+            // Act
+            var order = JsonSerializer.Deserialize<Data>(DataSample.CheckoutGetCompletedZeroSumOrderResponse, JsonSerialization.Settings);
 
+            // Assert
+            Assert.Equal("https://svea2-sample.eu.ngrok.io/api/svea/validation/{checkout.order.uri}/?marketId=SE", order.MerchantSettings.CheckoutValidationCallBackUri.OriginalString);
+            Assert.Equal("https://svea2-sample.eu.ngrok.io/api/svea/push/{checkout.order.uri}/?marketId=SE", order.MerchantSettings.PushUri.OriginalString);
+            Assert.Equal("https://svea2-sample.eu.ngrok.io/terms", order.MerchantSettings.TermsUri.OriginalString);
+            Assert.Equal("https://localhost:44345/CheckOut/LoadPaymentMenu", order.MerchantSettings.CheckoutUri.OriginalString);
+            Assert.Equal("https://localhost:44345/checkout/thankyou", order.MerchantSettings.ConfirmationUri.OriginalString);
+            Assert.Equal(0, order.MerchantSettings.ActivePartPaymentCampaigns.Count);
+            Assert.Equal(0, order.MerchantSettings.PromotedPartPaymentCampaign);
+
+            var item1 = order.Cart.Items.First();
+            Assert.Equal(2, order.Cart.Items.Count);
+            Assert.Equal("Ref2", item1.ArticleNumber);
+            Assert.Equal("Levis 501 Jeans", item1.Name);
+            Assert.Equal(1, item1.Quantity);
+            Assert.Equal(1190, item1.UnitPrice);
+            Assert.Equal(0, item1.DiscountAmount);
+            Assert.Equal(0, item1.VatPercent);
+            Assert.Null(item1.TemporaryReference);
+            Assert.Equal(1, item1.RowNumber);
+            Assert.Null(item1.MerchantData);
+
+            var item2 = order.Cart.Items[1];
+            Assert.Equal(2, order.Cart.Items.Count);
+            Assert.Equal("Ref5", item2.ArticleNumber);
+            Assert.Equal("Rabattkod 1190", item2.Name);
+            Assert.Equal(1, item2.Quantity);
+            Assert.Equal(-1190, item2.UnitPrice);
+            Assert.Equal(0, item2.DiscountAmount);
+            Assert.Equal(0, item2.VatPercent);
+            Assert.Null(item2.TemporaryReference);
+            Assert.Equal(2, item2.RowNumber);
+            Assert.Null(item2.MerchantData);
+
+            Assert.Equal(626, order.Customer.Id);
+            Assert.Equal("194605092222", order.Customer.NationalId);
+            Assert.Equal("SE", order.Customer.CountryCode);
+            
+            Assert.Equal("Persson, Tess T", order.ShippingAddress.FullName);
+            Assert.Equal("Tess", order.ShippingAddress.FirstName);
+            Assert.Equal("c/o Eriksson, Erik", order.ShippingAddress.CoAddress);
+            
+            Assert.Equal("Persson, Tess T", order.BillingAddress.FullName);
+            Assert.Equal("Tess", order.BillingAddress.FirstName);
+            Assert.Equal("c/o Eriksson, Erik", order.BillingAddress.CoAddress);
+
+            Assert.Equal("desktop", order.Gui.Layout);
+            Assert.Equal("sv-SE", order.Locale);
+            Assert.Equal("SEK", order.Currency);
+            Assert.Equal("SE", order.CountryCode);
+            Assert.Equal("638297691863676770", order.ClientOrderNumber);
+            Assert.Equal(8932787, order.OrderId);
+            Assert.Equal("test@test.com",order.EmailAddress);
+            Assert.Equal("34345435435", order.PhoneNumber);
+            Assert.Equal(PaymentType.ZEROSUM, order.PaymentType);
+            Assert.Equal(order.Payment.PaymentMethodType, PaymentMethodType.ZeroSum);
+            Assert.Equal(CheckoutOrderStatus.Final, order.Status);
+            Assert.Null(order.CustomerReference);
+            Assert.Null(order.SveaWillBuyOrder);
+            Assert.Null(order.IdentityFlags);
+            Assert.Null(order.MerchantData);
+            Assert.Null(order.PeppolId);
+        }
+
+        
         private static UpdateOrderModel CreateUpdateOrderRequest(string merchantData)
         {
             var orderRows = new List<OrderRow>

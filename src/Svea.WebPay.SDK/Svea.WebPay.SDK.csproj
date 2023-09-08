@@ -13,6 +13,7 @@
     <PackageReleaseNotes>Initital release.</PackageReleaseNotes>
     <AssemblyName>Svea.WebPay.SDK</AssemblyName>
     <RootNamespace>Svea.WebPay.SDK</RootNamespace>
+    <UserSecretsId>dbbf3868-1fa7-4a00-8b9b-ce3bc8eecfe0</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

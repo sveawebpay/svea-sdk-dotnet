@@ -180,7 +180,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("test@test.com",order.EmailAddress);
             Assert.Equal("34345435435", order.PhoneNumber);
             Assert.Equal(PaymentType.ZEROSUM, order.PaymentType);
-            Assert.Equal(order.Payment.PaymentMethodType, PaymentMethodType.ZeroSum);
+            Assert.Equal(PaymentMethodType.ZeroSum, order.Payment.PaymentMethodType);
             Assert.Equal(CheckoutOrderStatus.Final, order.Status);
             Assert.Null(order.CustomerReference);
             Assert.Null(order.SveaWillBuyOrder);

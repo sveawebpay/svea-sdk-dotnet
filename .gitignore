@@ -4,3 +4,4 @@ bin
 /src/Svea.WebPay.SDK.Extensions
 packages
 *.user
+.idea

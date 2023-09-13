@@ -26,7 +26,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 var count = 0;
                 Data response = null;
 
-                while (true && count < 5)
+                while (count < 5)
                 {
                     try
                     {
@@ -34,9 +34,8 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                         response = await _sveaClientSweden.Checkout.GetOrder(long.Parse(_orderId)).ConfigureAwait(false);
                         Assert.NotNull(response);
                         break;
-
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         count++;
                         Thread.Sleep(1000 * 3);

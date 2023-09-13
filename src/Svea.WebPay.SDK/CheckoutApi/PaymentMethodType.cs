@@ -15,6 +15,7 @@
         Trustly,
         Swish,
         Vipps,
-        MobilePay
+        MobilePay,
+        ZeroSum
     }
 }

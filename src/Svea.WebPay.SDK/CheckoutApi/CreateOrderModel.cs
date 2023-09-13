@@ -24,7 +24,9 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// <param name="merchantSettings">
         /// At certain points in an order’s lifetime, we will attempt to call endpoints on your side. You provide the URI:s for these endpoints in the MerchantSettings object
         /// </param>
-        /// <param name="cart"></param>
+        /// <param name="cart">
+        /// Free order items/rows, like gift cards, can have a value of 0, denoting no cost
+        /// </param>
         /// <param name="requireElectronicIdAuthentication"></param>
         /// <param name="presetValues"></param>
         /// <param name="identityFlags"></param>

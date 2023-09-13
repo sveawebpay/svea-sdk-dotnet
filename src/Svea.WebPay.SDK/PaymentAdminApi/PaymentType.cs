@@ -41,6 +41,8 @@
 
         Leasing,
 
-        MobilePay
+        MobilePay,
+        
+        ZeroSum
     }
 }

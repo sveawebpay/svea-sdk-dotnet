@@ -68,43 +68,43 @@ jobs:
           Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
           Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
 
-      #- name: Setup ngrok
-      #  run: |
-      #    wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-      #    jar xvf ngrok-stable-linux-amd64.zip
-      #    chmod +x ngrok
-          
-      #- name: Start ngrok
-      #  run: ./ngrok start -config Sample.AspNetCore/ngrok.yml uitestGithub &
-                   
-      #- name: Start SDK Sample project
-      #  working-directory: Sample.AspNetCore
-      #  run:
-      #      dotnet Sample.AspNetCore.dll &
-      #  env:
-      #    Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
-      #    Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
-      #    Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
-      #    Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
-      #    Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
-      #    Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
-      #    MerchantSettings:PushUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/push/{checkout.order.uri}/?marketId={marketId}
-      #    MerchantSettings:TermsUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/terms
-      #    MerchantSettings:CheckoutUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/CheckOut/LoadPaymentMenu
-      #    MerchantSettings:ConfirmationUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/checkout/thankyou
-      #    MerchantSettings:CheckoutValidationCallbackUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
-      #    MerchantSettings:WebhookUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/shippingvalidation/?marketId={marketId}
-      
-      #- name: Run SDK UI tests
-      #  run: dotnet test Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.dll
-      #  env:
-      #    Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
-      #    Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
-      #    Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
-      #    Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
-      #    Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
-      #    Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
-      #    SampleWebsite:Url: https://localhost:5001
+#      - name: Setup ngrok
+#        run: |
+#          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+#          jar xvf ngrok-stable-linux-amd64.zip
+#          chmod +x ngrok
+#          
+#      - name: Start ngrok
+#        run: ./ngrok start -config Sample.AspNetCore/ngrok.yml uitestGithub &
+#                   
+#      - name: Start SDK Sample project
+#        working-directory: Sample.AspNetCore
+#        run:
+#            dotnet Sample.AspNetCore.dll &
+#        env:
+#          Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
+#          Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
+#          Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
+#          Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
+#          Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
+#          Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
+#          MerchantSettings:PushUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/push/{checkout.order.uri}/?marketId={marketId}
+#          MerchantSettings:TermsUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/terms
+#          MerchantSettings:CheckoutUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/CheckOut/LoadPaymentMenu
+#          MerchantSettings:ConfirmationUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/checkout/thankyou
+#          MerchantSettings:CheckoutValidationCallbackUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/validation/{checkout.order.uri}/?marketId={marketId}
+#          MerchantSettings:WebhookUri: https://${{ env.uitestUrlSubdomain }}.eu.ngrok.io/api/svea/shippingvalidation/?marketId={marketId}
+#      
+#      - name: Run SDK UI tests
+#        run: dotnet test Sample.AspNetCore.SystemTests/Sample.AspNetCore.SystemTests.dll
+#        env:
+#          Credentials:0:MerchantId: ${{ secrets.SWEDEN_MERCHANT_ID}}
+#          Credentials:0:Secret: ${{ secrets.SWEDEN_MERCHANT_SECRET }}
+#          Credentials:1:MerchantId: ${{ secrets.NORWAY_MERCHANT_ID}}
+#          Credentials:1:Secret: ${{ secrets.NORWAY_MERCHANT_SECRET }}
+#          Credentials:2:MerchantId: ${{ secrets.FINNISH_MERCHANT_ID }}
+#          Credentials:2:Secret: ${{ secrets.FINNISH_MERCHANT_SECRET }}
+#          SampleWebsite:Url: https://localhost:5001
 
       - name: Commit Action Status
         if: ${{ always() }}

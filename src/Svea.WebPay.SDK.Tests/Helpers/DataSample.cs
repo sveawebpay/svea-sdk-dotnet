@@ -843,6 +843,135 @@
             ""PeppolId"":null
         }";
 
+        public static string CheckoutGetCompletedZeroSumOrderResponse = @"
+        {
+               ""Gui"":{
+                  ""Layout"":""desktop"",
+                  ""Snippet"":""\r\n<div id=\""svea-checkout-container\"" data-sco-sveacheckout=\""\"" data-sco-sveacheckout-locale=\""sv-SE\"" style=\""overflow-x: hidden; overflow-y: hidden;\"">\r\n    <noscript> Please <a href=\""http://enable-javascript.com\"">enable JavaScript</a>. </noscript>\r\n    <iframe id=\""svea-checkout-iframe\"" name=\""svea-checkout-iframe\"" data-sco-sveacheckout-iframeSrc=\""https://checkoutapistage.svea.com/b/index.html?orderId=8932787&merchantId=201663&authToken=SveaCheckout%20xoxmFsJhNtSzmg5Oaj92YOZ%252bEkI%253d&token=F1C54F2D300C7C46827BE796E5E08F62&locale=sv-SE&enableEvents=true&_638297692201286047\"" scrolling=\""no\"" frameborder=\""0\"" style=\""display: none; width: 1px; min-width: 100%; max-width: 100%;\""></iframe>\r\n</div>\r\n\r\n<script type=\""text/javascript\"" src=\""https://checkoutapistage.svea.com/merchantscript/index.js?v=0b79d8becf8cb9a09f58530bf1ac222e\""></script>\r\n<script type=\""text/javascript\"">!function(e){var t=e.document,n=t.querySelectorAll(\""[\"".concat(\""data-sco-sveacheckout\"",\""]\""));if(!n.length)throw new Error(\""No Svea checkout container exists on page\"");function c(){return!!e.scoInitializeInjectedInstances&&(e.scoInitializeInjectedInstances(),!0)}var o,i;c()||(o=0,e.setTimeout(i=function(){o+=1,c()||(o<150?e.setTimeout(i,20):[].slice.call(n).forEach(function(e){var n=t.createElement(\""div\"");n.innerHTML=\""Something went wrong, please refresh the page\"",e.appendChild(n)}))},20))}(window);</script>\r\n\r\n""
+               },
+               ""MerchantSettings"":{
+                  ""CheckoutValidationCallBackUri"":""https://svea2-sample.eu.ngrok.io/api/svea/validation/{checkout.order.uri}/?marketId=SE"",
+                  ""PushUri"":""https://svea2-sample.eu.ngrok.io/api/svea/push/{checkout.order.uri}/?marketId=SE"",
+                  ""WebhookUri"":""https://svea2-sample.eu.ngrok.io/api/svea/shippingvalidation/?marketId=SE"",
+                  ""TermsUri"":""https://svea2-sample.eu.ngrok.io/terms"",
+                  ""CheckoutUri"":""https://localhost:44345/CheckOut/LoadPaymentMenu"",
+                  ""ConfirmationUri"":""https://localhost:44345/checkout/thankyou"",
+                  ""ActivePartPaymentCampaigns"":[                     
+                  ],
+                  ""PromotedPartPaymentCampaign"":0
+               },
+               ""Cart"":{
+                  ""Items"":[
+                     {
+                        ""ArticleNumber"":""Ref2"",
+                        ""Name"":""Levis 501 Jeans"",
+                        ""Quantity"":100,
+                        ""UnitPrice"":119000,
+                        ""DiscountPercent"":0,
+                        ""DiscountAmount"":0,
+                        ""VatPercent"":0,
+                        ""Unit"":null,
+                        ""TemporaryReference"":null,
+                        ""RowNumber"":1,
+                        ""MerchantData"":null,
+                        ""ShippingInformation"":null,
+                        ""RowType"":""Row""
+                     },
+                     {
+                        ""ArticleNumber"":""Ref5"",
+                        ""Name"":""Rabattkod 1190"",
+                        ""Quantity"":100,
+                        ""UnitPrice"":-119000,
+                        ""DiscountPercent"":0,
+                        ""DiscountAmount"":0,
+                        ""VatPercent"":0,
+                        ""Unit"":null,
+                        ""TemporaryReference"":null,
+                        ""RowNumber"":2,
+                        ""MerchantData"":null,
+                        ""ShippingInformation"":null,
+                        ""RowType"":""Row""
+                     }
+                  ]
+               },
+               ""Customer"":{
+                  ""Id"":626,
+                  ""NationalId"":""194605092222"",
+                  ""CountryCode"":""SE"",
+                  ""IsCompany"":false,
+                  ""VatNumber"":null
+               },
+               ""ShippingAddress"":{
+                  ""FullName"":""Persson, Tess T"",
+                  ""FirstName"":""Tess"",
+                  ""LastName"":""Persson"",
+                  ""StreetAddress"":""Testgatan 1"",
+                  ""StreetAddress2"":null,
+                  ""StreetAddress3"":null,
+                  ""CoAddress"":""c/o Eriksson, Erik"",
+                  ""PostalCode"":""99999"",
+                  ""City"":""Stan"",
+                  ""CountryCode"":""SE"",
+                  ""IsGeneric"":false,
+                  ""AddressLines"":[
+                     
+                  ]
+               },
+               ""BillingAddress"":{
+                  ""FullName"":""Persson, Tess T"",
+                  ""FirstName"":""Tess"",
+                  ""LastName"":""Persson"",
+                  ""StreetAddress"":""Testgatan 1"",
+                  ""StreetAddress2"":null,
+                  ""StreetAddress3"":null,
+                  ""CoAddress"":""c/o Eriksson, Erik"",
+                  ""PostalCode"":""99999"",
+                  ""City"":""Stan"",
+                  ""CountryCode"":""SE"",
+                  ""IsGeneric"":false,
+                  ""AddressLines"":[
+                     
+                  ]
+               },
+               ""Locale"":""sv-SE"",
+               ""Currency"":""SEK"",
+               ""CountryCode"":""SE"",
+               ""ClientOrderNumber"":""638297691863676770"",
+               ""OrderId"":8932787,
+               ""EmailAddress"":""test@test.com"",
+               ""PhoneNumber"":""34345435435"",
+               ""PaymentType"":""ZEROSUM"",
+               ""Payment"":{
+                  ""PaymentMethodType"":""ZeroSum""
+               },
+               ""Status"":""Final"",
+               ""CustomerReference"":null,
+               ""SveaWillBuyOrder"":null,
+               ""IdentityFlags"":null,
+               ""MerchantData"":null,
+               ""PeppolId"":null,
+               ""ShippingInformation"":{
+                  ""ShippingProvider"":{
+                     ""Name"":""nShift"",
+                     ""ShipmentId"":"""",
+                     ""Status"":"""",
+                     ""ShippingOption"":null
+                  },
+                  ""EnforceFallback"":false,
+                  ""EnableShipping"":false,
+                  ""Weight"":0.0,
+                  ""Tags"":null,
+                  ""FallbackOptions"":null,
+                  ""ShouldRejectShippingSession"":false
+               },
+               ""ShippingEnabled"":false,
+               ""Validation"":{
+                  ""MinAge"":null
+               },
+               ""Recurring"":null,
+               ""RecurringToken"":null
+        }";
+
         public static string CheckoutUpdateOrderResponse = @"
         {
             ""MerchantSettings"":

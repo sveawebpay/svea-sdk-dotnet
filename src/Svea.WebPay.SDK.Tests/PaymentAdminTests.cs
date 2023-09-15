@@ -439,7 +439,7 @@ namespace Svea.WebPay.SDK.Tests
             );
 
             // Deliveries
-            Assert.Equal(0, order.Deliveries.Count);
+            Assert.Empty(order.Deliveries);
 
             // Order Rows
             Assert.Equal(2, order.OrderRows.Count);
@@ -523,11 +523,11 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("SE", order.ShippingAddress.CountryCode);
 
             // Order Actions
-            Assert.Equal(0, order.AvailableActions.Count);
+            Assert.Empty(order.AvailableActions);
 
             // Deliveries
             var delivery = order.Deliveries.First();
-            Assert.Equal(1, order.Deliveries.Count);
+            Assert.Single(order.Deliveries);
             Assert.Equal("2020-06-23 20:49:50", delivery.CreationDate.ToString("yyyy-MM-dd HH:mm:ss"));
             Assert.Equal(0, delivery.CreditedAmount);
             Assert.Equal(5368, delivery.DeliveryAmount);
@@ -547,7 +547,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(0, orderRow1.VatPercent);
             Assert.Equal(0, orderRow1.DiscountAmount);
             Assert.Equal("SEK", orderRow1.Unit);
-            Assert.Equal(1, orderRow1.AvailableActions.Count);
+            Assert.Single(orderRow1.AvailableActions);
             Assert.Equal(new List<string> { "CanCreditRow" }, orderRow1.AvailableActions);
             Assert.Null(orderRow1.Actions.CancelOrderRow);
             Assert.Null(orderRow1.Actions.UpdateOrderRow);
@@ -561,7 +561,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(0, orderRow2.VatPercent);
             Assert.Equal(0, orderRow2.DiscountAmount);
             Assert.Equal("SEK", orderRow2.Unit);
-            Assert.Equal(1, orderRow2.AvailableActions.Count);
+            Assert.Single(orderRow2.AvailableActions);
             Assert.Equal(new List<string> { "CanCreditRow" }, orderRow2.AvailableActions);
             Assert.Null(orderRow2.Actions.CancelOrderRow);
             Assert.Null(orderRow2.Actions.UpdateOrderRow);
@@ -571,10 +571,10 @@ namespace Svea.WebPay.SDK.Tests
             Assert.NotNull(delivery.Actions.CreditNewRow);
             Assert.NotNull(delivery.Actions.CreditOrderRows);
             Assert.Null(delivery.Actions.CreditAmount);
-            Assert.Equal(0, delivery.Credits.Count);
+            Assert.Empty(delivery.Credits);
 
             // Order Rows
-            Assert.Equal(0, order.OrderRows.Count);
+            Assert.Empty(order.OrderRows);
         }
 
         [Fact]
@@ -617,11 +617,11 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("SE", order.ShippingAddress.CountryCode);
 
             // Order Actions
-            Assert.Equal(0, order.AvailableActions.Count);
+            Assert.Empty(order.AvailableActions);
 
             // Deliveries
             var delivery = order.Deliveries.First();
-            Assert.Equal(1, order.Deliveries.Count);
+            Assert.Single(order.Deliveries);
             Assert.Equal("2020-06-23 21:55:42", delivery.CreationDate.ToString("yyyy-MM-dd HH:mm:ss"));
             Assert.Equal(5368, delivery.CreditedAmount);
             Assert.Equal(5368, delivery.DeliveryAmount);
@@ -641,7 +641,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(0, orderRow1.VatPercent);
             Assert.Equal(0, orderRow1.DiscountAmount);
             Assert.Equal("SEK", orderRow1.Unit);
-            Assert.Equal(0, orderRow1.AvailableActions.Count);
+            Assert.Empty(orderRow1.AvailableActions);
             Assert.Null(orderRow1.Actions.CancelOrderRow);
             Assert.Null(orderRow1.Actions.UpdateOrderRow);
 
@@ -654,19 +654,19 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(0, orderRow2.VatPercent);
             Assert.Equal(0, orderRow2.DiscountAmount);
             Assert.Equal("SEK", orderRow2.Unit);
-            Assert.Equal(0, orderRow2.AvailableActions.Count);
+            Assert.Empty(orderRow2.AvailableActions);
             Assert.Null(orderRow2.Actions.CancelOrderRow);
             Assert.Null(orderRow2.Actions.UpdateOrderRow);
 
-            Assert.Equal(0, delivery.AvailableActions.Count);
+            Assert.Empty(delivery.AvailableActions);
             Assert.Null(delivery.Actions.CreditNewRow);
             Assert.Null(delivery.Actions.CreditOrderRows);
             Assert.Null(delivery.Actions.CreditAmount);
-            Assert.Equal(1, delivery.Credits.Count);
+            Assert.Single(delivery.Credits);
 
             var credit = delivery.Credits.First();
             Assert.Equal(-5368, credit.Amount);
-            Assert.Equal(0, credit.Actions.Count);
+            Assert.Empty(credit.Actions);
             Assert.Equal(2, credit.OrderRows.Count);
             var creditedOrderRow1 = credit.OrderRows.ElementAt(0);
             Assert.Equal(1, creditedOrderRow1.OrderRowId);
@@ -689,7 +689,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("SEK", creditedOrderRow2.Unit);
 
             // Order Rows
-            Assert.Equal(0, order.OrderRows.Count);
+            Assert.Empty(order.OrderRows);
         }
     }
 }

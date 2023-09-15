@@ -194,7 +194,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Base
                     .SveaFrame;
             }
 
-            var match = Regex.Match(frame.Attributes.Src.Value, "orderId=(\\d+)");
+            var match = Regex.Match(frame.DomAttributes.GetValue("src"), "orderId=(\\d+)");
 
             _orderId = match?.Groups?.Count > 1 ? match.Groups[1].Value : null;
 

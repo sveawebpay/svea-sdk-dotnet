@@ -80,11 +80,11 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("http://localhost:51898/terms", order.MerchantSettings.TermsUri.OriginalString);
             Assert.Equal("http://localhost:8080/php-checkout/examples/create-order.php", order.MerchantSettings.CheckoutUri.OriginalString);
             Assert.Equal("http://localhost/php-checkout/examples/get-order.php", order.MerchantSettings.ConfirmationUri.OriginalString);
-            Assert.Equal(0, order.MerchantSettings.ActivePartPaymentCampaigns.Count);
+            Assert.Empty(order.MerchantSettings.ActivePartPaymentCampaigns);
             Assert.Equal(0, order.MerchantSettings.PromotedPartPaymentCampaign);
 
             var item = order.Cart.Items.First();
-            Assert.Equal(1, order.Cart.Items.Count);
+            Assert.Single(order.Cart.Items);
             Assert.Equal("ABC80", item.ArticleNumber);
             Assert.Equal("Computer", item.Name);
             Assert.Equal(10, item.Quantity);
@@ -132,7 +132,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("https://svea2-sample.eu.ngrok.io/terms", order.MerchantSettings.TermsUri.OriginalString);
             Assert.Equal("https://localhost:44345/CheckOut/LoadPaymentMenu", order.MerchantSettings.CheckoutUri.OriginalString);
             Assert.Equal("https://localhost:44345/checkout/thankyou", order.MerchantSettings.ConfirmationUri.OriginalString);
-            Assert.Equal(0, order.MerchantSettings.ActivePartPaymentCampaigns.Count);
+            Assert.Empty(order.MerchantSettings.ActivePartPaymentCampaigns);
             Assert.Equal(0, order.MerchantSettings.PromotedPartPaymentCampaign);
 
             var item1 = order.Cart.Items.First();

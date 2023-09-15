@@ -9,9 +9,9 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
     public class NewOrderRowTests
     {
         [Theory]
-        [InlineData("ref1", "Name", 20, 1000, 100, 0, "st", 1)]
-        [InlineData("", "Name", 20, 1000, 100, 0, "st", 1)]
-        [InlineData("", "N", 20, 1000, 100, 0, "st", 1)]
+        [InlineData("ref1", "Name", 20, 1000L, 100, 0, "st", 1L)]
+        [InlineData("", "Name", 20, 1000L, 100, 0, "st", 1L)]
+        [InlineData("", "N", 20, 1000L, 100, 0, "st", 1L)]
         public void CreateNewOrderRow_DoesNotThrow_WhenGivenValidNewOrderRow(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
             int vatPercent, string unit, long? rowid)
         {
@@ -29,15 +29,15 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
 
 
         [Theory]
-        [InlineData("adsfasdfasdfffffffffffffffasdfasdfasdfasdfasdfaasdfoiuashdfiuasdhbbffiasydbfuaysdfvbvbuyasdfgvgvuaysdfgasudyfgasudyfgasuydfgasuyidfgasiuydffgasudyfgasuydfgasuiydfgasuydfgasoydfgaosydfgasddfsuygasdfyuagagysdfdfausyduaysdfguasdyfgausydfguyasdfggasudyfgusdyfdy", "Name", 20, 1000, 100, 0, "st", 1)]
-        [InlineData("ref1", "Name", 1000000000, 1000, 100, 0, "st", 1)]
-        [InlineData("ref1111", "Name", 20, 10000000000000, 100, 0, "st", 1)]
-        [InlineData("ref1", "Name", 20, 1000, -1, 0, "st", 1)]
-        [InlineData("ref1", "Name", 20, 1000, 20001, 0, "st", 1)]
-        [InlineData("ref1", "Name", 20, 1000, 100, 0, "stttt", 1)]
-        [InlineData("ref1", "", 20, 1000, 100, 0, "st", 1)]
-        [InlineData("ref1", "adsfasdfasdfffffffffffffffasdfasdsdfsdfsd", 20, 1000, 100, 0, "st", 1)]
-        [InlineData("ref1", "Name", 20, 1000, 101, 0, "st", 1, true)]
+        [InlineData("adsfasdfasdfffffffffffffffasdfasdfasdfasdfasdfaasdfoiuashdfiuasdhbbffiasydbfuaysdfvbvbuyasdfgvgvuaysdfgasudyfgasudyfgasuydfgasuyidfgasiuydffgasudyfgasuydfgasuiydfgasuydfgasoydfgaosydfgasddfsuygasdfyuagagysdfdfausyduaysdfguasdyfgausydfguyasdfggasudyfgusdyfdy", "Name", 20, 1000L, 100, 0, "st", 1L)]
+        [InlineData("ref1", "Name", 1000000000, 1000L, 100, 0, "st", 1L)]
+        [InlineData("ref1111", "Name", 20, 10000000000000L, 100, 0, "st", 1L)]
+        [InlineData("ref1", "Name", 20, 1000L, -1, 0, "st", 1L)]
+        [InlineData("ref1", "Name", 20, 1000L, 20001, 0, "st", 1L)]
+        [InlineData("ref1", "Name", 20, 1000L, 100, 0, "stttt", 1L)]
+        [InlineData("ref1", "", 20, 1000L, 100, 0, "st", 1L)]
+        [InlineData("ref1", "adsfasdfasdfffffffffffffffasdfasdsdfsdfsd", 20, 1000L, 100, 0, "st", 1L)]
+        [InlineData("ref1", "Name", 20, 1000L, 101, 0, "st", 1L, true)]
         public void ThrowsArgumentException_WhenGivenInvalidNewOrderRow(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
             int vatPercent, string unit, long? rowid, bool useDiscountPercent = false)
         {
@@ -52,7 +52,7 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
 
 
         [Theory]
-        [InlineData("ref1", "Name", 20, 1000, 100, 0, "st", 1)]
+        [InlineData("ref1", "Name", 20, 1000L, 100, 0, "st", 1L)]
         public void ThrowsArgumentException_IfMinorUnitIsNull(string articleNumber, string name, int quantity, long unitPrice, int discountAmount,
             int vatPercent, string unit, long? rowid)
         {
@@ -80,7 +80,7 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
         }
 
         [Theory]
-        [InlineData("ref1", 20, 1000, 100, 0, "st", 1)]
+        [InlineData("ref1", 20, 1000L, 100, 0, "st", 1L)]
         public void ThrowsArgumentException_IfNameIsNull(string articleNumber, int quantity, long unitPrice, int discountAmount,
             int vatPercent, string unit, long? rowid)
         {

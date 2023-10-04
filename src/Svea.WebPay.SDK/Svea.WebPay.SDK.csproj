@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net6.0;net7.0</TargetFrameworks>
     <PackageId>Svea.WebPay.SDK</PackageId>
     <Authors>Svea WebPay</Authors>
     <Description>C#/.Net Standard 2.0 SDK for Svea WebPay REST API</Description>
@@ -21,16 +21,18 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-
-
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[7.0.0,8.0)" />
+    <PackageReference Include="System.Text.Json" Version="[7.0.0,8.0)" />
+  </ItemGroup>  
   <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[6.0.0,7.0.0)" />
-    <PackageReference Include="System.Text.Json" Version="[6.0.0,7.0.0)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[6.0.0,8.0)" />
+    <PackageReference Include="System.Text.Json" Version="[6.0.0,8.0)" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[3.1.1,7.0.0)" />
-    <PackageReference Include="System.Text.Json" Version="[5.0.1,7.0.0)" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="[3.1.1,8.0)" />
+    <PackageReference Include="System.Text.Json" Version="[5.0.1,8.0)" />
   </ItemGroup>
-
-
+  
 </Project>

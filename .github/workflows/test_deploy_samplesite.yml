@@ -7,10 +7,8 @@ on:
 
 env:
   dotnetVersion: |
-    3.1.101
-    5.x
     6.x
-
+    7.x
 jobs:
   test-unit-ui:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}

@@ -12,12 +12,12 @@ namespace Svea.WebPay.SDK.Json
     public class TypesafeEnumConverter : JsonConverter<Type>
     {
         [ThreadStatic]
-        private Dictionary<Type, Dictionary<string, object>> _fromValueMap; // string representation to Enum value map
+        private static Dictionary<Type, Dictionary<string, object>> _fromValueMap; // string representation to Enum value map
 
         [ThreadStatic]
-        private Dictionary<Type, Dictionary<object, string>> _toValueMap; // Enum value to string map
+        private static Dictionary<Type, Dictionary<object, string>> _toValueMap; // Enum value to string map
 
-        public string UnknownValue { get; set; } = "Unknown";
+        private string UnknownValue { get; set; } = "Unknown";
 
         public override Type Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -32,7 +32,9 @@ namespace Svea.WebPay.SDK.Json
                 var val = FromValue(typeToConvert, enumText);
 
                 if (val != null)
+                {
                     return val;
+                }
             }
             else if (reader.TokenType == JsonTokenType.Number)
             {
@@ -60,7 +62,7 @@ namespace Svea.WebPay.SDK.Json
 
         public override void Write(Utf8JsonWriter writer, Type value, JsonSerializerOptions options)
         {
-            Type enumType = value.GetType();
+            var enumType = value;
 
             InitMap(enumType);
 
@@ -69,25 +71,31 @@ namespace Svea.WebPay.SDK.Json
             writer.WriteStringValue(val);
         }
 
-        private void InitMap(Type enumType)
+        private static void InitMap(Type enumType)
         {
             var underlyingType = Nullable.GetUnderlyingType(enumType);
-            enumType = underlyingType != null ? underlyingType : enumType;
+            enumType = underlyingType ?? enumType;
 
-            if (this._fromValueMap == null)
-                this._fromValueMap = new Dictionary<Type, Dictionary<string, object>>();
+            if (_fromValueMap == null)
+            {
+                _fromValueMap = new Dictionary<Type, Dictionary<string, object>>();
+            }
 
-            if (this._toValueMap == null)
-                this._toValueMap = new Dictionary<Type, Dictionary<object, string>>();
+            if (_toValueMap == null)
+            {
+                _toValueMap = new Dictionary<Type, Dictionary<object, string>>();
+            }
 
-            if (this._fromValueMap.ContainsKey(enumType))
+            if (_fromValueMap.ContainsKey(enumType))
+            {
                 return; // already initialized
+            }
 
             var fromMap = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
             var toMap = new Dictionary<object, string>();
 
             var fields = enumType.GetFields(BindingFlags.Static | BindingFlags.Public);
-            foreach (FieldInfo field in fields)
+            foreach (var field in fields)
             {
                 var name = field.Name;
                 var enumValue = Enum.Parse(enumType, name);
@@ -96,25 +104,22 @@ namespace Svea.WebPay.SDK.Json
                 fromMap[name] = enumValue;
             }
 
-            this._fromValueMap[enumType] = fromMap;
-            this._toValueMap[enumType] = toMap;
+            _fromValueMap[enumType] = fromMap;
+            _toValueMap[enumType] = toMap;
         }
 
-        private string ToValue(Type enumType, object obj)
+        private static string ToValue(Type enumType, object obj)
         {
-            Dictionary<object, string> map = this._toValueMap[enumType];
+            var map = _toValueMap[enumType];
 
             return map[obj];
         }
 
-        private Type FromValue(Type enumType, string value)
+        private static Type FromValue(Type enumType, string value)
         {
-            Dictionary<string, object> map = this._fromValueMap[enumType];
+            var map = _fromValueMap[enumType];
 
-            if (!map.ContainsKey(value))
-                return null;
-
-            return map[value].GetType();
+            return !map.ContainsKey(value) ? null : map[value].GetType();
         }
     }
 }

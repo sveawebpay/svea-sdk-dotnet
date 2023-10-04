@@ -27,9 +27,8 @@ on:
 
 env:
   dotnetVersion: |
-    3.1.101
-    5.x
     6.x
+    7.x
   AZURE_WEBAPP_PACKAGE_PATH: '.'
 
 jobs:

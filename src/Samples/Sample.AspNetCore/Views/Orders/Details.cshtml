@@ -63,7 +63,7 @@ else if (TempData["ErrorMessage"] != null)
                             <dt class="col-sm-2">
                                 @Html.DisplayNameFor(model => order.Order.OrderAmount)
                             </dt>
-                            <dd class="col-sm-4" automation="text-orderstatus">
+                            <dd class="col-sm-4" automation="text-orderamount">
                                 @(order.Order.OrderAmount.InLowestMonetaryUnit / 100)
                             </dd>
                             

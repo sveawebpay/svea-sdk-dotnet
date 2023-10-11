@@ -63,7 +63,8 @@ namespace Sample.AspNetCore.SystemTests.Test.Helpers
             .PaymentMethods.Card.IsVisible.WaitTo.BeTrue()
             .PaymentMethods.Card.Click()
             .Submit.Click()
-            .SwitchToFrame<CardPaymentFramePage>(By.CssSelector("iframe"))
+            .SwitchToRoot<CardPaymentPage>()
+            // . SwitchToFrame<CardPaymentFramePage>(By.CssSelector("iframe"))
             .CardNumber.IsVisible.WaitTo.BeTrue()
             .Do(x =>
             {

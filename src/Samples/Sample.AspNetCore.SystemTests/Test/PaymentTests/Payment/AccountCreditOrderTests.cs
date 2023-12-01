@@ -12,6 +12,8 @@ using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 {
+	using NUnit.Framework.Legacy;
+
 	public class AccountCreditOrderTests : Base.PaymentTests
 	{
 		public AccountCreditOrderTests(string driverAlias)

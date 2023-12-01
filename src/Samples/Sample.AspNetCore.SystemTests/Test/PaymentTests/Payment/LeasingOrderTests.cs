@@ -32,7 +32,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     {
                         // Assert sdk/api response
                         response = await _sveaClientSweden.Checkout.GetOrder(long.Parse(_orderId)).ConfigureAwait(false);
-                        Assert.NotNull(response);
+                        Assert.That(response, Is.Not.Null);
                         break;
                     }
                     catch (Exception)

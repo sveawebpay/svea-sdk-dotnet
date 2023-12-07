@@ -10,6 +10,8 @@ using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 {
+    using NUnit.Framework.Legacy;
+
     public class InvoiceOrderTests : Base.PaymentTests
     {
         public InvoiceOrderTests(string driverAlias)

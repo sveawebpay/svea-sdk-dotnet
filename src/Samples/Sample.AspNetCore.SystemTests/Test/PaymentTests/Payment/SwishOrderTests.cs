@@ -9,6 +9,8 @@ using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 {
+    using NUnit.Framework.Legacy;
+
     public class SwishOrderTests : Base.PaymentTests
     {
         public SwishOrderTests(string driverAlias)
@@ -52,7 +54,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                 Assert.That(response.OrderStatus.ToString(), Is.EqualTo(nameof(OrderStatus.Delivered)));
                 Assert.That(response.AvailableActions.Count, Is.EqualTo(0));
 
-                Assert.Null(response.OrderRows);
+                Assert.That(response.OrderRows, Is.Null);
 
                 Assert.That(response.Deliveries.Count, Is.EqualTo(1));
                 CollectionAssert.AreEquivalent(

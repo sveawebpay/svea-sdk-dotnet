@@ -9,6 +9,8 @@ using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 {
+    using NUnit.Framework.Legacy;
+
     public class TrustlyOrderTests : Base.PaymentTests
     {
         public TrustlyOrderTests(string driverAlias)

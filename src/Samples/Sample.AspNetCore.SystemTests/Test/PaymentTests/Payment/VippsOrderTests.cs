@@ -9,6 +9,8 @@ using System.Linq;
 
 namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
 {
+    using NUnit.Framework.Legacy;
+
     public class VippsOrderTests : Base.PaymentTests
     {
         public VippsOrderTests(string driverAlias)
@@ -56,7 +58,7 @@ namespace Sample.AspNetCore.SystemTests.Test.PaymentTests.Payment
                     response.AvailableActions
                 );
 
-                Assert.Null(response.OrderRows);
+                Assert.That(response.OrderRows, Is.Null);
 
                 Assert.That(response.Deliveries.Count(), Is.EqualTo(1));
                 Assert.That(response.Deliveries.First().AvailableActions.Count, Is.EqualTo(0));

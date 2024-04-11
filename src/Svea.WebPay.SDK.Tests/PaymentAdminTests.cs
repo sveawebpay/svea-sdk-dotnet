@@ -419,7 +419,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(2291662, order.Id);
             Assert.Equal("SEK", order.Currency);
             Assert.Equal("637254821997417753", order.MerchantOrderId);
-            Assert.Equal(OrderStatus.Open, order.OrderStatus);
+            Assert.Equal(OrderStatus.Expired, order.OrderStatus);
             Assert.Equal("tess.persson@mail.com", order.EmailAddress.ToString());
             Assert.Equal("08 111 111 11", order.PhoneNumber);
             Assert.Equal("", order.CustomerReference);

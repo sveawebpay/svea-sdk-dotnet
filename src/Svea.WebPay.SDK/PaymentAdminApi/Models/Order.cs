@@ -23,10 +23,13 @@
             OrderAmount = orderResponseObject.OrderAmount;
             OrderStatus = orderResponseObject.OrderStatus;
             PaymentType = orderResponseObject.PaymentType;
+            PeppolId = orderResponseObject.PeppolId;
             PhoneNumber = orderResponseObject.PhoneNumber;
             ShippingAddress = orderResponseObject.ShippingAddress;
             SveaWillBuy = orderResponseObject.SveaWillBuy;
             AvailableActions = orderResponseObject.Actions;
+            ExpirationDate = orderResponseObject.ExpirationDate;
+            BillingEmailAddress = orderResponseObject.BillingEmailAddress;
 
             Actions = new OrderActions(orderResponseObject, client);
             OrderRows = orderResponseObject.OrderRows?.Select(x => new OrderRow(orderResponseObject.Id, x, client)).ToList();
@@ -51,8 +54,11 @@
         public IList<OrderRow> OrderRows { get; }
         public OrderStatus OrderStatus { get; }
         public PaymentType PaymentType { get; }
+        public string PeppolId { get; set; }
         public string PhoneNumber { get; }
         public Address ShippingAddress { get; }
         public bool? SveaWillBuy { get; }
+        public DateTime ExpirationDate { get; set; }
+        public string BillingEmailAddress { get; set; }
     }
 }

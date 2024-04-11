@@ -1,6 +1,5 @@
 ﻿namespace Svea.WebPay.SDK.PaymentAdminApi.Response
 {
-
     using System;
     using System.Collections.Generic;
     using System.Text.Json.Serialization;
@@ -13,7 +12,8 @@
         public OrderResponseObject(IList<string> actions, Address billingAddress, MinorUnit cancelledAmount, DateTime creationDate,
             string currency, string customerReference, IList<DeliveryResponseObject> deliveries, EmailAddress emailAddress, long id,
             bool isCompany, string merchantOrderId, string nationalId, MinorUnit orderAmount, IList<OrderRowResponseObject> orderRows,
-            OrderStatus orderStatus, PaymentType paymentType, string phoneNumber, Address shippingAddress, bool? sveaWillBuy)
+            OrderStatus orderStatus, PaymentType paymentType, string peppolId, string phoneNumber, Address shippingAddress, bool? sveaWillBuy, 
+            DateTime expirationDate, string billingEmailAddress)
         {
             Actions = actions;
             BillingAddress = billingAddress;
@@ -31,9 +31,12 @@
             OrderRows = orderRows;
             OrderStatus = orderStatus;
             PaymentType = paymentType;
+            PeppolId = peppolId;
             PhoneNumber = phoneNumber;
             ShippingAddress = shippingAddress;
             SveaWillBuy = sveaWillBuy;
+            ExpirationDate = expirationDate;
+            BillingEmailAddress = billingEmailAddress;
         }
 
         /// <summary>
@@ -136,18 +139,36 @@
         /// Minimum 6 characters long Peppol Identifier.
         /// </summary>
         [JsonInclude]
-        public string PhoneNumber { get; }
-
+        public string PeppolId { get; set; }
+        
         /// <summary>
         /// The customer’s phone number.
         /// </summary>
         [JsonInclude]
-        public Address ShippingAddress { get; }
+        public string PhoneNumber { get; }
 
         /// <summary>
         /// Shipping address of identified customer.
         /// </summary>
         [JsonInclude]
+        public Address ShippingAddress { get; }
+
+        /// <summary>
+        /// Only available on Invoice order. Is true if Svea buys the invoice.
+        /// </summary>
+        [JsonInclude]
         public bool? SveaWillBuy { get; }
+        
+        /// <summary>
+        /// Date and time when the order will be expired.
+        /// </summary>
+        [JsonInclude]
+        public DateTime ExpirationDate { get; set; }
+        
+        /// <summary>
+        /// Email address of identified customer.
+        /// </summary>
+        [JsonInclude]
+        public string BillingEmailAddress { get; set; }
     }
 }

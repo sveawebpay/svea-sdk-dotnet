@@ -28,5 +28,10 @@
         /// The order does not have a set Payment Method
         /// </summary>
         Processing, 
+        
+        /// <summary>
+        /// The order has expired. This is applicable for Invoice, Account credit and Payment plan order types.
+        /// </summary>
+        Expired
     }
 }

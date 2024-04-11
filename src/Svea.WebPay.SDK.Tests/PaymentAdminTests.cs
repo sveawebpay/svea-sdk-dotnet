@@ -1,9 +1,13 @@
 ﻿using Xunit;
+
 using Moq;
+
 using Svea.WebPay.SDK.PaymentAdminApi;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Svea.WebPay.SDK.Tests.Helpers;
 using Svea.WebPay.SDK.Json;
 using Svea.WebPay.SDK.PaymentAdminApi.Response;
@@ -25,10 +29,12 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.AdminGetOrder));
 
             // Act
-            var actualOrder = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
+            var actualOrder = await sveaClient.PaymentAdmin.GetOrder(9788143).ConfigureAwait(false);
 
             // Assert
             Assert.True(DataComparison.OrdersAreEqual(expectedOrder, actualOrder));
+            Assert.Equal(expectedOrder.ExpirationDate, new DateTime(2024, 6, 9, 22, 0, 0));
+            Assert.Equal(expectedOrder.OrderStatus, OrderStatus.Expired);
         }
 
         [Fact]
@@ -82,7 +88,8 @@ namespace Svea.WebPay.SDK.Tests
             var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminDeliveredOrder, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedOrder = new Order(orderResponseObject, null);
-            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AdminDeliveredOrder));
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse,
+                DataSample.AdminDeliveredOrder));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
@@ -100,7 +107,8 @@ namespace Svea.WebPay.SDK.Tests
             var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminPartiallyDeliveredOrder, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedOrder = new Order(orderResponseObject, null);
-            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AdminPartiallyDeliveredOrder));
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse,
+                DataSample.AdminPartiallyDeliveredOrder));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
@@ -121,7 +129,8 @@ namespace Svea.WebPay.SDK.Tests
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedResponse = new Order(orderResponseObject, null);
 
-            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowResponse));
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse,
+                DataSample.AddOrderRowResponse));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
@@ -153,14 +162,16 @@ namespace Svea.WebPay.SDK.Tests
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedResponse = new Order(orderResponseObject, null);
 
-            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.AddOrderRowsResponse));
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminGetOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse,
+                DataSample.AddOrderRowsResponse));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
 
             var resourceResponse = await order.Actions.AddOrderRows(
                 new AddOrderRowsRequest(
-                    new List<NewOrderRow> {
+                    new List<NewOrderRow>
+                    {
                         new NewOrderRow(
                             name: "Slim Fit 512",
                             quantity: new MinorUnit(2),
@@ -199,12 +210,14 @@ namespace Svea.WebPay.SDK.Tests
             var creditResponseObject = JsonSerializer.Deserialize<CreditResponseObject>(DataSample.CreditResponse, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedCreditResponse = new CreditResponse(creditResponseObject);
-            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.CreditResponse));
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString,
+                DataSample.TaskResponse, DataSample.CreditResponse));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var delivery = order.Deliveries.FirstOrDefault(dlv => dlv.Id == 5588817);
-            var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
+            var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId)
+                .ToList();
             var resourceResponse = await delivery.Actions.CreditOrderRows(new CreditOrderRowsRequest(orderRowIds), new PollingTimeout(15)).ConfigureAwait(false);
 
             // Assert
@@ -219,12 +232,14 @@ namespace Svea.WebPay.SDK.Tests
             var creditResponseObject = JsonSerializer.Deserialize<CreditResponseObject>(DataSample.CreditResponse, JsonSerialization.Settings);
             var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
             var expectedCreditResponse = new CreditResponse(creditResponseObject);
-            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString, DataSample.TaskResponse, DataSample.CreditResponse));
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString,
+                DataSample.TaskResponse, DataSample.CreditResponse));
 
             // Act
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             var delivery = order.Deliveries.FirstOrDefault(dlv => dlv.Id == 5588817);
-            var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId).ToList();
+            var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId)
+                .ToList();
             var resourceResponse = await delivery.Actions.CreditNewRow(new CreditNewOrderRowRequest(
                 new CreditOrderRow(
                     name: "Slim Fit 512",
@@ -275,7 +290,8 @@ namespace Svea.WebPay.SDK.Tests
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             await order.Actions.UpdateOrderRows(
                 new UpdateOrderRowsRequest(
-                    new List<NewOrderRow> {
+                    new List<NewOrderRow>
+                    {
                         new NewOrderRow(
                             name: order.OrderRows.ElementAt(0).Name,
                             quantity: order.OrderRows.ElementAt(0).Quantity,
@@ -362,7 +378,8 @@ namespace Svea.WebPay.SDK.Tests
             var order = await sveaClient.PaymentAdmin.GetOrder(2291662).ConfigureAwait(false);
             await order.Actions.ReplaceOrderRows(
                 new ReplaceOrderRowsRequest(
-                    new List<NewOrderRow> {
+                    new List<NewOrderRow>
+                    {
                         new NewOrderRow(
                             name: "Slim Fit 512",
                             quantity: new MinorUnit(2),

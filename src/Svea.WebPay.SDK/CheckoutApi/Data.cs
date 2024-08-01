@@ -1,5 +1,6 @@
 ﻿namespace Svea.WebPay.SDK.CheckoutApi
 {
+    using System;
     using System.Text.Json.Serialization;
 
     public class Data
@@ -104,9 +105,10 @@
         /// </summary>
         /// </param>
         [JsonConstructor]
-        public Data(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency, 
-            string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType? paymentType, 
-            CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId, GetOrderShippingInformation shippingInformation)
+        public Data(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency,
+            string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType? paymentType,
+            CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId, GetOrderShippingInformation shippingInformation,
+            bool? recurring, string recurringToken = null)
         {
             MerchantSettings = merchantSettings;
             Cart = cart;
@@ -131,6 +133,8 @@
             Payment = payment;
             PeppolId = peppolId;
             ShippingInformation = shippingInformation;
+            Recurring = recurring;
+            RecurringToken = recurringToken;
         }
 
         /// <summary>
@@ -195,10 +199,10 @@
 
         [JsonInclude]
         public string ClientOrderNumber { get; }
-        
+
         [JsonInclude]
         public long OrderId { get; }
-        
+
         [JsonInclude]
         public string EmailAddress { get; }
 
@@ -212,7 +216,7 @@
         /// The final payment method for the order. Will only have a value when the order is finalized, otherwise unknown.
         /// </summary>
         [JsonInclude]
-        public PaymentType? PaymentType { get;  }
+        public PaymentType? PaymentType { get; }
 
         /// <summary>
         /// The current state of the order
@@ -256,5 +260,18 @@
 
         [JsonInclude]
         public GetOrderShippingInformation ShippingInformation { get; }
+
+        /// <summary>
+        /// Indicates if the order is recurring order and will create a recurring token when order is finalized. Only applicable if merchant has recurring orders enabled.
+        /// </summary>
+        [JsonInclude]
+        public bool? Recurring { get; }
+
+
+        /// <summary>
+        /// Recurring token to be used for subsequent recurring orders. Only available when order is finalized. Only applicable if merchant has recurring orders enabled.
+        /// </summary>
+        [JsonInclude]
+        public string RecurringToken { get; }
     }
 }

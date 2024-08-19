@@ -24,13 +24,20 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.MapPost("/orders", CreateOrderHandler.Handle)
+app.MapPost("/api/orders", CreateOrderHandler.Handle)
 .WithName("Create Checkout Order")
 .WithOpenApi();
 
-app.MapGet("/orders", GetOrderHandler.Handle)
-.WithName("Create Checkout Order")
+app.MapPatch("/api/orders/{orderId}", UpdateOrderHandler.Handle)
+.WithName("Update Checkout Order")
 .WithOpenApi();
+
+
+app.MapGet("/api/orders/{orderId}", GetOrderHandler.Handle)
+.WithName("Get Checkout Order")
+.WithOpenApi();
+
+app.MapGet("/api/utils/merchants", GetMerchantsHandler.Handle).WithName("Get Available Merchants").WithOpenApi();
 
 app.MapFallbackToFile("/index.html");
 

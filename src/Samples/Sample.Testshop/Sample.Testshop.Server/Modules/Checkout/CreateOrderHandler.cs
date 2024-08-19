@@ -9,11 +9,18 @@ namespace Sample.Testshop.Server.Modules.Checkout
 
         public static async Task<Data> Handle(CreateOrderRequestModel createOrderModel, SveaWebPayClient sveaClient)
         {
+            if (string.IsNullOrWhiteSpace(createOrderModel?.ClientOrderNumber))
+            {
+                createOrderModel.ClientOrderNumber = Guid.NewGuid().ToString().Replace("-", "");
+                createOrderModel.Currency = "SEK";
+            }
+
+
             var response = await sveaClient.Checkout.CreateOrder(new CreateOrderModel(new RegionInfo(createOrderModel.CountryCode), new CurrencyCode(createOrderModel.Currency), new Language(createOrderModel.Locale),
                 createOrderModel.ClientOrderNumber, createOrderModel.MerchantSettings?.ToSDKModel(), createOrderModel.Cart.ToSDKModel(),
                 createOrderModel.RequireElectronicIdAuthentication,
                 createOrderModel.PresetValues?.Select(x => new Presetvalue(x.TypeName, x.Value, x.IsReadonly)).ToList(), null, null, createOrderModel.MerchantData, null));
-            ;
+
             return response;
 
         }
@@ -51,15 +58,15 @@ namespace Sample.Testshop.Server.Modules.Checkout
             public string CheckoutUri { get; set; } = string.Empty;
             public string ConfirmationUri { get; set; } = string.Empty;
             public List<long>? ActivePartPaymentCampaigns { get; set; }
-            public int PromotedPartPaymentCampaign { get; set; }
+            public long? PromotedPartPaymentCampaign { get; set; }
 
             public Svea.WebPay.SDK.CheckoutApi.MerchantSettings ToSDKModel()
             {
                 return new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(new Uri(PushUri),
                     new Uri(TermsUri),
-                    new Uri(CheckoutUri), 
-                    new Uri(ConfirmationUri), 
-                    new Uri(CheckoutValidationCallBackUri), 
+                    new Uri(CheckoutUri),
+                    new Uri(ConfirmationUri),
+                    !string.IsNullOrEmpty(CheckoutValidationCallBackUri) ? new Uri(CheckoutValidationCallBackUri) : null,
                     null,
                     ActivePartPaymentCampaigns ?? new List<long>(),
                     PromotedPartPaymentCampaign);

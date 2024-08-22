@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Svea.WebPay.SDK.CheckoutApi.Recurring;
+using System;
 using System.Threading.Tasks;
 
 namespace Svea.WebPay.SDK.CheckoutApi
@@ -53,5 +54,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             var data = await _sveaHttpClient.HttpPut<Data>(url, updateOrderModel, configureAwait);
             return data;
         }
+
+        public CheckoutRecurring Recurring { get; }
     }
 }

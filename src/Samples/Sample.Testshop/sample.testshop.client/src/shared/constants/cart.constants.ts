@@ -1,6 +1,6 @@
-import { Cart } from "../models/checkout/CreateOrderModel";
+import { RequestCart } from "../models/checkout/CreateOrderModel";
 
-export const defaultCart = {
+export const defaultCart: RequestCart = {
   items: [
     {
       articleNumber: "1234",
@@ -29,7 +29,7 @@ export const defaultCart = {
   ],
 };
 
-export const leasingCart: Cart = {
+export const leasingCart: RequestCart = {
   items: [
     {
       articleNumber: "L-1001",
@@ -45,7 +45,7 @@ export const leasingCart: Cart = {
     },
   ],
 };
-export const zeroSumCart: Cart = {
+export const zeroSumCart: RequestCart = {
   items: [
     {
       articleNumber: "Z-1001",
@@ -77,7 +77,7 @@ export const zeroSumCart: Cart = {
 export interface CartOption {
   label: string;
   id: number;
-  cart: Cart;
+  cart: RequestCart;
 }
 export const cartOptions = [
   { label: "Default Cart", id: 1, cart: defaultCart },

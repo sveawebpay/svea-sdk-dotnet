@@ -1,21 +1,34 @@
-export interface OrderRow {
+export interface OrderRowBase {
   articleNumber: string;
   name: string;
-  quantity: number;
-  unitPrice: number;
   unit: string;
-  discountAmount?: number;
-  discountPercent?: number;
-  discountType?: DiscountType;
-  discountValue?: number;
   merchantData?: string;
   shippingInfo?: string;
   temporaryReference?: string;
-  vatPercent: number;
   rowNumber: number;
   rowType?: string;
 }
 
+export interface OrderRowResponse extends OrderRowBase {
+  quantity: MinorUnit;
+  unitPrice: MinorUnit;
+  discountAmount?: MinorUnit;
+  discountPercent?: MinorUnit;
+  discountValue?: MinorUnit;
+  vatPercent: MinorUnit;
+}
+export interface OrderRowRequest extends OrderRowBase {
+  quantity: number;
+  unitPrice: number;
+  discountAmount?: number;
+  discountPercent?: number;
+  discountValue?: number;
+  vatPercent: number;
+}
+
+export interface MinorUnit {
+  inLowestMonetaryUnit: number;
+}
 export enum DiscountType {
   Percentage,
   Amount,

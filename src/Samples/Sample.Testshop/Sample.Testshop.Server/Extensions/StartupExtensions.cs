@@ -62,6 +62,16 @@ namespace Sample.Testshop.Server.Extensions
                 var paymentAdminApiHttpClient = httpClientFactory.CreateClient("paymentAdminApi");
                 return new Svea.WebPay.SDK.SveaWebPayClient(checkoutApiHttpClient, paymentAdminApiHttpClient, new Svea.WebPay.SDK.Credentials(credential?.MerchantId ?? merchantId, credential?.Secret ?? secret), s.GetService<ILogger>());
             });
+            //services.AddTransient(s =>
+            //{
+
+            //    var httpContextAccessor = s.GetService<IHttpContextAccessor>();
+            //    var currentMarket = httpContextAccessor.HttpContext.Request.Headers["merchantId"].FirstOrDefault() ?? "SE";
+            //    var credentials = s.GetService<IOptions<List<Credentials>>>()?.Value;
+            //    var credential = credentials?.FirstOrDefault(x => x.MerchantId.Equals(currentMarket, StringComparison.InvariantCultureIgnoreCase));
+            //    var httpClientFactory = s.GetService<IHttpClientFactory>();
+            //    return new Svea.WebPay.SDK.SveaHttpClient(httpClientFactory.CreateClient("checkoutApi"), new Svea.WebPay.SDK.Credentials(credential?.MerchantId ?? merchantId, credential?.Secret ?? secret), s.GetService<ILogger>())č
+            //});
 
             return services;
         }

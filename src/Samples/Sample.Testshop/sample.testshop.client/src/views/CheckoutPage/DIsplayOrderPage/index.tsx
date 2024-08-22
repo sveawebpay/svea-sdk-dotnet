@@ -5,6 +5,7 @@ import { Cookies } from "react-cookie";
 import { OrderResponse } from "../../../shared/models/checkout/OrderResponse";
 import { Box, Card, CardContent, Container, Grid } from "@mui/material";
 import OrderDetails from "./components/OrderDetails";
+import CartEditor from "../components/CartEditor";
 
 const DisplayOrderPage: React.FC = () => {
   const [orderData, setOrderData] = useState<OrderResponse | null>(null);
@@ -54,19 +55,30 @@ const DisplayOrderPage: React.FC = () => {
         position: "relative",
       }}
     >
-      <Grid container spacing={2} style={{ flexGrow: 1 }} direction={"row"}>
-        <Grid item>
+      <Grid
+        container
+        spacing={2}
+        style={{ flexGrow: 1 }}
+        direction={"row"}
+        columns={4}
+      >
+        <Grid item sm={3}>
           <Card sx={{ marginBottom: 0 }}>
             <CardContent>
-              <Grid container spacing={2}>
+              <Grid container spacing={1} direction={"column"}>
                 <Grid item>
                   <OrderDetails orderDetails={orderData} />
+                </Grid>
+                <Grid item>
+                  {orderData && (
+                    <CartEditor initialItems={orderData?.cart.items} />
+                  )}
                 </Grid>
               </Grid>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item style={{ flex: 1 }}>
+        <Grid item style={{ flex: 1 }} sm={1}>
           <Box style={{ flexGrow: 1 }} ref={divRef}></Box>
         </Grid>
       </Grid>

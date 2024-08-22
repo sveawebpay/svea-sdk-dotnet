@@ -1,6 +1,8 @@
 ﻿using Svea.WebPay.SDK;
 using Svea.WebPay.SDK.CheckoutApi;
 using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Sample.Testshop.Server.Modules.Checkout
 {
@@ -82,11 +84,11 @@ namespace Sample.Testshop.Server.Modules.Checkout
                     Items.Select(x => new Svea.WebPay.SDK.CheckoutApi.OrderRow(
                         x.ArticleNumber,
                         x.Name,
-                        new MinorUnit(x.Quantity),
-                        new MinorUnit(x.UnitPrice),
-                        new MinorUnit(x.DiscountPercent),
-                        new MinorUnit(x.DiscountAmount),
-                        new MinorUnit(x.VatPercent),
+                        x.Quantity,
+                        x.UnitPrice,
+                        x.DiscountPercent,
+                        x.DiscountAmount,
+                        x.VatPercent,
                         x.Unit,
                         x.TemporaryReference,
                         x.RowNumber,
@@ -99,11 +101,11 @@ namespace Sample.Testshop.Server.Modules.Checkout
         {
             public string? ArticleNumber { get; set; }
             public string Name { get; set; } = string.Empty;
-            public decimal Quantity { get; set; }
-            public decimal UnitPrice { get; set; }
-            public decimal DiscountPercent { get; set; }
-            public decimal DiscountAmount { get; set; }
-            public decimal VatPercent { get; set; }
+            public MinorUnit Quantity { get; set; }
+            public MinorUnit UnitPrice { get; set; }
+            public MinorUnit DiscountPercent { get; set; }
+            public MinorUnit DiscountAmount { get; set; }
+            public MinorUnit VatPercent { get; set; }
             public string Unit { get; set; } = string.Empty;
             public string? TemporaryReference { get; set; }
             public int RowNumber { get; set; }

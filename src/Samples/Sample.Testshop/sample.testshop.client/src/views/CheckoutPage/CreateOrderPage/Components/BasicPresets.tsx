@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Divider, Grid, Typography } from "@mui/material";
 import ToggleOffOutlinedIcon from "@mui/icons-material/ToggleOffOutlined";
 import IsCompanySwitch from "./IsCompanySwitch";
@@ -50,7 +50,6 @@ const BasicPresets: React.FC<BasicPresetsProps> = () => {
         <RequireElectronicAuthentication />
         <Recurring />
         <ReloadOrderManually />
-        {/* <IframeWidth /> */}
       </Grid>
     </>
   );

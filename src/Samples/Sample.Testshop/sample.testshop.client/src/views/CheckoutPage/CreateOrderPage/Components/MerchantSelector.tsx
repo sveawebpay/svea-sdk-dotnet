@@ -1,7 +1,8 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import SelectOption from "../../../../components/form-components/SelectOption";
 import { GetMerchantsResponse } from "../../../../shared/models/merchant/Merchant";
+import { StoreOutlined } from "@mui/icons-material";
 
 interface MerchantSelectorProps {
   merchants: GetMerchantsResponse[];
@@ -9,20 +10,24 @@ interface MerchantSelectorProps {
 
 const MerchantSelector: React.FC<MerchantSelectorProps> = ({ merchants }) => {
   return (
-    <Grid alignItems="left" spacing={1}>
-      <Grid item sx={{ width: "180px" }}>
+    <>
+      <Typography variant="h6" display="flex" alignItems="center">
+        <StoreOutlined fontSize="medium" sx={{ marginRight: -1 }} />
+        Select a merchant
+      </Typography>
+      <Box p={1}>
         <SelectOption
           id="merchant-select"
-          label="Merchant"
           options={merchants.map((x) => ({
             value: x.merchantId,
             label: x.market,
           }))}
           selectFormPath="merchantId"
-          width="100%"
+          width="50%"
         />
-      </Grid>
-    </Grid>
+      </Box>
+      <Divider />
+    </>
   );
 };
 

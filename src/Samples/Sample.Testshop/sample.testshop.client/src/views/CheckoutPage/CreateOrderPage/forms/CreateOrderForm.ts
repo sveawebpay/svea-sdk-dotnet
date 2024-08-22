@@ -2,6 +2,7 @@ import { cartOptions } from "../../../../shared/constants/cart.constants";
 import CreateOrderModel, {
   MerchantSettings,
   PresetValue,
+  RequestCart,
 } from "../../../../shared/models/checkout/CreateOrderModel";
 
 export interface CreateOrderForm {
@@ -10,6 +11,7 @@ export interface CreateOrderForm {
   postalCodePresetValue: FormPresetValue;
   nationalIdPresetValue: FormPresetValue;
   phoneNumberPresetValue: FormPresetValue;
+  cart: RequestCart;
   identityFlags: FormIdentityFlags;
   requireElectronicAuthentication: boolean;
   recurring: boolean;

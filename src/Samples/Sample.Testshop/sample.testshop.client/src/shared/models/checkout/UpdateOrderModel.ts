@@ -1,5 +1,5 @@
-import { Cart } from "./CreateOrderModel";
+import { RequestCart } from "./CreateOrderModel";
 
 export default interface UpdateOrderModel {
-  cart: Cart;
+  cart: RequestCart;
 }

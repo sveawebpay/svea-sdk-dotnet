@@ -1,4 +1,4 @@
-import { OrderRow } from "./shared";
+import { OrderRowResponse } from "./shared";
 
 //Order model
 export interface OrderResponse {
@@ -6,7 +6,7 @@ export interface OrderResponse {
   clientOrderNumber: string;
   gui: Gui;
   status: string;
-  cart: { items: OrderRow[] };
+  cart: { items: OrderRowResponse[] };
   currency: string;
   locale: string;
   customer: Customer;
@@ -39,4 +39,4 @@ export interface Address {
   PostalCode: string;
   CountryCode: string;
 }
-export type { OrderRow };
+export type { OrderRowResponse as OrderRow };

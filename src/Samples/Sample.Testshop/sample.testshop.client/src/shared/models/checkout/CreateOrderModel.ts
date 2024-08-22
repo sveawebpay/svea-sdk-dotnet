@@ -1,4 +1,4 @@
-import { OrderRow } from "./shared";
+import { OrderRowRequest } from "./shared";
 
 interface CreateOrderModel {
   countryCode: string;
@@ -6,7 +6,7 @@ interface CreateOrderModel {
   locale: string;
   clientOrderNumber: string;
   merchantSettings: MerchantSettings;
-  cart: Cart;
+  cart: RequestCart;
   presetValues?: PresetValue[];
   identityFlags?: IdentityFlags;
   requireElectronicIdAuthentication?: boolean;
@@ -25,8 +25,8 @@ export interface PartPayment {
   description: string;
 }
 
-export interface Cart {
-  items: OrderRow[];
+export interface RequestCart {
+  items: OrderRowRequest[];
 }
 
 export interface MerchantSettings {

@@ -1,5 +1,5 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import {
   CreateOrderForm,
   FormDataToCreateOrderModel,
@@ -18,6 +18,7 @@ import { MerchantService } from "../../../services/merchant.service";
 import CartPresetSelector from "./Components/CartPresetSelector";
 import { Cookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { cartOptions } from "../../../shared/constants/cart.constants";
 
 const CreateOrderPage: React.FC = () => {
   const [merchantOptions, setMerchantOptions] = useState<
@@ -78,6 +79,7 @@ const CreateOrderPage: React.FC = () => {
       locale: "sv-SE",
       currency: "",
       countryCode: "",
+      cart: { items: [] },
       merchantId: 0,
     },
   });
@@ -85,6 +87,7 @@ const CreateOrderPage: React.FC = () => {
   const navigate = useNavigate();
 
   const merchantIdWatch = methods.watch("merchantId");
+  const cartPresetWatch = methods.watch("cartPreset");
 
   useEffect(() => {
     console.log(merchantIdWatch);
@@ -94,6 +97,13 @@ const CreateOrderPage: React.FC = () => {
         ""
     );
   }, [merchantIdWatch, methods, merchantOptions]);
+
+  useEffect(() => {
+    methods.setValue(
+      "cart",
+      cartOptions.find((x) => x.id === cartPresetWatch)?.cart ?? { items: [] }
+    );
+  }, [cartPresetWatch, methods]);
 
   const onSubmit = async (formData: CreateOrderForm) => {
     console.log(formData);
@@ -112,7 +122,6 @@ const CreateOrderPage: React.FC = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <MerchantSelector merchants={merchantOptions} />
         <Typography variant="h5">Preset</Typography>
         <Paper sx={{ padding: 0 }}>
           <Grid container>
@@ -123,9 +132,9 @@ const CreateOrderPage: React.FC = () => {
               md={4}
               sx={{ borderRight: "2px solid #f4f4ee" }}
             >
+              <MerchantSelector merchants={merchantOptions} />
               <BasicPresets />
             </Grid>
-
             <Grid
               item
               xl={4}
@@ -138,7 +147,6 @@ const CreateOrderPage: React.FC = () => {
               <EnableShipping />
               <MiscSettings />
             </Grid>
-
             <Grid item xl={4} xs={12} md={4}>
               <PaymentOptionsPresets />
               <CartPresetSelector />
@@ -148,6 +156,7 @@ const CreateOrderPage: React.FC = () => {
         <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: 2 }}>
           <Button
             disableElevation
+            disabled={!merchantIdWatch || !cartPresetWatch}
             variant="contained"
             color="primary"
             type="submit"

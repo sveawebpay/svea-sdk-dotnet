@@ -11,6 +11,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         public Checkout(SveaHttpClient sveaHttpClient)
         {
             _sveaHttpClient = sveaHttpClient;
+            Recurring = new CheckoutRecurring(sveaHttpClient);
         }
 
         /// <summary>

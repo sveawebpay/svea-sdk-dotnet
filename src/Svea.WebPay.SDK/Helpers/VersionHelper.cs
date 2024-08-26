@@ -14,7 +14,9 @@ namespace Svea.WebPay.SDK.Helpers
 
         private static string GetVersionNumber()
         {
-            string fullVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString()??"1.0.0";
+            var versionAttribute = Assembly.GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            var fullVersion = versionAttribute?.InformationalVersion ?? "1.0.0";
             return fullVersion.Split('+')[0];
         }
 

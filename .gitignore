@@ -5,3 +5,5 @@ bin
 packages
 *.user
 .idea
+src/.DS_Store
+.DS_Store

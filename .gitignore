@@ -6,3 +6,5 @@ packages
 *.user
 .idea
 /src/Svea.WebPay.SDK.Tests/appsettings.Development.json
+src/.DS_Store
+.DS_Store

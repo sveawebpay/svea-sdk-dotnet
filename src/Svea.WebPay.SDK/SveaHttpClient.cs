@@ -18,10 +18,13 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Svea.WebPay.SDK
 {
+    using Svea.WebPay.SDK.Helpers;
     using Svea.WebPay.SDK.PaymentAdminApi;
+    using System.Reflection;
 
     public class SveaHttpClient : ISveaHttpClient
     {
+        private const string SVEA_SDK_HEADER_NAME = "X-SVEA-SDK-PACKAGE";
         private readonly HttpClient _client;
         private readonly Credentials _credentials;
         private readonly ILogger _logger;
@@ -31,6 +34,9 @@ namespace Svea.WebPay.SDK
             this._client = client;
             this._credentials = credentials;
             this._logger = logger;
+
+            _client.DefaultRequestHeaders.Add(SVEA_SDK_HEADER_NAME, $"NET-{VersionHelper.Version}");
+
         }
 
         /// <summary>

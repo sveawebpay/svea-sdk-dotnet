@@ -106,7 +106,8 @@
         [JsonConstructor]
         public Data(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency, 
             string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType? paymentType, 
-            CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId, GetOrderShippingInformation shippingInformation)
+            CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId, GetOrderShippingInformation shippingInformation,
+            OrderValidation validation)
         {
             MerchantSettings = merchantSettings;
             Cart = cart;
@@ -256,5 +257,12 @@
 
         [JsonInclude]
         public GetOrderShippingInformation ShippingInformation { get; }
+
+        /// <summary>
+        /// Order validations such as minimum age requirement.
+        /// Apply it in order to have order validation such as minimum age.
+        /// </summary>
+        [JsonInclude]
+        public OrderValidation Validation { get; set; }
     }
 }

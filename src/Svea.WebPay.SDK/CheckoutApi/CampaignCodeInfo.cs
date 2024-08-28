@@ -2,6 +2,7 @@
 {
     public class CampaignCodeInfo
     {
+        public CampaignCodeInfo() { }
         public CampaignCodeInfo(long campaignCode, string description, PaymentPlanTypeCode paymentPlanType, int contractLengthInMonths, decimal monthlyAnnuityFactor, decimal initialFee, decimal notificationFee, decimal interestRatePercent, int numberOfInterestFreeMonths, int numberOfPaymentFreeMonths, decimal fromAmount, decimal amount)
         {
             CampaignCode = campaignCode;

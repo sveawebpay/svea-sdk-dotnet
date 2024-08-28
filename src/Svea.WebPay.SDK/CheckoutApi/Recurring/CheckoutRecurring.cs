@@ -22,19 +22,19 @@ namespace Svea.WebPay.SDK.CheckoutApi.Recurring
             return data;
         }
 
-        public async Task<RecurringToken> GetRecurringToken(string recurringToken, bool configureAwait = false)
+        public async Task<RecurringToken> GetRecurringTokenAsync(string recurringToken, bool configureAwait = false)
         {
             var url = new Uri($"/api/tokens/{recurringToken}", UriKind.Relative);
             var data = await _sveaHttpClient.HttpGet<RecurringToken>(url, configureAwait);
             return data;
         }
-        public async Task<OrderData> GetRecurringOrder(string recurringToken, long orderId, bool configureAwait = false)
+        public async Task<OrderData> GetRecurringOrderAsync(string recurringToken, long orderId, bool configureAwait = false)
         {
             var url = new Uri($"/api/tokens/{recurringToken}/orders/{orderId}", UriKind.Relative);
             var data = await _sveaHttpClient.HttpGet<OrderData>(url, configureAwait);
             return data;
         }
-        public async Task<ChangePaymentMethodResponse> ChangePaymentMethod(ChangepaymentMethodModel changePaymentMethodModel, string recurringToken, bool configureAwait = false)
+        public async Task<ChangePaymentMethodResponse> ChangePaymentMethodAsync(ChangepaymentMethodModel changePaymentMethodModel, string recurringToken, bool configureAwait = false)
         {
             var url = new Uri($"/api/tokens/{recurringToken}/payment-methods", UriKind.Relative);
             var data = await _sveaHttpClient.HttpPost<ChangePaymentMethodResponse>(url, changePaymentMethodModel, configureAwait);

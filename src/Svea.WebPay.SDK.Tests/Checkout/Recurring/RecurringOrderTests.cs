@@ -43,7 +43,7 @@ namespace Svea.WebPay.SDK.Tests.Checkout.Recurring
             var sveaClient = SveaClient(mockHandler);
 
             // Act
-            var result = await sveaClient.Checkout.Recurring.GetRecurringToken(recurringToken);
+            var result = await sveaClient.Checkout.Recurring.GetRecurringTokenAsync(recurringToken);
 
             // Assert
             Assert.NotNull(result);
@@ -63,7 +63,7 @@ namespace Svea.WebPay.SDK.Tests.Checkout.Recurring
             var sveaClient = SveaClient(mockHandler);
 
             // Act
-            var result = await sveaClient.Checkout.Recurring.GetRecurringOrder(recurringToken, orderId);
+            var result = await sveaClient.Checkout.Recurring.GetRecurringOrderAsync(recurringToken, orderId);
 
             // Assert
             Assert.NotNull(result);
@@ -83,7 +83,7 @@ namespace Svea.WebPay.SDK.Tests.Checkout.Recurring
             var sveaClient = SveaClient(mockHandler);
 
             // Act
-            var result = await sveaClient.Checkout.Recurring.ChangePaymentMethod(changePaymentMethodModel, recurringToken);
+            var result = await sveaClient.Checkout.Recurring.ChangePaymentMethodAsync(changePaymentMethodModel, recurringToken);
 
             // Assert
             Assert.NotNull(result);

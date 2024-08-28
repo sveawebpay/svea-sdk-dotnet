@@ -55,6 +55,9 @@ namespace Svea.WebPay.SDK.CheckoutApi
             var data = await _sveaHttpClient.HttpPut<Data>(url, updateOrderModel, configureAwait);
             return data;
         }
+        /// <summary>
+        /// Checkout utility methods that are not related to orders.
+        /// </summary>
         public CheckoutUtility Utility { get; }
     }
 }

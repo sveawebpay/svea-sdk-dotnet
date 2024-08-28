@@ -6,11 +6,13 @@ namespace Svea.WebPay.SDK.CheckoutApi.Recurring
 {
     public sealed class CreateRecurringOrderModel
     {
-        public CreateRecurringOrderModel(string clientOrderNumber, MerchantSettings merchantSettings, Cart cart)
+        public CreateRecurringOrderModel(string clientOrderNumber, string currency, RecurringMerchantSettings merchantSettings, Cart cart, Guid? partnerKey = null)
         {
             ClientOrderNumber = clientOrderNumber;
             MerchantSettings = merchantSettings;
             Cart = cart;
+            PartnerKey = partnerKey;
+            Currency = currency;
         }
         public CreateRecurringOrderModel()
         {
@@ -24,9 +26,19 @@ namespace Svea.WebPay.SDK.CheckoutApi.Recurring
         public string ClientOrderNumber { get; set; }
 
         /// <summary>
-        /// At certain points in an order’s lifetime, we will attempt to call endpoints on your side. You provide the URI:s for these endpoints in the MerchantSettings object
+        /// Currency as defined by ISO 4217
         /// </summary>
-        public MerchantSettings MerchantSettings { get; set; }
+        public string Currency { get; set; }
+
+        /// <summary>
+        /// Provided by Svea to select partners.
+        /// </summary>
+        public Guid? PartnerKey { get; set; }
+
+        /// <summary>
+        /// At certain points in an order’s lifetime, we will attempt to call endpoints on your side. You provide the URI:s for these endpoints in the RecurringMerchantSettings object
+        /// </summary>
+        public RecurringMerchantSettings MerchantSettings { get; set; }
         /// <summary>
         /// The total cost of the order rows in the cart needs to be higher than 0 (i.e. cart can not be empty).
         /// </summary>

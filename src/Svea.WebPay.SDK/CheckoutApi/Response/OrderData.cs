@@ -107,7 +107,7 @@ namespace Svea.WebPay.SDK.CheckoutApi.Response
         /// </summary>
         /// </param>
         [JsonConstructor]
-        public OrderData(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency,
+        public OrderData(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, string locale, string currency,
             string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType? paymentType,
             CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId, GetOrderShippingInformation shippingInformation,
             bool? recurring, string recurringToken = null)
@@ -117,7 +117,6 @@ namespace Svea.WebPay.SDK.CheckoutApi.Response
             Customer = customer;
             ShippingAddress = shippingAddress;
             BillingAddress = billingAddress;
-            Gui = gui;
             Locale = locale;
             Currency = currency;
             CountryCode = countryCode;
@@ -170,8 +169,6 @@ namespace Svea.WebPay.SDK.CheckoutApi.Response
         [JsonInclude]
         public Address BillingAddress { get; }
 
-        [JsonInclude]
-        public Gui Gui { get; }
 
         /// <summary>
         /// The current locale of the checkout, i.e.sv-SE etc.

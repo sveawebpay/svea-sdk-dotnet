@@ -7,6 +7,6 @@ namespace Svea.WebPay.SDK.CheckoutApi.Recurring
     public enum TokenStatus
     {
         Active = 1,
-        Canceled = 2
+        Cancelled = 2
     }
 }

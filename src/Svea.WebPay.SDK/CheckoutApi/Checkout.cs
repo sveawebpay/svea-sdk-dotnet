@@ -59,6 +59,9 @@ namespace Svea.WebPay.SDK.CheckoutApi
             return data;
         }
 
+        /// <summary>
+        /// Checkout recurring methods for creating subsequent recurring orders and managing recurring token.
+        /// </summary>
         public CheckoutRecurring Recurring { get; }
         /// <summary>
         /// Checkout utility methods that are not related to orders.

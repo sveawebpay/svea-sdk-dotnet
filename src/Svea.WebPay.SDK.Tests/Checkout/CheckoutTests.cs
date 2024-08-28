@@ -24,7 +24,7 @@ namespace Svea.WebPay.SDK.Tests.Checkout
             var request = checkoutOrderBuilder.UseTestValues().Build();
 
             // Act
-            var actualOrder = await sveaClient.Checkout.CreateOrder(request).ConfigureAwait(false);
+            var actualOrder = await sveaClient.Checkout.CreateOrder(request);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
@@ -39,7 +39,7 @@ namespace Svea.WebPay.SDK.Tests.Checkout
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutGetOrderResponse));
 
             // Act
-            var actualOrder = await sveaClient.Checkout.GetOrder(createdOrder.OrderId).ConfigureAwait(false);
+            var actualOrder = await sveaClient.Checkout.GetOrder(createdOrder.OrderId);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
@@ -55,7 +55,7 @@ namespace Svea.WebPay.SDK.Tests.Checkout
 
             // Act
             var update = CreateUpdateOrderRequest("");
-            var actualOrder = await sveaClient.Checkout.UpdateOrder(createdOrder.OrderId, update).ConfigureAwait(false);
+            var actualOrder = await sveaClient.Checkout.UpdateOrder(createdOrder.OrderId, update);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));

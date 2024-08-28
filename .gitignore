@@ -5,3 +5,4 @@ bin
 packages
 *.user
 .idea
+/src/Svea.WebPay.SDK.Tests/appsettings.Development.json

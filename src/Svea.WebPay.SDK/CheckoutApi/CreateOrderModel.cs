@@ -42,7 +42,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         public CreateOrderModel(RegionInfo countryCode, CurrencyCode currency, Language locale, string clientOrderNumber,
             MerchantSettings merchantSettings, Cart cart, bool requireElectronicIdAuthentication, IList<Presetvalue> presetValues = null,
             IdentityFlags identityFlags = null, Guid? partnerKey = null, string merchantData = null, ShippingInformation shippingInformation = null,
-            bool? recurring=null, OrderValidation orderValidation=null )
+            bool? recurring=null, OrderValidation validation=null )
         {
             CountryCode = countryCode;
             Currency = currency;
@@ -56,7 +56,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             PartnerKey = partnerKey;
             MerchantData = merchantData;
             ShippingInformation = shippingInformation;
-            Validation = orderValidation;
+            Validation = validation;
             Recurring = recurring;
         }
 

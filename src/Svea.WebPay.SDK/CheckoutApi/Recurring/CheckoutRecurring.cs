@@ -1,7 +1,4 @@
-﻿using Svea.WebPay.SDK.CheckoutApi.Response;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Svea.WebPay.SDK.CheckoutApi.Recurring

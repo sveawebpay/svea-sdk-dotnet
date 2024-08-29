@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Svea.WebPay.SDK.CheckoutApi.Response
+namespace Svea.WebPay.SDK.CheckoutApi
 {
     public class OrderData
     {
@@ -279,6 +279,6 @@ namespace Svea.WebPay.SDK.CheckoutApi.Response
         /// Apply it in order to have order validation such as minimum age.
         /// </summary>
         [JsonInclude]
-        public OrderValidation Validation { get; set; }
+        public OrderValidation Validation { get; }
     }
 }

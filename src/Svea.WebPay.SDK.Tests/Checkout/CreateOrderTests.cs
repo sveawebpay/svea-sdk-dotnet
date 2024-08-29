@@ -25,7 +25,22 @@ namespace Svea.WebPay.SDK.Tests.Checkout
             var request = checkoutOrderBuilder.UseTestValues().AddRecurring().Build();
 
             // Act
-            var actualOrder = await sveaClient.Checkout.CreateOrder(request).ConfigureAwait(false);
+            var actualOrder = await sveaClient.Checkout.CreateOrder(request);
+
+            // Assert
+            Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
+        }
+
+        [Fact]
+        public async System.Threading.Tasks.Task CreateOrder_Should_Serialize_AsExpectedForOrderValidationr()
+        {
+            // Arrange
+            var expectedOrder = JsonSerializer.Deserialize<Data>(CheckoutDataSamples.CheckoutCreateRecurringOrderResponse, JsonSerialization.Settings);
+            var sveaClient = SveaClient(CreateHandlerMock(CheckoutDataSamples.CheckoutCreateRecurringOrderResponse));
+            var request = checkoutOrderBuilder.UseTestValues().AddOrderValidation().Build();
+
+            // Act
+            var actualOrder = await sveaClient.Checkout.CreateOrder(request);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));

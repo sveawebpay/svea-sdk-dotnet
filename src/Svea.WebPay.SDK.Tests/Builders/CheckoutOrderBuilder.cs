@@ -15,6 +15,7 @@
         private MerchantSettings merchantSettings;
         private Cart cart;
         private bool? recurring;
+        private OrderValidation validation = null;
 
         public CreateOrderModel Build()
         {
@@ -54,6 +55,11 @@
         public CheckoutOrderBuilder AddRecurring()
         {
             this.recurring = true;
+            return this;
+        }
+        public CheckoutOrderBuilder AddOrderValidation(long minAge = 18)
+        {
+            this.validation = new OrderValidation(minAge);
             return this;
         }
     }

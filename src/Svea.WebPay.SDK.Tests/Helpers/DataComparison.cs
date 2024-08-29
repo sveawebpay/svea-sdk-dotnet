@@ -240,7 +240,10 @@ namespace Svea.WebPay.SDK.Tests.Helpers
             {
                 Assert.Equal(expectedData.Recurring, actualData.Recurring);
             }
-
+            if(expectedData.Validation !=null)
+            {
+                Assert.Equal(expectedData.Validation.MinAge, actualData.Validation.MinAge);
+            }
             return true;
         }
 

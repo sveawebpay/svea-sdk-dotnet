@@ -56,7 +56,7 @@ namespace Svea.WebPay.SDK.Tests.Helpers
             }
 
             Assert.Equal(expectedOrder.Deliveries.Count, actualOrder.Deliveries.Count);
-            foreach(var expected in expectedOrder.Deliveries)
+            foreach (var expected in expectedOrder.Deliveries)
             {
                 var actual = actualOrder.Deliveries.FirstOrDefault(delivery => delivery.Id == expected.Id);
                 DeliveriesAreEqual(actual, expected);
@@ -94,7 +94,7 @@ namespace Svea.WebPay.SDK.Tests.Helpers
             Assert.Equal(expectedDelivery.Status, actualDelivery.Status);
 
             Assert.Equal(expectedDelivery.OrderRows.Count, actualDelivery.OrderRows.Count);
-            foreach(var expected in expectedDelivery.OrderRows)
+            foreach (var expected in expectedDelivery.OrderRows)
             {
                 var actual = actualDelivery.OrderRows.FirstOrDefault(orderRow => orderRow.OrderRowId == expected.OrderRowId);
                 PaymentOrderRowsAreEqual(actual, expected);
@@ -156,7 +156,7 @@ namespace Svea.WebPay.SDK.Tests.Helpers
             Assert.Equal(expectedData.PeppolId, actualData.PeppolId);
             Assert.Equal(expectedData.MerchantData, actualData.MerchantData);
 
-            if(expectedData.MerchantSettings != null || actualData.MerchantSettings != null)
+            if (expectedData.MerchantSettings != null || actualData.MerchantSettings != null)
             {
                 Assert.Equal(expectedData.MerchantSettings.CheckoutUri, actualData.MerchantSettings.CheckoutUri);
                 Assert.Equal(expectedData.MerchantSettings.CheckoutValidationCallBackUri, actualData.MerchantSettings.CheckoutValidationCallBackUri);
@@ -178,7 +178,7 @@ namespace Svea.WebPay.SDK.Tests.Helpers
                 }
             }
 
-            if(expectedData.Customer != null || actualData.Customer != null)
+            if (expectedData.Customer != null || actualData.Customer != null)
             {
                 Assert.Equal(expectedData.Customer.Id, actualData.Customer.Id);
                 Assert.Equal(expectedData.Customer.CountryCode, actualData.Customer.CountryCode);
@@ -186,7 +186,7 @@ namespace Svea.WebPay.SDK.Tests.Helpers
                 Assert.Equal(expectedData.Customer.IsCompany, actualData.Customer.IsCompany);
             }
 
-            if(expectedData.ShippingAddress != null || actualData.ShippingAddress != null)
+            if (expectedData.ShippingAddress != null || actualData.ShippingAddress != null)
             {
                 Assert.Equal(expectedData.ShippingAddress.FirstName, actualData.ShippingAddress.FirstName);
                 Assert.Equal(expectedData.ShippingAddress.LastName, actualData.ShippingAddress.LastName);
@@ -235,6 +235,10 @@ namespace Svea.WebPay.SDK.Tests.Helpers
                     var actual = actualData.PresetValues.FirstOrDefault(presetValue => presetValue.Value == presetValue.Value);
                     PresetValuesAreEqual(actual, expected);
                 }
+            }
+            if (expectedData.Recurring.HasValue)
+            {
+                Assert.Equal(expectedData.Recurring, actualData.Recurring);
             }
 
             return true;

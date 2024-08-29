@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using Svea.WebPay.SDK.CheckoutApi;
 using Xunit;
-using Svea.WebPay.SDK.Extensions;
 using Svea.WebPay.SDK.Tests.Builders;
 using Svea.WebPay.SDK.Tests.Helpers;
 using Svea.WebPay.SDK.Json;
 using System.Linq;
 using OrderRow = Svea.WebPay.SDK.CheckoutApi.OrderRow;
 
-namespace Svea.WebPay.SDK.Tests
+namespace Svea.WebPay.SDK.Tests.Checkout
 {
     using System.Text.Json;
 
@@ -25,7 +24,7 @@ namespace Svea.WebPay.SDK.Tests
             var request = checkoutOrderBuilder.UseTestValues().Build();
 
             // Act
-            var actualOrder = await sveaClient.Checkout.CreateOrder(request).ConfigureAwait(false);
+            var actualOrder = await sveaClient.Checkout.CreateOrder(request);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
@@ -40,7 +39,7 @@ namespace Svea.WebPay.SDK.Tests
             var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutGetOrderResponse));
 
             // Act
-            var actualOrder = await sveaClient.Checkout.GetOrder(createdOrder.OrderId).ConfigureAwait(false);
+            var actualOrder = await sveaClient.Checkout.GetOrder(createdOrder.OrderId);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
@@ -56,7 +55,7 @@ namespace Svea.WebPay.SDK.Tests
 
             // Act
             var update = CreateUpdateOrderRequest("");
-            var actualOrder = await sveaClient.Checkout.UpdateOrder(createdOrder.OrderId, update).ConfigureAwait(false);
+            var actualOrder = await sveaClient.Checkout.UpdateOrder(createdOrder.OrderId, update);
 
             // Assert
             Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
@@ -119,7 +118,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Null(order.MerchantData);
             Assert.Null(order.PeppolId);
         }
-        
+
         [Fact]
         public void Completed_ZeroSum_Order_Should_Serialize_AsExpected()
         {
@@ -162,11 +161,11 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal(626, order.Customer.Id);
             Assert.Equal("194605092222", order.Customer.NationalId);
             Assert.Equal("SE", order.Customer.CountryCode);
-            
+
             Assert.Equal("Persson, Tess T", order.ShippingAddress.FullName);
             Assert.Equal("Tess", order.ShippingAddress.FirstName);
             Assert.Equal("c/o Eriksson, Erik", order.ShippingAddress.CoAddress);
-            
+
             Assert.Equal("Persson, Tess T", order.BillingAddress.FullName);
             Assert.Equal("Tess", order.BillingAddress.FirstName);
             Assert.Equal("c/o Eriksson, Erik", order.BillingAddress.CoAddress);
@@ -177,7 +176,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Equal("SE", order.CountryCode);
             Assert.Equal("638297691863676770", order.ClientOrderNumber);
             Assert.Equal(8932787, order.OrderId);
-            Assert.Equal("test@test.com",order.EmailAddress);
+            Assert.Equal("test@test.com", order.EmailAddress);
             Assert.Equal("34345435435", order.PhoneNumber);
             Assert.Equal(PaymentType.ZEROSUM, order.PaymentType);
             Assert.Equal(PaymentMethodType.ZeroSum, order.Payment.PaymentMethodType);
@@ -189,7 +188,7 @@ namespace Svea.WebPay.SDK.Tests
             Assert.Null(order.PeppolId);
         }
 
-        
+
         private static UpdateOrderModel CreateUpdateOrderRequest(string merchantData)
         {
             var orderRows = new List<OrderRow>

@@ -37,6 +37,11 @@ namespace Svea.WebPay.SDK.CheckoutApi.Recurring
             var data = await _sveaHttpClient.HttpPost<ChangePaymentMethodResponse>(url, changePaymentMethodModel, configureAwait);
             return data;
         }
+        public async Task PatchRecurringToken(PatchRecurringTokenModel patchRecurringTokenModel, string recurringToken, bool configureAwait = false)
+        {
+            var url = new Uri($"/api/tokens/{recurringToken}", UriKind.Relative);
+            await _sveaHttpClient.HttpPatch<dynamic>(url, patchRecurringTokenModel, configureAwait);
+        }
 
     }
 }

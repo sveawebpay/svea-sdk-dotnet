@@ -90,5 +90,22 @@ namespace Svea.WebPay.SDK.Tests.Checkout.Recurring
             Assert.Equal("<iframe src=\"\"></iframe>", result.Snippet);
             Assert.Equal(DateTime.Parse("2023-12-01T19:01:55.714942"), result.Expiration);
         }
+
+        [Fact]
+        public async Task PatchRecurringToken_ShouldCancelTheRecurringToken()
+        {
+            // Arrange
+            var mockResponse = "{}";
+            var mockHandler = CreateHandlerMock(mockResponse);
+
+            var recurringToken = "some-recurring-token";
+            var patchRecurringTokenModel = new PatchRecurringTokenModel() { Status = TokenStatus.Cancelled }; // Assuming a valid model instance
+            var sveaClient = SveaClient(mockHandler);
+
+            // Act
+            await sveaClient.Checkout.Recurring.PatchRecurringToken(patchRecurringTokenModel, recurringToken);
+
+            // Assert
+        }
     }
 }

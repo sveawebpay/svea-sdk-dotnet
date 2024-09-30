@@ -12,10 +12,10 @@ namespace Svea.WebPay.SDK.CheckoutApi.Recurring
             _sveaHttpClient = sveaHttpClient;
         }
 
-        public async Task<OrderData> CreateRecurringOrderAsync(CreateRecurringOrderModel createRecurringOrder, string recurringToken, bool configureAwait = false)
+        public async Task<RecurringOrder> CreateRecurringOrderAsync(CreateRecurringOrderModel createRecurringOrder, string recurringToken, bool configureAwait = false)
         {
             var url = new Uri($"/api/tokens/{recurringToken}/orders", UriKind.Relative);
-            var data = await _sveaHttpClient.HttpPost<OrderData>(url, createRecurringOrder, configureAwait);
+            var data = await _sveaHttpClient.HttpPost<RecurringOrder>(url, createRecurringOrder, configureAwait);
             return data;
         }
 

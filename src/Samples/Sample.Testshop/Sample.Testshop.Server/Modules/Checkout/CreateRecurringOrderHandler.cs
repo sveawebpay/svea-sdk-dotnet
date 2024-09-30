@@ -9,7 +9,7 @@ namespace Sample.Testshop.Server.Modules.Checkout
 {
     public static class CreateRecurringOrderHandler
     {
-        public static async Task<OrderData> Handle(CreateRecurringOrderRequest createRecurringOrderModel, string token, SveaWebPayClient sveaClient)
+        public static async Task<RecurringOrder> Handle(CreateRecurringOrderRequest createRecurringOrderModel, string token, SveaWebPayClient sveaClient)
         {
             if (string.IsNullOrWhiteSpace(createRecurringOrderModel?.ClientOrderNumber))
             {

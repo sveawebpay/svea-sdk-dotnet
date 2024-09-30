@@ -1,4 +1,4 @@
-import { OrderRowRequest } from "./shared";
+import { OrderRow } from "./shared";
 
 interface CreateOrderModel {
   countryCode: string;
@@ -26,7 +26,7 @@ export interface PartPayment {
 }
 
 export interface RequestCart {
-  items: OrderRowRequest[];
+  items: OrderRow[];
 }
 
 export interface MerchantSettings {

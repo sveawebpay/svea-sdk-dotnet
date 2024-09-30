@@ -22,7 +22,7 @@ namespace Sample.Testshop.Server.Modules.Checkout
                 createOrderModel.ClientOrderNumber, createOrderModel.MerchantSettings?.ToSDKModel(), createOrderModel.Cart.ToSDKModel(),
                 createOrderModel.RequireElectronicIdAuthentication,
                 createOrderModel.PresetValues?.Select(x => new Presetvalue(x.TypeName, x.Value, x.IsReadonly)).ToList(), null, null, createOrderModel.MerchantData, null));
-
+ 
             return response;
 
         }
@@ -101,11 +101,11 @@ namespace Sample.Testshop.Server.Modules.Checkout
         {
             public string? ArticleNumber { get; set; }
             public string Name { get; set; } = string.Empty;
-            public MinorUnit Quantity { get; set; }
-            public MinorUnit UnitPrice { get; set; }
-            public MinorUnit DiscountPercent { get; set; }
-            public MinorUnit DiscountAmount { get; set; }
-            public MinorUnit VatPercent { get; set; }
+            public long Quantity { get; set; }
+            public long UnitPrice { get; set; }
+            public long DiscountPercent { get; set; }
+            public long DiscountAmount { get; set; }
+            public long VatPercent { get; set; }
             public string Unit { get; set; } = string.Empty;
             public string? TemporaryReference { get; set; }
             public int RowNumber { get; set; }

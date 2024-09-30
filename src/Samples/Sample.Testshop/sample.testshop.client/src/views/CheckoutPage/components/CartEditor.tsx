@@ -12,11 +12,11 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
-import { OrderRowResponse } from "../../../shared/models/checkout/shared";
+import { OrderRow } from "../../../shared/models/checkout/shared";
 import { AddOutlined, Delete } from "@mui/icons-material";
 
 interface CartEditorProps {
-  initialItems: OrderRowResponse[];
+  initialItems: OrderRow[];
 }
 
 const CartEditor: React.FC<CartEditorProps> = ({ initialItems }) => {
@@ -39,7 +39,7 @@ const CartEditor: React.FC<CartEditorProps> = ({ initialItems }) => {
     }
   }, [initialItems, setValue]);
 
-  const onSubmit = (data: { items: OrderRowResponse[] }) => {
+  const onSubmit = (data: { items: OrderRow[] }) => {
     console.log(data);
   };
 
@@ -47,10 +47,10 @@ const CartEditor: React.FC<CartEditorProps> = ({ initialItems }) => {
     append({
       articleNumber: "",
       name: "",
-      quantity: { inLowestMonetaryUnit: 100 },
-      unitPrice: { inLowestMonetaryUnit: 0 },
+      quantity: 100,
+      unitPrice: 0,
       unit: "",
-      vatPercent: { inLowestMonetaryUnit: 0 },
+      vatPercent: 0,
       rowNumber: fields.length + 1,
     });
   };
@@ -98,24 +98,18 @@ const CartEditor: React.FC<CartEditorProps> = ({ initialItems }) => {
                 <TableCell>
                   <TextField
                     size="small"
-                    {...register(
-                      `items.${index}.quantity.inLowestMonetaryUnit`,
-                      {
-                        valueAsNumber: true,
-                      }
-                    )}
+                    {...register(`items.${index}.quantity`, {
+                      valueAsNumber: true,
+                    })}
                     variant="outlined"
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
                     size="small"
-                    {...register(
-                      `items.${index}.unitPrice.inLowestMonetaryUnit`,
-                      {
-                        valueAsNumber: true,
-                      }
-                    )}
+                    {...register(`items.${index}.unitPrice`, {
+                      valueAsNumber: true,
+                    })}
                     variant="outlined"
                   />
                 </TableCell>
@@ -129,36 +123,27 @@ const CartEditor: React.FC<CartEditorProps> = ({ initialItems }) => {
                 <TableCell>
                   <TextField
                     size="small"
-                    {...register(
-                      `items.${index}.discountAmount.inLowestMonetaryUnit`,
-                      {
-                        valueAsNumber: true,
-                      }
-                    )}
+                    {...register(`items.${index}.discountAmount`, {
+                      valueAsNumber: true,
+                    })}
                     variant="outlined"
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
                     size="small"
-                    {...register(
-                      `items.${index}.discountPercent.inLowestMonetaryUnit`,
-                      {
-                        valueAsNumber: true,
-                      }
-                    )}
+                    {...register(`items.${index}.discountPercent`, {
+                      valueAsNumber: true,
+                    })}
                     variant="outlined"
                   />
                 </TableCell>
                 <TableCell>
                   <TextField
                     size="small"
-                    {...register(
-                      `items.${index}.discountValue.inLowestMonetaryUnit`,
-                      {
-                        valueAsNumber: true,
-                      }
-                    )}
+                    {...register(`items.${index}.discountValue`, {
+                      valueAsNumber: true,
+                    })}
                     variant="outlined"
                   />
                 </TableCell>
@@ -186,12 +171,9 @@ const CartEditor: React.FC<CartEditorProps> = ({ initialItems }) => {
                 <TableCell>
                   <TextField
                     size="small"
-                    {...register(
-                      `items.${index}.vatPercent.inLowestMonetaryUnit`,
-                      {
-                        valueAsNumber: true,
-                      }
-                    )}
+                    {...register(`items.${index}.vatPercent`, {
+                      valueAsNumber: true,
+                    })}
                     variant="outlined"
                   />
                 </TableCell>

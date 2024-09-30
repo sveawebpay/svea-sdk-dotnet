@@ -97,9 +97,7 @@ const CheckoutPage: React.FC = () => {
             </Button>
           </Box>
           <Box>
-            <Typography variant="h6">
-              OR
-            </Typography>
+            <Typography variant="h6">OR</Typography>
             <Button
               variant="contained"
               color="secondary"
@@ -109,6 +107,30 @@ const CheckoutPage: React.FC = () => {
               sx={{ m: 1 }}
             >
               Create Order
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                navigate("/checkout/recurring/create");
+              }}
+              sx={{ m: 1 }}
+            >
+              Create a subsequent recurring order
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                navigate("/checkout/recurring/management");
+              }}
+              sx={{ m: 1 }}
+            >
+              Manage a token
             </Button>
           </Box>
         </Box>

@@ -11,6 +11,7 @@
             return new ConfigurationBuilder()
                 .SetBasePath(outputPath)
                 .AddJsonFile("appsettings.json", optional: true)
+                .AddJsonFile("appsettings.Development.json", optional: true)
                 .AddUserSecrets("114d902c-dbe0-4606-883a-cca99f92fd56")
                 .AddEnvironmentVariables()
                 .Build();

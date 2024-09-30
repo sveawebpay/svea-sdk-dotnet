@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CheckoutService } from "../../../services/checkout.service";
 import { Cookies } from "react-cookie";
-import { OrderResponse } from "../../../shared/models/checkout/OrderResponse";
 import { Box, Card, CardContent, Container, Grid } from "@mui/material";
 import OrderDetails from "./components/OrderDetails";
 import CartEditor from "../components/CartEditor";
+import { Data } from "../../../shared/models/checkout/shared";
 
 const DisplayOrderPage: React.FC = () => {
-  const [orderData, setOrderData] = useState<OrderResponse | null>(null);
+  const [orderData, setOrderData] = useState<Data | null>(null);
   const { id: orderId } = useParams();
   const divRef = useRef<HTMLDivElement>(null);
   const [checkoutSnippet, setCheckoutOrderSnippet] = useState<string>("");
@@ -24,7 +24,7 @@ const DisplayOrderPage: React.FC = () => {
         Number.parseInt(orderId!),
         merchantId
       );
-      setOrderData(response.data);
+      setOrderData(response);
     };
     void fetchOrder();
   }, [orderId]);

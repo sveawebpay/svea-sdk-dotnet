@@ -17,7 +17,7 @@ export interface OrderRowResponse extends OrderRowBase {
   discountValue?: MinorUnit;
   vatPercent: MinorUnit;
 }
-export interface OrderRowRequest extends OrderRowBase {
+export interface OrderRow extends OrderRowBase {
   quantity: number;
   unitPrice: number;
   discountAmount?: number;
@@ -45,4 +45,59 @@ export interface AdmittanceDetails {
   individualAdminInvoiceClientId: string;
   individualPartPaymentClientId: string;
   paymentGatewayMerchantId: string;
+}
+
+export interface Gui {
+  snippet: string;
+}
+
+export interface Customer {
+  Id: number;
+  NationalId: string;
+  Country: string;
+  IsCompany: boolean;
+  VatNumber: string;
+  IsVerified: boolean;
+}
+
+export interface Address {
+  FullName: string;
+  FirstName: string;
+  LastName: string;
+  StreetAddress: string;
+  StreetAddress2: string;
+  StreetAddress3: string;
+  CoAddress: string;
+  PostalCode: string;
+  CountryCode: string;
+}
+/// Checkout order data without minor currency
+export interface Data extends OrderData {
+  gui: Gui;
+}
+
+export interface OrderData {
+  orderId: number;
+  clientOrderNumber: string;
+  status: string;
+  cart: { items: OrderRow[] };
+  currency: string;
+  locale: string;
+  customer: Customer;
+  countryCode: string;
+  emailAddress: string;
+  phoneNumber: string;
+}
+
+export interface RecurringToken {
+  token: string;
+  status: string;
+  currency: string;
+  paymentMethod: string;
+  paymentMethodDetails: RecurringPaymentMethodDetails;
+}
+
+export interface RecurringPaymentMethodDetails {
+  expiryMonth: number;
+  expiryYear: number;
 }

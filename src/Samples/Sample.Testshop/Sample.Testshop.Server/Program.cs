@@ -37,6 +37,15 @@ app.MapGet("/api/orders/{orderId}", GetOrderHandler.Handle)
 .WithName("Get Checkout Order")
 .WithOpenApi();
 
+// Recurring Orders
+app.MapPost("/api/recurring/{token}/orders", CreateRecurringOrderHandler.Handle).WithName("Create Recurring Order")
+.WithOpenApi(); ;
+app.MapGet("/api/recurring/{token}/orders/{orderId}", GetRecurringOrder.Handle).WithName("Get Recurring Order")
+.WithOpenApi(); ;
+
+app.MapGet("/api/recurring/{token}", GetRecurringToken.Handle).WithName("Get Recurring Token")
+.WithOpenApi(); ;
+
 app.MapGet("/api/utils/merchants", GetMerchantsHandler.Handle).WithName("Get Available Merchants").WithOpenApi();
 
 app.MapFallbackToFile("/index.html");

@@ -14,10 +14,12 @@
         private string clientOrderNumber;
         private MerchantSettings merchantSettings;
         private Cart cart;
+        private bool? recurring;
+        private OrderValidation validation = null;
 
         public CreateOrderModel Build()
         {
-            return new CreateOrderModel(this.countryCode, this.currency, this.locale, this.clientOrderNumber, this.merchantSettings, this.cart, false);
+            return new CreateOrderModel(this.countryCode, this.currency, this.locale, this.clientOrderNumber, this.merchantSettings, this.cart, false, null, null, null, null, null, recurring);
         }
 
         public CheckoutOrderBuilder UseTestValues()
@@ -26,7 +28,7 @@
             var termsUri = new Uri("http://localhost:51898/terms");
             var checkoutUri = new Uri("http://localhost:8080/php-checkout/examples/create-order.php");
             var confirmationUri = new Uri("http://localhost/php-checkout/examples/get-order.php");
-            
+
             var orderRows = new List<OrderRow>
             {
                 new OrderRow(
@@ -48,6 +50,16 @@
             this.locale = new Language("sv-SE");
             this.clientOrderNumber = DateTime.Now.Ticks.ToString();
 
+            return this;
+        }
+        public CheckoutOrderBuilder AddRecurring()
+        {
+            this.recurring = true;
+            return this;
+        }
+        public CheckoutOrderBuilder AddOrderValidation(long minAge = 18)
+        {
+            this.validation = new OrderValidation(minAge);
             return this;
         }
     }

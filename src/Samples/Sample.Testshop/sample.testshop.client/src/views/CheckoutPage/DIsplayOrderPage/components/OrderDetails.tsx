@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { OrderResponse } from "../../../../shared/models/checkout/OrderResponse";
 import { Cookies } from "react-cookie";
 import { Divider, Typography } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
+import { Data } from "../../../../shared/models/checkout/shared";
 
 interface OrderDetailsProps {
-  orderDetails: OrderResponse;
+  orderDetails: Data;
 }
 const OrderDetails: React.FC<OrderDetailsProps> = (props) => {
   const [error, setError] = useState<string | null>(null);

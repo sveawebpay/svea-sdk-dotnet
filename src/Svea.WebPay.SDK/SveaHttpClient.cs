@@ -18,7 +18,9 @@ using Task = System.Threading.Tasks.Task;
 
 namespace Svea.WebPay.SDK
 {
+    using Svea.WebPay.SDK.Helpers;
     using Svea.WebPay.SDK.PaymentAdminApi;
+    using System.Reflection;
 
     public class SveaHttpClient : ISveaHttpClient
     {
@@ -31,6 +33,9 @@ namespace Svea.WebPay.SDK
             this._client = client;
             this._credentials = credentials;
             this._logger = logger;
+
+            _client.DefaultRequestHeaders.Add(VersionHelper.SVEA_SDK_HEADER_NAME, $"NET:{VersionHelper.Version}");
+
         }
 
         /// <summary>
@@ -108,7 +113,7 @@ namespace Svea.WebPay.SDK
             where TResourceResponse : new()
         {
             var httpRequestMessage = CreateHttpRequestMessage(HttpMethod.Post, url, payload);
-            
+
             var resourceResponse = await ExecuteResourceRequest<TResponse, TResourceResponse>(httpRequestMessage, pollingTimeout, configureAwait).ConfigureAwait(configureAwait);
 
             if (resourceResponse?.ResourceUri != null)
@@ -126,7 +131,7 @@ namespace Svea.WebPay.SDK
             if (timeout == null)
             {
                 timeout = new PollingTimeout();
-                polling = false; 
+                polling = false;
             }
 
             using (var cancellationToken = new CancellationTokenSource(timeout.Timeout))
@@ -155,7 +160,7 @@ namespace Svea.WebPay.SDK
                             }
 
                             taskResponse = await HttpGet<PaymentAdminApi.Models.Task>(response.ResourceUri, configureAwait).ConfigureAwait(configureAwait);
-                        } 
+                        }
                         while (taskResponse.Status == "InProgress" && taskResponse.ResourceUri == null && polling);
 
                         response.ResourceUri = taskResponse.ResourceUri;

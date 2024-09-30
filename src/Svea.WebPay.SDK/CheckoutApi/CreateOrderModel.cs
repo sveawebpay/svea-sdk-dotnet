@@ -41,7 +41,8 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// <param name="shippingInformation">Shipping information needed for the shipping checkout. Only applicable if merchant has shipping enabled.</param>
         public CreateOrderModel(RegionInfo countryCode, CurrencyCode currency, Language locale, string clientOrderNumber,
             MerchantSettings merchantSettings, Cart cart, bool requireElectronicIdAuthentication, IList<Presetvalue> presetValues = null,
-            IdentityFlags identityFlags = null, Guid? partnerKey = null, string merchantData = null, ShippingInformation shippingInformation = null)
+            IdentityFlags identityFlags = null, Guid? partnerKey = null, string merchantData = null, ShippingInformation shippingInformation = null,
+            bool? recurring=null, OrderValidation validation=null )
         {
             CountryCode = countryCode;
             Currency = currency;
@@ -55,6 +56,8 @@ namespace Svea.WebPay.SDK.CheckoutApi
             PartnerKey = partnerKey;
             MerchantData = merchantData;
             ShippingInformation = shippingInformation;
+            Validation = validation;
+            Recurring = recurring;
         }
 
         /// <summary>
@@ -132,5 +135,18 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// Shipping information needed for the shipping checkout. Only applicable if merchant has shipping enabled.	
         /// </summary>
         public ShippingInformation ShippingInformation { get; }
+
+        /// <summary>
+        /// Order validations such as minimum age requirement should be fulfilled here.
+        /// (It's nullable it means you do not need to provide anything in case the age limit is not required)
+        /// Apply it in order to have order validation such as minimum age
+        /// </summary>
+        public OrderValidation Validation { get; set; }
+        
+        /// <summary>
+        /// Indicates if the order is recurring order and will create a recurring token when order is finalized. Only applicable if merchant has recurring orders enabled.
+        /// </summary>
+        /// <remarks>In order to create recurring order this field should be set to true</remarks>
+        public bool? Recurring { get; set; }
     }
 }

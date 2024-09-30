@@ -5,6 +5,8 @@ import Home from "./views/Home";
 import CreateOrderPage from "./views/CheckoutPage/CreateOrderPage";
 import CheckoutPage from "./views/CheckoutPage";
 import DisplayOrderPage from "./views/CheckoutPage/DIsplayOrderPage";
+import CreateRecurringOrderPage from "./views/CheckoutPage/CreateRecurringOrderPage";
+import TokenManagementPage from "./views/CheckoutPage/TokenManagmentPage";
 
 const routes = [
   {
@@ -22,6 +24,14 @@ const routes = [
   {
     path: "checkout/display-order/:id",
     component: DisplayOrderPage,
+  },
+  {
+    path: "checkout/recurring/create",
+    component: CreateRecurringOrderPage,
+  },
+  {
+    path: "/checkout/recurring/management",
+    component: TokenManagementPage,
   },
 ];
 

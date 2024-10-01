@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { TextField, Button, Grid, Box, Typography, Card } from "@mui/material";
-import axios from "axios";
 import {
   OrderData,
   RecurringToken,
@@ -47,11 +46,12 @@ const TokenManagementPage: React.FC = () => {
   const handleChangePaymentMethod = async () => {
     try {
       const response = await CheckoutService.recurring.changePaymentMethods(
-        { termsUrl: "" },
+        { termsUrl: "https://svea.com" },
         recurringToken,
         merchantId
       );
       setPaymentMethodChangeResponse(response.data);
+      console.log(response.data)
     } catch (error) {
       console.error("Error changing payment method:", error);
     }
@@ -173,7 +173,9 @@ const TokenManagementPage: React.FC = () => {
                   Payment Method Change Response
                 </Typography>
                 <Typography variant="body1">
-                  Response: {paymentMethodChangeResponse}
+                  Expiration:{" "}
+                  {paymentMethodChangeResponse.expiration}
+                  Snippet: {paymentMethodChangeResponse.snippet}
                 </Typography>
                 {/* Add more response fields as necessary */}
               </Box>

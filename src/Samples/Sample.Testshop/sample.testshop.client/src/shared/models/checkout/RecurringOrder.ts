@@ -17,5 +17,5 @@ export interface ChangePaymentMethodRequest {
 }
 export interface ChangePaymentMethodResponse {
   snippet: string;
-  expiration: Date;
+  expiration: string;
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Builder;
 using Sample.Testshop.Server.Extensions;
 using Sample.Testshop.Server.Modules.Checkout;
 
@@ -45,6 +46,8 @@ app.MapGet("/api/recurring/{token}/orders/{orderId}", GetRecurringOrder.Handle).
 
 app.MapGet("/api/recurring/{token}", GetRecurringToken.Handle).WithName("Get Recurring Token")
 .WithOpenApi(); ;
+
+app.MapPost("/api/recurring/{token}/payment-method", ChangePaymentMethodHandler.Handle).WithName("Change Payment Method").WithOpenApi();
 
 app.MapGet("/api/utils/merchants", GetMerchantsHandler.Handle).WithName("Get Available Merchants").WithOpenApi();
 

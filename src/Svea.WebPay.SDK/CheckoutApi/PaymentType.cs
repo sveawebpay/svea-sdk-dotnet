@@ -107,6 +107,8 @@
 
         LEASING,
 
+        LEASINGMANUAL,
+
         MOBILEPAY,
         
         ZEROSUM

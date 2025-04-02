@@ -38,6 +38,22 @@ namespace Svea.WebPay.SDK.Tests
         }
 
         [Fact]
+        public async System.Threading.Tasks.Task GetOrderWithIdNoExpirationDate_Should_Serialize_AsExpected()
+        {
+            // Arrange
+            var orderResponseObject = JsonSerializer.Deserialize<OrderResponseObject>(DataSample.AdminGetOrderWithNoExpirationDate, JsonSerialization.Settings);
+            var expectedOrder = new Order(orderResponseObject, null);
+            var sveaClient = SveaClient(CreateHandlerMock(DataSample.AdminGetOrderWithNoExpirationDate));
+
+            // Act
+            var actualOrder = await sveaClient.PaymentAdmin.GetOrder(9788143);
+
+            // Assert
+            Assert.True(DataComparison.OrdersAreEqual(expectedOrder, actualOrder));
+            Assert.Equal(expectedOrder.ExpirationDate, null);
+        }
+
+        [Fact]
         public async System.Threading.Tasks.Task GetOrderWithUri_Should_Serialize_AsExpected()
         {
             // Arrange

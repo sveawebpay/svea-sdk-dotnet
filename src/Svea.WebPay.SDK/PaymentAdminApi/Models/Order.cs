@@ -58,7 +58,7 @@
         public string PhoneNumber { get; }
         public Address ShippingAddress { get; }
         public bool? SveaWillBuy { get; }
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public string BillingEmailAddress { get; set; }
     }
 }

@@ -784,14 +784,7 @@
 			        ""MerchantData"":null
 			    }]
             },
-            ""Customer"":{
-                ""Id"":626,
-                ""NationalId"":""194605092222"",
-                ""CountryCode"":""SE"",
-                ""IsCompany"":false,
-                ""VatNumber"":""5620202027"",
-                ""IsVerified"" : false
-            },
+            ""Customer"":null,
             ""ShippingAddress"":null,
             ""BillingAddress"":null,
             ""Gui"":

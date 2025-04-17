@@ -2,13 +2,7 @@
 {
     public class Customer
     {
-        public Customer(int id, string nationalId, string countryCode, bool isCompany)
-        {
-            Id = id;
-            NationalId = nationalId;
-            CountryCode = countryCode;
-            IsCompany = isCompany;
-        }
+
 
         public Customer(int id, string nationalId, string countryCode, bool isCompany, string vatNumber, bool isVerified)
         {

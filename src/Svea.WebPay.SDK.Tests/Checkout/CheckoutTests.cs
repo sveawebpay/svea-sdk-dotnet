@@ -46,6 +46,21 @@ namespace Svea.WebPay.SDK.Tests.Checkout
         }
 
         [Fact]
+        public async System.Threading.Tasks.Task GetOrderWithCustomerData_Should_Serialize_AsExpected()
+        {
+            // Arrange
+            var createdOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutCreateOrderResponse, JsonSerialization.Settings);
+            var expectedOrder = JsonSerializer.Deserialize<Data>(DataSample.CheckoutGetOrderResponseWithCustomer, JsonSerialization.Settings);
+            var sveaClient = SveaClient(CreateHandlerMock(DataSample.CheckoutGetOrderResponseWithCustomer));
+
+            // Act
+            var actualOrder = await sveaClient.Checkout.GetOrder(createdOrder.OrderId);
+
+            // Assert
+            Assert.True(DataComparison.DataAreEqual(expectedOrder, actualOrder));
+        }
+
+        [Fact]
         public async System.Threading.Tasks.Task UpdateOrder_Should_Serialize_AsExpected()
         {
             // Arrange

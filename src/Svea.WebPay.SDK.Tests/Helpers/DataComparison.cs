@@ -184,6 +184,8 @@ namespace Svea.WebPay.SDK.Tests.Helpers
                 Assert.Equal(expectedData.Customer.CountryCode, actualData.Customer.CountryCode);
                 Assert.Equal(expectedData.Customer.NationalId, actualData.Customer.NationalId);
                 Assert.Equal(expectedData.Customer.IsCompany, actualData.Customer.IsCompany);
+                Assert.Equal(expectedData.Customer.VatNumber, actualData.Customer.VatNumber);
+                Assert.Equal(expectedData.Customer.IsVerified, actualData.Customer.IsVerified);
             }
 
             if (expectedData.ShippingAddress != null || actualData.ShippingAddress != null)

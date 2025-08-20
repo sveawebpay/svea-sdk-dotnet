@@ -489,7 +489,7 @@ namespace Sample.AspNetCore.Controllers
                         new CreditNewOrderRowRequest(
                             new CreditOrderRow(
                                 name: "Slim Fit 512",
-                                100, 12, 1)
+                                100, 12, quantity:1)
                         ), new PollingTimeout(15)).ConfigureAwait(false);
 
                     TempData["CreditMessage"] = $"New credit row created. -> {response.ResourceUri.AbsoluteUri}";

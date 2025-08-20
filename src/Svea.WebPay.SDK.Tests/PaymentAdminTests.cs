@@ -257,16 +257,109 @@ namespace Svea.WebPay.SDK.Tests
             var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId)
                 .ToList();
             var resourceResponse = await delivery.Actions.CreditNewRow(new CreditNewOrderRowRequest(
+                newCreditOrderRows: new List<CreditOrderRow>
+                {
+                    new CreditOrderRow(
+                        name: "Slim Fit 512",
+                        unitPrice: new MinorUnit(100),
+                        vatPercent: new MinorUnit(12),
+                        articleNumber: "ArticleNumber123",
+                        unit: "pcs",
+                        discountPercent: new MinorUnit(25),
+                        quantity: new MinorUnit(1)
+                    ),
+                    new CreditOrderRow(
+                        name: "Classic Fit 501",
+                        unitPrice: new MinorUnit(200),
+                        vatPercent: new MinorUnit(25),
+                        articleNumber: "ArticleNumber456",
+                        unit: "pcs",
+                        discountPercent: new MinorUnit(10),
+                        quantity: new MinorUnit(2)
+                    )
+                }
+            ), new PollingTimeout(15));
+
+            // Assert
+            Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
+            Assert.True(DataComparison.CreditResponsesAreEqual(expectedCreditResponse, resourceResponse.Resource));
+        }
+
+        [Fact]
+        public async System.Threading.Tasks.Task CreditNewRowList_Should_Serialize_AsExpected()
+        {
+            // Arrange
+            var creditResponseObject = JsonSerializer.Deserialize<CreditResponseObject>(DataSample.CreditResponse, JsonSerialization.Settings);
+            var expectedTask = JsonSerializer.Deserialize<Task>(DataSample.TaskResponse, JsonSerialization.Settings);
+            var expectedCreditResponse = new CreditResponse(creditResponseObject);
+            var sveaClient = SveaClient(CreateHandlerMockWithAction(DataSample.AdminDeliveredOrder, "", expectedTask.ResourceUri.OriginalString,
+                DataSample.TaskResponse, DataSample.CreditResponse));
+
+            // Act
+            var order = await sveaClient.PaymentAdmin.GetOrder(2291662);
+            var delivery = order.Deliveries.FirstOrDefault(dlv => dlv.Id == 5588817);
+            var orderRowIds = delivery.OrderRows.Where(row => row.AvailableActions.Contains(OrderRowActionType.CanCreditRow)).Select(row => (long)row.OrderRowId)
+                .ToList();
+            var resourceResponse = await delivery.Actions.CreditNewRow(new CreditNewOrderRowRequest(
                 new CreditOrderRow(
                     name: "Slim Fit 512",
                     new MinorUnit(100),
-                    new MinorUnit(12), 1
+                    new MinorUnit(12),
+                    articleNumber: "ArticleNumber123",
+                    unit: "pcs",
+                    new MinorUnit(25),
+                    quantity: 1
                 )
             ), new PollingTimeout(15));
 
             // Assert
             Assert.Equal(expectedTask.ResourceUri.OriginalString, resourceResponse.TaskUri.OriginalString);
             Assert.True(DataComparison.CreditResponsesAreEqual(expectedCreditResponse, resourceResponse.Resource));
+        }
+
+        [Fact]
+        public void CreditNewRow_ShouldBeOnlyOneRowOrList()
+        {
+            // Arrange
+            Assert.Throws<ArgumentException>(() => (new CreditNewOrderRowRequest(
+               newCreditOrderRow: new CreditOrderRow(
+                    name: "Slim Fit 512",
+                    new MinorUnit(100),
+                    new MinorUnit(12),
+                    articleNumber: "ArticleNumber123",
+                    unit: "pcs",
+                    new MinorUnit(25),
+                    quantity: 1
+                ),
+                newCreditOrderRows: new List<CreditOrderRow>
+                {
+                    new CreditOrderRow(
+                        name: "Slim Fit 512",
+                        unitPrice: new MinorUnit(100),
+                        vatPercent: new MinorUnit(12),
+                        articleNumber: "ArticleNumber123",
+                        unit: "pcs",
+                        discountPercent: new MinorUnit(25),
+                        quantity: 1
+                    ),
+                    new CreditOrderRow(
+                        name: "Classic Fit 501",
+                        unitPrice: new MinorUnit(200),
+                        vatPercent: new MinorUnit(25),
+                        articleNumber: "ArticleNumber456",
+                        unit: "pcs",
+                        discountPercent: new MinorUnit(10),
+                        quantity: 2
+                    )
+                }
+
+            )));
+        }
+
+        [Fact]
+        public void CreditNewRows_ShouldBeRowOrList()
+        {
+            Assert.Throws<ArgumentException>(() => (new CreditNewOrderRowRequest(null, null)));
         }
 
         [Fact]

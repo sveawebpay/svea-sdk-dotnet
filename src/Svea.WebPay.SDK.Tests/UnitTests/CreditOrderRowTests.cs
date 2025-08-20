@@ -59,5 +59,54 @@ namespace Svea.WebPay.SDK.Tests.UnitTests
                 new MinorUnit(unitPrice),
                 new MinorUnit(vatPercent)));
         }
+
+
+        [Theory]
+        [InlineData("Name",1000,0,120)]
+        [InlineData("Name", 1000, 0, -5)]
+        public void ThrowsArgumentException_IfDiscountPercentIsNotValidRange(string name,long unitPrice,int vatPercent,int discountPercent)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new CreditOrderRow(name,
+                new MinorUnit(unitPrice),
+                new MinorUnit(vatPercent),
+                discountPercent: new MinorUnit(discountPercent)));
+        }
+
+        [Theory]
+        [InlineData("Name", 1000, 0)]
+        public void ThrowsArgumentOutOfRangeException_IfArticleNumberIsTooLong(string name, long unitPrice, int vatPercent)
+        {
+            var artNo = new string('a', 257);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new CreditOrderRow(name,
+                new MinorUnit(unitPrice),
+                new MinorUnit(vatPercent),
+                articleNumber: artNo));
+        }
+
+
+        [Theory]
+        [InlineData("Name", 1000, 0, 2000, 100)]
+        public void ThrowsInvalidOperationException_IfDiscountPercentAndDiscountAmountsAreBothPopulated(string name, long unitPrice, int vatPercent, int discountPercent,int discountAmount)
+        {
+            Assert.Throws<InvalidOperationException>(() => new CreditOrderRow(name,
+                new MinorUnit(unitPrice),
+                new MinorUnit(vatPercent),
+                discountPercent: new MinorUnit(discountPercent),
+                discountAmount : new MinorUnit(discountAmount)
+                ));
+        }
+
+
+        [Theory]
+        [InlineData("Name", 100, 0, 10 ,200000)]
+        public void ThrowsArgumentOutOfRangeException_IfDiscountAmountExceedRowAmount(string name, long unitPrice, int vatPercent, int quantity ,int discountAmount)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new CreditOrderRow(name,
+                new MinorUnit(unitPrice),
+                new MinorUnit(vatPercent),
+                quantity : new MinorUnit(quantity),
+                discountAmount: new MinorUnit(discountAmount)
+                ));
+        }
     }
 }

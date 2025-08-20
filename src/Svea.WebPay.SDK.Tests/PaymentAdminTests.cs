@@ -305,10 +305,10 @@ namespace Svea.WebPay.SDK.Tests
                     name: "Slim Fit 512",
                     new MinorUnit(100),
                     new MinorUnit(12),
+                    quantity: 1,
                     articleNumber: "ArticleNumber123",
                     unit: "pcs",
-                    new MinorUnit(25),
-                    quantity: 1
+                    discountPercent : new MinorUnit(25)
                 )
             ), new PollingTimeout(15));
 
@@ -326,10 +326,11 @@ namespace Svea.WebPay.SDK.Tests
                     name: "Slim Fit 512",
                     new MinorUnit(100),
                     new MinorUnit(12),
+                    quantity: 1,
                     articleNumber: "ArticleNumber123",
                     unit: "pcs",
-                    new MinorUnit(25),
-                    quantity: 1
+                    discountPercent : new MinorUnit(25)
+
                 ),
                 newCreditOrderRows: new List<CreditOrderRow>
                 {
@@ -337,10 +338,11 @@ namespace Svea.WebPay.SDK.Tests
                         name: "Slim Fit 512",
                         unitPrice: new MinorUnit(100),
                         vatPercent: new MinorUnit(12),
+                        quantity: 1,
                         articleNumber: "ArticleNumber123",
                         unit: "pcs",
-                        discountPercent: new MinorUnit(25),
-                        quantity: 1
+                        discountPercent: new MinorUnit(25)
+                        
                     ),
                     new CreditOrderRow(
                         name: "Classic Fit 501",

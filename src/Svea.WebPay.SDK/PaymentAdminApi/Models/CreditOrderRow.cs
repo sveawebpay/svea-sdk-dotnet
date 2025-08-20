@@ -15,7 +15,7 @@
         /// <param name="unit">The unit type, e.g., “st”, “pc”, “kg” etc.</param>
         /// <param name="discountPercent">Discount percent applied to the order row.</param>
         /// <param name="discountAmount">Discount amount in the order row’s currency.</param>
-        public CreditOrderRow(string name, MinorUnit unitPrice, MinorUnit vatPercent,string articleNumber=null,string unit=null,MinorUnit discountPercent=null,MinorUnit discountAmount=null ,MinorUnit quantity = null)
+        public CreditOrderRow(string name, MinorUnit unitPrice, MinorUnit vatPercent, MinorUnit quantity = null, string articleNumber=null,string unit=null, MinorUnit discountPercent=null, MinorUnit discountAmount=null)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             UnitPrice = unitPrice ?? throw new ArgumentNullException(nameof(unitPrice));

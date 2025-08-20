@@ -14,9 +14,13 @@
         /// <param name="newCreditOrderRow">The new credit row</param>
         /// <param name="newCreditOrderRows">Use this if crediting multiple new rows</param>
         /// <param name="configureAwait">true to attempt to marshal the continuation back to the original context captured; otherwise, false.</param>
-        public CreditNewOrderRowRequest(CreditOrderRow newCreditOrderRow,  IList<CreditOrderRow> newCreditOrderRows = null, bool configureAwait = false) 
+        public CreditNewOrderRowRequest(CreditOrderRow newCreditOrderRow = null, IList<CreditOrderRow> newCreditOrderRows = null, bool configureAwait = false) 
         {
-            NewCreditOrderRow = newCreditOrderRow ?? throw new ArgumentNullException(nameof(newCreditOrderRow));
+            if((newCreditOrderRow is null) == (newCreditOrderRows is null))
+            {
+                throw new ArgumentException("Provide either a single row or a list of rows.");
+            }
+            NewCreditOrderRow = newCreditOrderRow;
             NewCreditOrderRows = newCreditOrderRows;
             ConfigureAwait = configureAwait;
         }

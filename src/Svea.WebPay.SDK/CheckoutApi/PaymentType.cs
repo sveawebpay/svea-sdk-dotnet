@@ -111,6 +111,10 @@
 
         MOBILEPAY,
         
-        ZEROSUM
+        ZEROSUM,
+
+        APPLEPAY,
+
+        APPLEPAY_PF
     }
 }

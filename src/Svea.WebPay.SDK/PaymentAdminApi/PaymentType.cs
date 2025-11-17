@@ -43,6 +43,8 @@
 
         MobilePay,
         
-        ZeroSum
+        ZeroSum,
+
+        ApplePay
     }
 }

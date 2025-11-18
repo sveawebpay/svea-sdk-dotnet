@@ -16,6 +16,7 @@
         Swish,
         Vipps,
         MobilePay,
-        ZeroSum
+        ZeroSum,
+        ApplePay
     }
 }

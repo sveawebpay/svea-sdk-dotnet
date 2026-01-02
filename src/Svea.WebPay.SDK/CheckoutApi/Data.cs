@@ -108,11 +108,10 @@
         public Data(MerchantSettings merchantSettings, Cart cart, Customer customer, Address shippingAddress, Address billingAddress, Gui gui, string locale, string currency,
             string countryCode, Presetvalue[] presetValues, string clientOrderNumber, long orderId, string emailAddress, string phoneNumber, PaymentType? paymentType,
             CheckoutOrderStatus status, object customerReference, bool? sveaWillBuyOrder, IdentityFlags identityFlags, object merchantData, PaymentInfo payment, string peppolId, GetOrderShippingInformation shippingInformation,
-            bool? recurring, string recurringToken = null, OrderValidation validation = null) : base(merchantSettings, cart, customer, shippingAddress, billingAddress, locale, currency, countryCode,
-                presetValues, clientOrderNumber, orderId, emailAddress, phoneNumber, paymentType, status, customerReference,
-                sveaWillBuyOrder, identityFlags, merchantData, payment, peppolId, shippingInformation, recurring, recurringToken, validation)
+           BillingReferenceModel[] billingReferences, bool? recurring, string recurringToken = null, OrderValidation validation = null) : base(merchantSettings, cart, customer, shippingAddress, billingAddress, locale, currency, countryCode,
+            presetValues, clientOrderNumber, orderId, emailAddress, phoneNumber, paymentType, status, customerReference,
+            sveaWillBuyOrder, identityFlags, merchantData, payment, peppolId, shippingInformation, billingReferences, recurring, recurringToken, validation)
         {
-
             Gui = gui;
         }
 

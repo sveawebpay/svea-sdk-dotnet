@@ -3,7 +3,6 @@
     public class BillingReferenceModel
     {
         public int ReferenceNumber { get; set; }
-
         public BillingReferenceType Type { get; set; }
         public string Value { get; set; }
     }

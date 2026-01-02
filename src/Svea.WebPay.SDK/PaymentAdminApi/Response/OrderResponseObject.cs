@@ -13,7 +13,7 @@
             string currency, string customerReference, IList<DeliveryResponseObject> deliveries, EmailAddress emailAddress, long id,
             bool isCompany, string merchantOrderId, string nationalId, MinorUnit orderAmount, IList<OrderRowResponseObject> orderRows,
             OrderStatus orderStatus, PaymentType paymentType, string peppolId, string phoneNumber, Address shippingAddress, bool? sveaWillBuy, 
-            DateTime? expirationDate, string billingEmailAddress, BillingReferenceModel[] billingReference)
+            DateTime? expirationDate, string billingEmailAddress, BillingReferenceModel[] billingReferences)
         {
             Actions = actions;
             BillingAddress = billingAddress;
@@ -37,7 +37,7 @@
             SveaWillBuy = sveaWillBuy;
             ExpirationDate = expirationDate;
             BillingEmailAddress = billingEmailAddress;
-            BillingReferences = billingReference;
+            BillingReferences = billingReferences;
         }
 
         /// <summary>

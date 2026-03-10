@@ -34,6 +34,7 @@
             Actions = new OrderActions(orderResponseObject, client);
             OrderRows = orderResponseObject.OrderRows?.Select(x => new OrderRow(orderResponseObject.Id, x, client)).ToList();
             Deliveries = orderResponseObject.Deliveries?.Select(x => new Delivery(orderResponseObject.Id, x, client)).ToList();
+            BillingReferences = orderResponseObject.BillingReferences;
         }
 
         public OrderActions Actions { get; }
@@ -60,5 +61,6 @@
         public bool? SveaWillBuy { get; }
         public DateTime? ExpirationDate { get; set; }
         public string BillingEmailAddress { get; set; }
+        public BillingReferenceModel[] BillingReferences { get; set; }
     }
 }

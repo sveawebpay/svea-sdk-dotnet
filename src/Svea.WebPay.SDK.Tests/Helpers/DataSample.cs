@@ -643,7 +643,15 @@
                 }
             ],
             ""Actions"":[""CanDeliverOrder"",""CanDeliverPartially"",""CanCancelOrder"",""CanCancelOrderRow"",""CanAddOrderRow"",""CanUpdateOrderRow""],
-            ""SveaWillBuy"":true
+            ""SveaWillBuy"":true,
+            ""BillingReferences"": [
+              {
+                ""ReferenceNumber"": 1001,
+                ""Type"": ""Purchase"",
+                ""Value"": ""Test""
+              }
+]
+           
         }";
 
         public static string AddOrderRowsResponse = @"
@@ -735,7 +743,14 @@
                 }
             ],
             ""Actions"":[""CanDeliverOrder"",""CanDeliverPartially"",""CanCancelOrder"",""CanCancelOrderRow"",""CanAddOrderRow"",""CanUpdateOrderRow""],
-            ""SveaWillBuy"":true
+            ""SveaWillBuy"":true,
+            ""BillingReferences"":[
+                {
+                   ""ReferenceNumber"": 1001,
+                   ""Type"": ""Purchase"",
+                   ""Value"": ""Test""
+                }
+            ]
         }";
 
         public static string CreditResponse = @"

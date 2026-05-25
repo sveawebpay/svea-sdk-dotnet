@@ -45,6 +45,8 @@
         
         ZeroSum,
 
-        ApplePay
+        ApplePay,
+
+        GooglePay
     }
 }

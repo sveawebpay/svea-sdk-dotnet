@@ -11,7 +11,7 @@ jobs:
   version:
     runs-on: ubuntu-latest
     outputs:
-      NUGETVERSIONV2: ${{ steps.gitversion.outputs.fullSemVer   }}
+      NUGETVERSIONV2: ${{ steps.gitversion.outputs.nuGetVersion    }}
 
     steps:
       - uses: actions/checkout@v6  

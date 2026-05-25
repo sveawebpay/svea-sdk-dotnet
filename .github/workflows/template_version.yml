@@ -33,3 +33,6 @@ jobs:
         run: |
             echo '${{ toJson(steps.gitversion.outputs) }}'
            
+      - name: Dump GitVersion outputs
+        run: |
+              echo '${{ toJson(steps.gitversion.outputs) }}'

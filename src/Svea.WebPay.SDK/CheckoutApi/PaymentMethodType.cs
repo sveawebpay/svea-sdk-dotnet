@@ -17,7 +17,6 @@
         Vipps,
         MobilePay,
         ZeroSum,
-        ApplePay,
-        GooglePay
+        ApplePay
     }
 }

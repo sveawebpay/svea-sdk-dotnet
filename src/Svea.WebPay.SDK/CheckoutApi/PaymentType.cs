@@ -115,10 +115,6 @@
 
         APPLEPAY,
 
-        APPLEPAY_PF,
-
-        GOOGLEPAY,
-
-        GOOGLEPAY_PF
+        APPLEPAY_PF
     }
 }

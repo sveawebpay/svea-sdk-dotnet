@@ -19,7 +19,7 @@ jobs:
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v4.5.0
         with:
-          versionSpec: '5.x.x'
+          versionSpec: '6.x.x'
  
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow

@@ -11,7 +11,7 @@ jobs:
   version:
     runs-on: ubuntu-latest
     outputs:
-      NUGETVERSIONV2: ${{ steps.gitversion.outputs.nuGetVersionV2  }}
+      NUGETVERSIONV2: ${{ steps.gitversion.outputs.fullSemVer   }}
 
     steps:
       - uses: actions/checkout@v6  
@@ -29,7 +29,7 @@ jobs:
         id: gitversion # step id used as reference for output values
         uses: gittools/actions/gitversion/execute@v4.5.0
 
-      - name: Debug GitVersion
+      - name: Print ALL GitVersion outputs
         run: |
-            echo "nuGetVersionV2 = ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
-            echo "fullSemVer = ${{ steps.gitversion.outputs.fullSemVer }}"
+            echo '${{ toJson(steps.gitversion.outputs) }}'
+           

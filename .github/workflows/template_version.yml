@@ -29,10 +29,4 @@ jobs:
         id: gitversion # step id used as reference for output values
         uses: gittools/actions/gitversion/execute@v4.5.0
 
-      - name: Print ALL GitVersion outputs
-        run: |
-            echo '${{ toJson(steps.gitversion.outputs) }}'
-           
-      - name: Dump GitVersion outputs
-        run: |
-              echo '${{ toJson(steps.gitversion.outputs) }}'
+     

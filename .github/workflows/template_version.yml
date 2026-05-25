@@ -11,19 +11,22 @@ jobs:
   version:
     runs-on: ubuntu-latest
     outputs:
-      NUGETVERSIONV2: ${{ steps.gitversion.outputs.NUGETVERSIONV2 }}
+      NUGETVERSIONV2: ${{ steps.gitversion.outputs.semVer   }}
 
     steps:
-      - uses: actions/checkout@v6        
+      - uses: actions/checkout@v6  
+        with:
+          fetch-depth: 0
+  
 
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v4.5.0
         with:
-          versionSpec: '5.x.x'
+          versionSpec: '6.x.x'
  
-      - name: Fetch all history for all tags and branches
-        run: git fetch --prune --unshallow
- 
+    
       - name: Use GitVersion
         id: gitversion # step id used as reference for output values
         uses: gittools/actions/gitversion/execute@v4.5.0
+
+     

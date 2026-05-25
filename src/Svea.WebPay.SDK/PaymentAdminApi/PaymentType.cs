@@ -27,7 +27,7 @@
         /// <summary>
         /// DirectBank order
         /// </summary>
-        DirectBank, 
+        DirectBank,
 
         /// <summary>
         /// Swish order
@@ -42,9 +42,11 @@
         Leasing,
 
         MobilePay,
-        
+
         ZeroSum,
 
-        ApplePay
+        ApplePay,
+
+        GooglePay
     }
 }

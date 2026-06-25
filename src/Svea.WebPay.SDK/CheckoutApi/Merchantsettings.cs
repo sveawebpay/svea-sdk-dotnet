@@ -68,7 +68,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// <remarks>Must be valid CampaignID.</remarks>
         /// </param>
         public MerchantSettings(Uri pushUri, Uri termsUri, Uri checkoutUri, Uri confirmationUri,
-            Uri checkoutValidationCallBackUri = null, Uri webhookUri = null, IList<long> activePartPaymentCampaigns = null,
+            Uri checkoutValidationCallBackUri = null, Uri webhookUri = null, Uri integrityPolicyUri = null, IList<long> activePartPaymentCampaigns = null,
             long? promotedPartPaymentCampaign = null)
         {
             PushUri = pushUri ?? throw new ArgumentNullException(nameof(pushUri));
@@ -77,6 +77,7 @@ namespace Svea.WebPay.SDK.CheckoutApi
             ConfirmationUri = confirmationUri ?? throw new ArgumentNullException(nameof(confirmationUri));
             CheckoutValidationCallBackUri = checkoutValidationCallBackUri;
             WebhookUri = webhookUri;
+            IntegrityPolicyUri = integrityPolicyUri;
             ActivePartPaymentCampaigns = activePartPaymentCampaigns;
             PromotedPartPaymentCampaign = promotedPartPaymentCampaign;
         }
@@ -121,6 +122,12 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// </summary>
         /// <remarks>Required. Data type: Url. Max length: 500. Min length: 1.</remarks>
         public Uri ConfirmationUri { get; }
+
+        /// <summary>
+        /// If a Integrity Policy URI is provided, a link will be displayed in the footer in the checkout.
+        /// </summary>
+        /// <remarks>Data type: Url, Max length: 500</remarks>
+        public Uri IntegrityPolicyUri { get; }
 
         /// <summary>
         /// List of valid CampaignIDs. If used, a list of available part payment campaign options will be filtered through the chosen list.

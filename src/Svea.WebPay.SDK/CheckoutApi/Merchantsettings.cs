@@ -68,8 +68,8 @@ namespace Svea.WebPay.SDK.CheckoutApi
         /// <remarks>Must be valid CampaignID.</remarks>
         /// </param>
         public MerchantSettings(Uri pushUri, Uri termsUri, Uri checkoutUri, Uri confirmationUri,
-            Uri checkoutValidationCallBackUri = null, Uri webhookUri = null, IList<long> activePartPaymentCampaigns = null,
-            long? promotedPartPaymentCampaign = null, Uri integrityPolicyUri = null)
+            Uri checkoutValidationCallBackUri = null, Uri webhookUri = null, Uri integrityPolicyUri = null, IList<long> activePartPaymentCampaigns = null,
+            long? promotedPartPaymentCampaign = null)
         {
             PushUri = pushUri ?? throw new ArgumentNullException(nameof(pushUri));
             TermsUri = termsUri ?? throw new ArgumentNullException(nameof(termsUri));
@@ -77,9 +77,9 @@ namespace Svea.WebPay.SDK.CheckoutApi
             ConfirmationUri = confirmationUri ?? throw new ArgumentNullException(nameof(confirmationUri));
             CheckoutValidationCallBackUri = checkoutValidationCallBackUri;
             WebhookUri = webhookUri;
+            IntegrityPolicyUri = integrityPolicyUri;
             ActivePartPaymentCampaigns = activePartPaymentCampaigns;
             PromotedPartPaymentCampaign = promotedPartPaymentCampaign;
-            IntegrityPolicyUri = integrityPolicyUri;
         }
 
         /// <summary>

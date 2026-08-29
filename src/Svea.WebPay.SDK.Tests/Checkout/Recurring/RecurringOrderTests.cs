@@ -79,7 +79,7 @@ namespace Svea.WebPay.SDK.Tests.Checkout.Recurring
             var mockHandler = CreateHandlerMock(mockResponse);
 
             var recurringToken = "some-recurring-token";
-            var changePaymentMethodModel = new ChangepaymentMethodModel(); // Assuming a valid model instance
+            var changePaymentMethodModel = new ChangePaymentMethodModel(); // Assuming a valid model instance
             var sveaClient = SveaClient(mockHandler);
 
             // Act

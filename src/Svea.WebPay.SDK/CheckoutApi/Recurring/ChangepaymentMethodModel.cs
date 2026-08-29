@@ -1,7 +1,6 @@
 ﻿namespace Svea.WebPay.SDK.CheckoutApi.Recurring
 {
-    public class ChangepaymentMethodModel
-
+    public class ChangePaymentMethodModel
     {
         /// <summary>
         /// The URL of your terms that will be present in the snippet footer

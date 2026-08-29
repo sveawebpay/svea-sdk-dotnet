@@ -26,6 +26,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.github\workflows\uat.yml = ..\.github\workflows\uat.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Testshop.Server", "Samples\Sample.Testshop\Sample.Testshop.Server\Sample.Testshop.Server.csproj", "{61F611BF-5D07-4FD0-A0B7-55768155C860}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "sample.testshop.client", "Samples\Sample.Testshop\sample.testshop.client\sample.testshop.client.esproj", "{A8A4B917-A67F-4D09-9B04-6DA45C28D1EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,16 @@ Global
 		{F2EC41C0-CD08-477D-9192-669855B298BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2EC41C0-CD08-477D-9192-669855B298BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2EC41C0-CD08-477D-9192-669855B298BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61F611BF-5D07-4FD0-A0B7-55768155C860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61F611BF-5D07-4FD0-A0B7-55768155C860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61F611BF-5D07-4FD0-A0B7-55768155C860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61F611BF-5D07-4FD0-A0B7-55768155C860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8A4B917-A67F-4D09-9B04-6DA45C28D1EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8A4B917-A67F-4D09-9B04-6DA45C28D1EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8A4B917-A67F-4D09-9B04-6DA45C28D1EF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A8A4B917-A67F-4D09-9B04-6DA45C28D1EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8A4B917-A67F-4D09-9B04-6DA45C28D1EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8A4B917-A67F-4D09-9B04-6DA45C28D1EF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

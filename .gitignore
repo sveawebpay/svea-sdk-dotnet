@@ -5,6 +5,7 @@ bin
 packages
 *.user
 .idea
+**/appsettings.Development.json
 /src/Svea.WebPay.SDK.Tests/appsettings.Development.json
 src/.DS_Store
 .DS_Store

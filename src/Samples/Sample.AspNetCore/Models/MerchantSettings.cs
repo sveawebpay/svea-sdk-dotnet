@@ -11,5 +11,6 @@ namespace Sample.AspNetCore.Models
         public Uri CheckoutValidationCallbackUri { get; set; }
         public Uri WebhookUri { get; set; }
         public Uri IntegrityPolicyUri { get; set; }
+        public Uri AuthReturnUri { get; set; }
     }
 }

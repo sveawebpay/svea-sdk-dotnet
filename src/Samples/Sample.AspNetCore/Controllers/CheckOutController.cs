@@ -15,8 +15,6 @@ using Cart = Sample.AspNetCore.Models.Cart;
 
 namespace Sample.AspNetCore.Controllers;
 
-using System.Data.SqlTypes;
-
 public class CheckOutController : Controller
 {
     private readonly Cart _cartService;
@@ -67,14 +65,14 @@ public class CheckOutController : Controller
             var shippingCallbackUri = new Uri(_merchantSettings.WebhookUri.ToString().Replace("{marketId}", _marketService.MarketId));
 
             var checkoutValidationCallbackUri = new Uri(_merchantSettings.CheckoutValidationCallbackUri.ToString().Replace("{marketId}", _marketService.MarketId));
-                
+
             var shippingFallbacks = new List<FallbackOption> { new FallbackOption("79d0c2d3-71f4-4205-a5bc-4aa9ab324c98", "DHL Home Delivery", "dhl", Convert.ToInt64(_cartService.CalculateTotal()), null, null) };
             var shippingInformation = new ShippingInformation(true, 1000, null, null);
 
             var paymentOrderRequest = new CreateOrderModel(region, currencyRequest, languageRequest, DateTime.Now.Ticks.ToString(),
-                new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(pushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, checkoutValidationCallbackUri, shippingCallbackUri, _merchantSettings.IntegrityPolicyUri),
+                new Svea.WebPay.SDK.CheckoutApi.MerchantSettings(pushUri, _merchantSettings.TermsUri, _merchantSettings.CheckoutUri, _merchantSettings.ConfirmationUri, checkoutValidationCallbackUri, shippingCallbackUri, _merchantSettings.IntegrityPolicyUri, authReturnUri: _merchantSettings.AuthReturnUri),
                 new Svea.WebPay.SDK.CheckoutApi.Cart(orderItems), requireBanKId, null, null, null, null, enableShipping ? shippingInformation : null);
-                
+
             var data = await _sveaClient.Checkout.CreateOrder(paymentOrderRequest).ConfigureAwait(false);
 
             return data;
